@@ -19,7 +19,7 @@
 # Excuse the ugly code.  I threw this together as quickly as possible and I
 # don't normally code in Python.
 #
-import csv, getpass, json, os, time, urllib
+import csv, getpass, json, os, time, urllib, random
 
 # using python-twitter library
 import twitter
@@ -30,9 +30,9 @@ def get_user_params():
     user_params = {}
 
     # get user input params
-    user_params['inList']  = raw_input( '\nInput file [./corpus.csv]: ' )
-    user_params['outList'] = raw_input( 'Results file [./full-corpus.csv]: ' )
-    user_params['rawDir']  = raw_input( 'Raw data dir [./rawdata/]: ' )
+    user_params['inList']  = '' #raw_input( '\nInput file [./corpus.csv]: ' )
+    user_params['outList'] = '' #raw_input( 'Results file [./full-corpus.csv]: ' )
+    user_params['rawDir']  = '' #raw_input( 'Raw data dir [./rawdata/]: ' )
     
     # apply defaults
     if user_params['inList']  == '': 
@@ -53,6 +53,10 @@ def dump_user_params( user_params ):
     print 'Raw data: '   + user_params['rawDir']
     return
 
+def filter_list( total_list ) :
+    # filtering only apple for test purposes
+    indices = [i for i in range( len( total_list ) ) if (total_list[i])[0] ==  "apple"]
+    return [total_list[i] for i in indices]
 
 def read_total_list( in_filename ):
 
@@ -235,7 +239,16 @@ def main():
 
     # get fetch list
     total_list = read_total_list( user_params['inList'] )
+
+    # filter out only apple tweets
+    #total_list = filter_list( total_list )
+    
+    # pull only 100 tweets
+    #total_list = random.sample( total_list, 100 )
+
+    print 'total tweets : ', len( total_list )
     fetch_list = purge_already_fetched( total_list, user_params['rawDir'] )
+    print 'fetch tweets : ',  len( fetch_list )
 
     # start fetching data from twitter
     download_tweets( fetch_list, user_params['rawDir'] )
