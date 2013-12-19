@@ -21,6 +21,9 @@
 #
 import csv, getpass, json, os, time, urllib
 
+# using python-twitter library
+import twitter
+
 
 def get_user_params():
 
@@ -68,6 +71,7 @@ def purge_already_fetched( fetch_list, raw_dir ):
 
     # list of tweet ids that still need downloading
     rem_list = []
+    count = 0;
 
     # check each tweet to see if we have it
     for item in fetch_list:
@@ -79,11 +83,14 @@ def purge_already_fetched( fetch_list, raw_dir ):
             # attempt to parse json file
             try:
                 parse_tweet_json( tweet_file )
+                count = count + 1
                 print '--> already downloaded #' + item[2]
             except RuntimeError:
                 rem_list.append( item )
         else:
             rem_list.append( item )
+
+    print 'already fetched :', count
 
     return rem_list
 
@@ -102,12 +109,23 @@ def get_time_left_str( cur_idx, fetch_list, download_pause ):
 
 def download_tweets( fetch_list, raw_dir ):
 
+    # proxy settings for downloading behind a proxy
+    #os.environ['http_proxy'] = 'http://10.10.78.21:3128/'
+    #os.environ['https_proxy'] = 'http://10.10.78.21:3128/'
+
+    # using python-twitter library
+    api = twitter.Api(consumer_key='yDkaORxEcwX6SheX6pa1fw',
+                  consumer_secret='VYIGd2KITohR4ygmHrcyZgV0B74CXi5wsT1eryVtw',
+                  access_token_key='227846642-8IjK2K32CDFt3682SNOOpnzegAja3TyVpzFOGrQj',
+                  access_token_secret='L6of20EZdBv48EA2GE8Js6roIfZFnCKBpoPwvBDxF8',
+                  input_encoding=None, cache=None)
+
     # ensure raw data directory exists
     if not os.path.exists( raw_dir ):
         os.mkdir( raw_dir )
 
     # stay within rate limits
-    max_tweets_per_hr  = 125
+    max_tweets_per_hr  = 180*4
     download_pause_sec = 3600 / max_tweets_per_hr
 
     # download tweets
@@ -122,13 +140,21 @@ def download_tweets( fetch_list, raw_dir ):
               (item[2], idx+1, len(fetch_list), trem)
 
         # pull data
-        url = 'http://api.twitter.com/1/statuses/show.json?id=' + item[2]
-        urllib.urlretrieve( url, raw_dir + item[2] + '.json' )
-
+        start = time.time()
+        try:
+            tweetStatus = api.GetStatus(item[2])
+            tweetFile = open(raw_dir + item[2] + '.json', 'w')
+            tweetFile.write( tweetStatus.AsJsonString() )
+            tweetFile.close()
+        except Exception, e:
+            print 'Cannot download tweet #'+item[2]
+            print e
+        end = time.time()
+        
         # stay in Twitter API rate limits 
-        print '    pausing %d sec to obey Twitter API rate limits' % \
-              (download_pause_sec)
-        time.sleep( download_pause_sec )
+        print '    pausing %.2f sec to obey Twitter API rate limits' % \
+              (download_pause_sec-(end-start))
+        time.sleep( download_pause_sec-(end-start) )
 
     return
 
@@ -177,7 +203,7 @@ def build_output_corpus( out_filename, raw_dir, total_list ):
     
                 # character encoding for output
                 for i in range(0,len(full_row)):
-                    full_row[i] = full_row[i].encode("utf-8")
+                    full_row[i] = full_row[i].encode("utf-8").replace('\n',' ')
     
                 # write csv row
                 writer.writerow( full_row )
