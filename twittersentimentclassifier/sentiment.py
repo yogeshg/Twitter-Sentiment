@@ -20,7 +20,7 @@ fp = open( 'sentiment.csv', 'rb' )
 reader = csv.reader( fp, delimiter=',', quotechar='"', escapechar='\\' )
 tweets = []
 for row in reader:
-    tweets.append( [row[3], row[4]] );
+    tweets.append( [row[4], row[1]] );
 
 
 # treat neutral and irrelevant the same
@@ -33,8 +33,8 @@ for t in tweets:
 random.shuffle( tweets );
 
 fvecs = [(tweet_features.make_tweet_dict(t),s) for (t,s) in tweets]
-v_train = fvecs[:2500]
-v_test  = fvecs[2500:]
+v_train = fvecs[:len(fvecs)*9/10]
+v_test  = fvecs[len(fvecs)*9/10:]
 
 
 # dump tweets which our feature selector found nothing
@@ -55,7 +55,7 @@ classifier = nltk.NaiveBayesClassifier.train(v_train);
 
 # classify and dump results for interpretation
 print '\nAccuracy %f\n' % nltk.classify.accuracy(classifier, v_test)
-#print classifier.show_most_informative_features(200)
+print classifier.show_most_informative_features(200)
 
 
 # build confusion matrix over test set
