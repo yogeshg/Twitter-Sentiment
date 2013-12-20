@@ -2,24 +2,12 @@
 # Sanders-Twitter Sentiment Corpus Install Script
 # Version 0.1
 #
-# Pulls tweet data from Twitter because ToS prevents distributing it directly.
+# Adapted from http://www.sananalytics.com/lab/twitter-sentiment/
 #
-# Right now we use unauthenticated requests, which are rate-limited to 150/hr.
-# We use 125/hr to stay safe.  
+# Yogesh Garg
+# yogeshg91@gmail.com
 #
-# We could more than double the download speed by using authentication with
-# OAuth logins.  But for now, this is too much of a PITA to implement.  Just let
-# the script run over a weekend and you'll have all the data.
-#
-#   - Niek Sanders
-#     njs@sananalytics.com
-#     October 20, 2011
-#
-#
-# Excuse the ugly code.  I threw this together as quickly as possible and I
-# don't normally code in Python.
-#
-import csv, getpass, json, os, time, urllib, random
+import csv, getpass, json, os, time, random
 
 # using python-twitter library
 import twitter
@@ -191,7 +179,7 @@ def build_output_corpus( out_filename, raw_dir, total_list ):
                          quoting=csv.QUOTE_ALL )
 
     # write header row
-    writer.writerow( ['Topic','Sentiment','TweetId','TweetDate','TweetText'] )
+    #writer.writerow( ['Topic','Sentiment','TweetId','TweetDate','TweetText'] )
 
     # parse all downloaded tweets
     missing_count = 0
@@ -263,6 +251,16 @@ def main():
                          total_list )
 
     return
+
+def redoLastStep():
+    user_params = {}
+    user_params['inList'] = './sanderstwitter02/corpus.csv'
+    user_params['outList'] = './sanderstwitter02/full-corpus.csv'
+    user_params['rawDir'] = './sanderstwitter02/rawdata/'
+
+    total_list = read_total_list( user_params['inList'] )
+    build_output_corpus( user_params['outList'], user_params['rawDir'], 
+                         total_list )
 
 
 if __name__ == '__main__':
