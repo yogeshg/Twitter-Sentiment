@@ -219,6 +219,17 @@ def build_output_corpus( out_filename, raw_dir, total_list ):
     return
 
 
+def rebuild_output_corpus():
+    user_params = {}
+    user_params['inList'] = './sanderstwitter02/corpus.csv'
+    user_params['outList'] = './sanderstwitter02/full-corpus.csv'
+    user_params['rawDir'] = './sanderstwitter02/rawdata/'
+
+    total_list = read_total_list( user_params['inList'] )
+    build_output_corpus( user_params['outList'], user_params['rawDir'], 
+                         total_list )
+
+
 def main():
 
     # get user parameters
@@ -251,16 +262,6 @@ def main():
                          total_list )
 
     return
-
-def redoLastStep():
-    user_params = {}
-    user_params['inList'] = './sanderstwitter02/corpus.csv'
-    user_params['outList'] = './sanderstwitter02/full-corpus.csv'
-    user_params['rawDir'] = './sanderstwitter02/rawdata/'
-
-    total_list = read_total_list( user_params['inList'] )
-    build_output_corpus( user_params['outList'], user_params['rawDir'], 
-                         total_list )
 
 
 if __name__ == '__main__':
