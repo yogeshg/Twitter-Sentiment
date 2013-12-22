@@ -10,57 +10,71 @@ to a naive Bayes classifier to assign a label of 'positive', 'negative', or
 the influence of covariant features.
 
 """
-import csv, random
+import random
 import nltk
-import tweet_features, tweet_pca
 
 
-# read all tweets and labels
-fp = open( 'sentiment.csv', 'rb' )
-reader = csv.reader( fp, delimiter=',', quotechar='"', escapechar='\\' )
-tweets = []
-for row in reader:
-    tweets.append( [row[4], row[1]] );
+def getTrainingAndTestData(tweets, ratio):
+	import tweet_features, tweet_pca
+	random.shuffle( tweets );
+
+	fvecs = nltk.classify.apply_features(tweet_features.make_tweet_dict,tweets)
+
+	return (fvecs[:int(len(fvecs)*ratio)],fvecs[int(len(fvecs)*ratio):])
 
 
-# treat neutral and irrelevant the same
-for t in tweets:
-    if t[1] == 'irrelevant':
-        t[1] = 'neutral'
 
 
-# split in to training and test sets
-random.shuffle( tweets );
-
-fvecs = [(tweet_features.make_tweet_dict(t),s) for (t,s) in tweets]
-v_train = fvecs[:len(fvecs)*9/10]
-v_test  = fvecs[len(fvecs)*9/10:]
 
 
-# dump tweets which our feature selector found nothing
-#for i in range(0,len(tweets)):
-#    if tweet_features.is_zero_dict( fvecs[i][0] ):
-#        print tweets[i][1] + ': ' + tweets[i][0]
 
 
-# apply PCA reduction
-#(v_train, v_test) = \
-#        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
 
 
-# train classifier
-classifier = nltk.NaiveBayesClassifier.train(v_train);
-#classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
+
+def trainAndClassify( argument ):
+	import sanderstwitter02
+	tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+	
+	if( argument % 2 == 0):
+		(v_train, v_test) = getTrainingAndTestData(tweets,0.9)
+		(v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+
+	# dump tweets which our feature selector found nothing
+	#for i in range(0,len(tweets)):
+	#    if tweet_features.is_zero_dict( fvecs[i][0] ):
+	#        print tweets[i][1] + ': ' + tweets[i][0]
 
 
-# classify and dump results for interpretation
-print '\nAccuracy %f\n' % nltk.classify.accuracy(classifier, v_test)
-print classifier.show_most_informative_features(200)
+	# apply PCA reduction
+	#(v_train, v_test) = \
+	#        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
 
 
-# build confusion matrix over test set
-test_truth   = [s for (t,s) in v_test]
-test_predict = [classifier.classify(t) for (t,s) in v_test]
+	# train classifier
+	
+		classifier = nltk.NaiveBayesClassifier.train(v_train);
+	else:
+		classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
 
-print 'Confusion Matrix'
-print nltk.ConfusionMatrix( test_truth, test_predict )
+	# classify and dump results for interpretation
+
+	print classifier.show_most_informative_features(200)
+	accuracy = nltk.classify.accuracy(classifier, v_test)
+	print '\nAccuracy %f\n' % accuracy
+
+	# build confusion matrix over test set
+	test_truth   = [s for (t,s) in v_test]
+	test_predict = [classifier.classify(t) for (t,s) in v_test]
+
+	print 'Confusion Matrix'
+	print nltk.ConfusionMatrix( test_truth, test_predict )
+
+	return accuracy
+
+def main() :
+	print trainAndClassify(0)
+	print trainAndClassify(1)
+	print trainAndClassify(2)
+	print trainAndClassify(3)
+
