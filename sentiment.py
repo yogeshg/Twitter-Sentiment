@@ -1,5 +1,4 @@
 """
-@package sentiment
 Twitter sentiment analysis.
 
 This code performs sentiment analysis on Tweets.
@@ -15,10 +14,11 @@ import nltk
 
 
 def getTrainingAndTestData(tweets, ratio):
-	import tweet_features, tweet_pca
+	import sandersfeatures
+	# tweet_features, tweet_pca
 	random.shuffle( tweets );
 
-	fvecs = nltk.classify.apply_features(tweet_features.make_tweet_dict,tweets)
+	fvecs = nltk.classify.apply_features(sandersfeatures.tweet_features.make_tweet_dict,tweets)
 
 	return (fvecs[:int(len(fvecs)*ratio)],fvecs[int(len(fvecs)*ratio):])
 
@@ -30,15 +30,20 @@ def getTrainingAndTestData2(tweets, ratio):
     	words_filtered = [e.lower() for e in words.split() if len(e) >= 3] 
     	tweetsArr.append([words_filtered, sentiment])
 
-
     random.shuffle( tweetsArr );
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
     test_tweets  = tweetsArr[int(len(tweetsArr)*ratio):]
 
     def get_words_in_tweets(tweetsArr):
         all_words = []
+        total_tweets = len(tweetsArr);
+        count_tweets = 0;
+        print( str(total_tweets) + ' tweets to be processed'),
         for (words, sentiment) in tweetsArr:
           all_words.extend(words)
+          count_tweets += 1
+          print('\r' + str(count_tweets) + ' of ' + str(total_tweets) + ' tweets processed'),
+        print('')
         return all_words
 
     def get_word_features(wordlist):
@@ -106,3 +111,5 @@ def main() :
 	print trainAndClassify(2)
 	print trainAndClassify(3)
 
+if __name__ == "__main__":
+	main()
