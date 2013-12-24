@@ -27,7 +27,7 @@ def getTrainingAndTestData2(tweets, ratio):
 
     from functools import wraps
 
-    def counter(func):
+    def counter(func):	#http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
         @wraps(func)
         def tmp(*args, **kwargs):
             tmp.count += 1
@@ -57,7 +57,7 @@ def getTrainingAndTestData2(tweets, ratio):
 
     word_features = get_word_features(get_words_in_tweets(train_tweets))
 
-    @counter
+    @counter	#http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
     def extract_features(document):
         document_words = set(document)
         features = {}
