@@ -82,17 +82,16 @@ def getTrainingAndTestData2(tweets, ratio):
 
     return (v_train, v_test)
 
-	
-	if( argument % 2 == 0):
-		(v_train, v_test) = getTrainingAndTestData(tweets,0.9)
-	else:
-		(v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 def trainAndClassify( tweets, argument ):
 
 
 
 
 
+    if( argument % 2 == 0):
+        (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
+    else:
+        (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 
     # dump tweets which our feature selector found nothing
     #for i in range(0,len(tweets)):
