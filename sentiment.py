@@ -84,8 +84,17 @@ def getTrainingAndTestData2(tweets, ratio):
 
 def trainAndClassify( tweets, argument ):
 
+    print '######################'
 
+    if( argument % 2 == 0):
+        print 'features\t: sandersfeatures'
+    else:
+        print 'features\t: laurentfeatures'
 
+    if( (argument/2) % 2 == 0):
+        print 'classifier\t: NaiveBayesClassifier'
+    else:
+        print 'classifier\t: train_maxent_classifier_with_gis'
 
 
     if( argument % 2 == 0):
