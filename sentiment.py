@@ -120,9 +120,9 @@ def trainAndClassify( tweets, argument ):
 
     # classify and dump results for interpretation
 
-    print classifier.show_most_informative_features(200)
     accuracy = nltk.classify.accuracy(classifier, v_test)
     print '\nAccuracy %f\n' % accuracy
+    print classifier.show_most_informative_features(200)
 
     # build confusion matrix over test set
     test_truth   = [s for (t,s) in v_test]

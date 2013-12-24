@@ -1,6 +1,8 @@
 ######################
 features	: sandersfeatures
 classifier	: NaiveBayesClassifier
+Accuracy 0.777778
+
 Most Informative Features
                hasThanks = True           positi : neutra =      7.2 : 1.0
               hasExclaim = True           positi : neutra =      3.1 : 1.0
@@ -63,8 +65,6 @@ Most Informative Features
                  hasLike = False          neutra : positi =      1.0 : 1.0
 None
 
-Accuracy 0.777778
-
 Confusion Matrix
          | n   p |
          | e n o |
@@ -85,6 +85,8 @@ positive | . 1<.>|
 ######################
 features	: laurentfeatures
 classifier	: NaiveBayesClassifier
+Accuracy 0.444444
+
 Most Informative Features
            contains(and) = True           negati : neutra =      9.8 : 1.0
            contains(new) = True           positi : neutra =      5.7 : 1.0
@@ -288,8 +290,6 @@ contains(#needsomethingtoread) = False          neutra : positi =      1.1 : 1.0
       contains(products) = False          neutra : positi =      1.1 : 1.0
 None
 
-Accuracy 0.444444
-
 Confusion Matrix
          | n   p |
          | e n o |
@@ -310,6 +310,8 @@ positive | . 2<.>|
 ######################
 features	: sandersfeatures
 classifier	: train_maxent_classifier_with_gis
+Accuracy 0.444444
+
   ==> Training (100 iterations)
 
       Iteration    Log Likelihood    Accuracy
@@ -609,8 +611,6 @@ classifier	: train_maxent_classifier_with_gis
    0.001 hasFix==False and label is 'negative'
 None
 
-Accuracy 0.444444
-
 Confusion Matrix
          | n   p |
          | e n o |
@@ -631,6 +631,8 @@ positive | . 3<1>|
 ######################
 features	: laurentfeatures
 classifier	: train_maxent_classifier_with_gis
+Accuracy 0.666667
+
   ==> Training (100 iterations)
 
       Iteration    Log Likelihood    Accuracy
@@ -936,8 +938,6 @@ classifier	: train_maxent_classifier_with_gis
    0.094 contains(needs)==True and label is 'negative'
    0.093 contains(landscape)==True and label is 'neutral'
 None
-
-Accuracy 0.666667
 
 Confusion Matrix
          | n   p |
