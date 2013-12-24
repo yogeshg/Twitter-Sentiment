@@ -72,6 +72,8 @@ def getTrainingAndTestData2(tweets, ratio):
 
     v_train = nltk.classify.apply_features(extract_features,train_tweets)
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
+    #v_train = [(extract_features(train_tweets[i][0]),train_tweets[i][1]) for i in range(len(train_tweets))]
+    #v_test  = [(extract_features(test_tweets[i][0]) , test_tweets[i][1]) for i in range(len(test_tweets)) ]
 
     sys.stdout.write('\n')
     sys.stdout.flush()
