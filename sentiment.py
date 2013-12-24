@@ -133,8 +133,11 @@ def trainAndClassify( tweets, argument ):
 
     return accuracy
 
-def main() :
+def main(argv) :
     import sanderstwitter02
+
+    if (len(argv) > 0) :
+        sys.stdout = open( str(argv[0]), 'w')
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
     print trainAndClassify(tweets, 0)
@@ -142,5 +145,7 @@ def main() :
     print trainAndClassify(tweets, 2)
     print trainAndClassify(tweets, 3)
 
+    sys.stdout.flush()
+
 if __name__ == "__main__":
-	main()
+   main(sys.argv[1:])
