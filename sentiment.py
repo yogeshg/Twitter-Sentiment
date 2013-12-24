@@ -89,36 +89,37 @@ def getTrainingAndTestData2(tweets, ratio):
 		(v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 def trainAndClassify( tweets, argument ):
 
-	# dump tweets which our feature selector found nothing
-	#for i in range(0,len(tweets)):
-	#    if tweet_features.is_zero_dict( fvecs[i][0] ):
-	#        print tweets[i][1] + ': ' + tweets[i][0]
 
-	# apply PCA reduction
-	#(v_train, v_test) = \
-	#        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
 
-	# train classifier
-	
-	if( (argument/2) % 2 == 0):
-		classifier = nltk.NaiveBayesClassifier.train(v_train);
-	else:
-		classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
 
-	# classify and dump results for interpretation
 
-	print classifier.show_most_informative_features(200)
-	accuracy = nltk.classify.accuracy(classifier, v_test)
-	print '\nAccuracy %f\n' % accuracy
 
-	# build confusion matrix over test set
-	test_truth   = [s for (t,s) in v_test]
-	test_predict = [classifier.classify(t) for (t,s) in v_test]
+    # dump tweets which our feature selector found nothing
+    #for i in range(0,len(tweets)):
+    #    if tweet_features.is_zero_dict( fvecs[i][0] ):
+    #        print tweets[i][1] + ': ' + tweets[i][0]
 
-	print 'Confusion Matrix'
-	print nltk.ConfusionMatrix( test_truth, test_predict )
+    # apply PCA reduction
+    #(v_train, v_test) = \
+    #        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
 
-	return accuracy
+    # train classifier
+    
+    if( (argument/2) % 2 == 0):
+        classifier = nltk.NaiveBayesClassifier.train(v_train);
+    else:
+        classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
+    # classify and dump results for interpretation
+
+    print classifier.show_most_informative_features(200)
+    accuracy = nltk.classify.accuracy(classifier, v_test)
+    print '\nAccuracy %f\n' % accuracy
+    # build confusion matrix over test set
+    test_truth   = [s for (t,s) in v_test]
+    test_predict = [classifier.classify(t) for (t,s) in v_test]
+    print 'Confusion Matrix'
+    print nltk.ConfusionMatrix( test_truth, test_predict )
+    return accuracy
 
 def main() :
     import sanderstwitter02
