@@ -36,14 +36,8 @@ def getTrainingAndTestData2(tweets, ratio):
 
     def get_words_in_tweets(tweetsArr):
         all_words = []
-        total_tweets = len(tweetsArr);
-        count_tweets = 0;
-        print( str(total_tweets) + ' tweets to be processed'),
         for (words, sentiment) in tweetsArr:
           all_words.extend(words)
-          count_tweets += 1
-          print('\r' + str(count_tweets) + ' of ' + str(total_tweets) + ' tweets processed'),
-        print('')
         return all_words
 
     def get_word_features(wordlist):
@@ -77,11 +71,9 @@ def trainAndClassify( argument ):
 	#    if tweet_features.is_zero_dict( fvecs[i][0] ):
 	#        print tweets[i][1] + ': ' + tweets[i][0]
 
-
 	# apply PCA reduction
 	#(v_train, v_test) = \
 	#        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
-
 
 	# train classifier
 	
