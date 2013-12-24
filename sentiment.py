@@ -82,14 +82,12 @@ def getTrainingAndTestData2(tweets, ratio):
 
     return (v_train, v_test)
 
-def trainAndClassify( argument ):
-	import sanderstwitter02
-	tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 	
 	if( argument % 2 == 0):
 		(v_train, v_test) = getTrainingAndTestData(tweets,0.9)
 	else:
 		(v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+def trainAndClassify( tweets, argument ):
 
 	# dump tweets which our feature selector found nothing
 	#for i in range(0,len(tweets)):
@@ -123,10 +121,13 @@ def trainAndClassify( argument ):
 	return accuracy
 
 def main() :
-	print trainAndClassify(0)
-	print trainAndClassify(1)
-	print trainAndClassify(2)
-	print trainAndClassify(3)
+    import sanderstwitter02
+    tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+
+    print trainAndClassify(tweets, 0)
+    print trainAndClassify(tweets, 1)
+    print trainAndClassify(tweets, 2)
+    print trainAndClassify(tweets, 3)
 
 if __name__ == "__main__":
 	main()
