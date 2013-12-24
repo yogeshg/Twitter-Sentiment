@@ -14,13 +14,13 @@ import nltk
 
 
 def getTrainingAndTestData(tweets, ratio):
-	import sandersfeatures
-	# tweet_features, tweet_pca
-	random.shuffle( tweets );
+    import sandersfeatures
+    # tweet_features, tweet_pca
+    random.shuffle( tweets );
 
 	fvecs = nltk.classify.apply_features(sandersfeatures.tweet_features.make_tweet_dict,tweets)
 
-	return (fvecs[:int(len(fvecs)*ratio)],fvecs[int(len(fvecs)*ratio):])
+    return (fvecs[:int(len(fvecs)*ratio)],fvecs[int(len(fvecs)*ratio):])
 
 
 def getTrainingAndTestData2(tweets, ratio):
