@@ -28,7 +28,7 @@ def getTrainingAndTestData2(tweets, ratio):
 
     from functools import wraps
 
-    def counter(func):	#http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
+    def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
         @wraps(func)
         def tmp(*args, **kwargs):
             tmp.count += 1
@@ -38,8 +38,8 @@ def getTrainingAndTestData2(tweets, ratio):
 
     tweetsArr = []
     for (words, sentiment) in tweets:
-    	words_filtered = [e.lower() for e in words.split() if len(e) >= 3] 
-    	tweetsArr.append([words_filtered, sentiment])
+        words_filtered = [e.lower() for e in words.split() if len(e) >= 3]
+        tweetsArr.append([words_filtered, sentiment])
 
     random.shuffle( tweetsArr );
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
@@ -48,7 +48,7 @@ def getTrainingAndTestData2(tweets, ratio):
     def get_words_in_tweets(tweetsArr):
         all_words = []
         for (words, sentiment) in tweetsArr:
-          all_words.extend(words)
+            all_words.extend(words)
         return all_words
 
     def get_word_features(wordlist):
@@ -58,7 +58,7 @@ def getTrainingAndTestData2(tweets, ratio):
 
     word_features = get_word_features(get_words_in_tweets(train_tweets))
 
-    @counter	#http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
+    @counter    #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
     def extract_features(document):
         document_words = set(document)
         features = {}
@@ -74,7 +74,7 @@ def getTrainingAndTestData2(tweets, ratio):
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
     #v_train = [(extract_features(train_tweets[i][0]),train_tweets[i][1]) for i in range(len(train_tweets))]
     #v_test  = [(extract_features(test_tweets[i][0]) , test_tweets[i][1]) for i in range(len(test_tweets)) ]
-    
+
     sys.stderr.write('\n')
     sys.stderr.flush()
 
@@ -112,7 +112,7 @@ def trainAndClassify( tweets, argument ):
     #        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
 
     # train classifier
-    
+
     if( (argument/2) % 2 == 0):
         classifier = nltk.NaiveBayesClassifier.train(v_train);
     else:
@@ -148,4 +148,4 @@ def main(argv) :
     sys.stdout.flush()
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])

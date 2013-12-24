@@ -21,13 +21,13 @@ def get_user_params():
     user_params['inList']  = '' #raw_input( '\nInput file [./corpus.csv]: ' )
     user_params['outList'] = '' #raw_input( 'Results file [./full-corpus.csv]: ' )
     user_params['rawDir']  = '' #raw_input( 'Raw data dir [./rawdata/]: ' )
-    
+
     # apply defaults
-    if user_params['inList']  == '': 
+    if user_params['inList']  == '':
         user_params['inList'] = './corpus.csv'
-    if user_params['outList'] == '': 
+    if user_params['outList'] == '':
         user_params['outList'] = './full-corpus.csv'
-    if user_params['rawDir']  == '': 
+    if user_params['rawDir']  == '':
         user_params['rawDir'] = './rawdata/'
 
     return user_params
@@ -142,8 +142,8 @@ def download_tweets( fetch_list, raw_dir ):
             print 'Cannot download tweet #'+item[2]
             print e
         end = time.time()
-        
-        # stay in Twitter API rate limits 
+
+        # stay in Twitter API rate limits
         print '    pausing %.2f sec to obey Twitter API rate limits' % \
               (download_pause_sec-(end-start))
         time.sleep( download_pause_sec-(end-start) )
@@ -152,7 +152,7 @@ def download_tweets( fetch_list, raw_dir ):
 
 
 def parse_tweet_json( filename ):
-    
+
     # read tweet
     print 'opening: ' + filename
     fp = open( filename, 'rb' )
@@ -188,15 +188,15 @@ def build_output_corpus( out_filename, raw_dir, total_list ):
         # ensure tweet exists
         if os.path.exists( raw_dir + item[2] + '.json' ):
 
-            try: 
+            try:
                 # parse tweet
                 parsed_tweet = parse_tweet_json( raw_dir + item[2] + '.json' )
                 full_row = item + parsed_tweet
-    
+
                 # character encoding for output
                 for i in range(0,len(full_row)):
                     full_row[i] = full_row[i].encode("utf-8").replace('\n',' ')
-    
+
                 # write csv row
                 writer.writerow( full_row )
 
@@ -212,7 +212,7 @@ def build_output_corpus( out_filename, raw_dir, total_list ):
     if missing_count == 0:
         print '\nSuccessfully downloaded corpus!'
         print 'Output in: ' + out_filename + '\n'
-    else: 
+    else:
         print '\nMissing %d of %d tweets!' % (missing_count, len(total_list))
         print 'Partial output in: ' + out_filename + '\n'
 
@@ -226,7 +226,7 @@ def rebuild_output_corpus():
     user_params['rawDir'] = './sanderstwitter02/rawdata/'
 
     total_list = read_total_list( user_params['inList'] )
-    build_output_corpus( user_params['outList'], user_params['rawDir'], 
+    build_output_corpus( user_params['outList'], user_params['rawDir'],
                          total_list )
 
 
@@ -241,7 +241,7 @@ def main():
 
     # filter out only apple tweets
     #total_list = filter_list( total_list )
-    
+
     # pull only 100 tweets
     #total_list = random.sample( total_list, 100 )
 
@@ -258,7 +258,7 @@ def main():
     download_tweets( fetch_list, user_params['rawDir'] )
 
     # build output corpus
-    build_output_corpus( user_params['outList'], user_params['rawDir'], 
+    build_output_corpus( user_params['outList'], user_params['rawDir'],
                          total_list )
 
     return

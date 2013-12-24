@@ -1,5 +1,5 @@
 """
-@package tweet_pca 
+@package tweet_pca
 PCT for dimensionality reduction.
 
 """
@@ -45,4 +45,3 @@ def tweet_pca_reduce( tweets_train, tweets_test, output_dim ):
              [s for (t,s) in tweets_test])
 
     return (reduced_train, reduced_test)
-

@@ -64,8 +64,8 @@ testFeatures = \
 
 
 def make_tweet_nparr( txt ):
-    """ 
-    Extract tweet feature vector as NumPy array. 
+    """
+    Extract tweet feature vector as NumPy array.
     """
     # result storage
     fvec = numpy.empty( len(testFeatures) )
@@ -84,8 +84,8 @@ def make_tweet_nparr( txt ):
 
 
 def make_tweet_dict( txt ):
-    """ 
-    Extract tweet feature vector as dictionary. 
+    """
+    Extract tweet feature vector as dictionary.
     """
     txtLow = ' ' + txt.lower() + ' '
 
