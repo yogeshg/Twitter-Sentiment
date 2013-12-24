@@ -117,16 +117,20 @@ def trainAndClassify( tweets, argument ):
         classifier = nltk.NaiveBayesClassifier.train(v_train);
     else:
         classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
+
     # classify and dump results for interpretation
 
     print classifier.show_most_informative_features(200)
     accuracy = nltk.classify.accuracy(classifier, v_test)
     print '\nAccuracy %f\n' % accuracy
+
     # build confusion matrix over test set
     test_truth   = [s for (t,s) in v_test]
     test_predict = [classifier.classify(t) for (t,s) in v_test]
+
     print 'Confusion Matrix'
     print nltk.ConfusionMatrix( test_truth, test_predict )
+
     return accuracy
 
 def main() :
