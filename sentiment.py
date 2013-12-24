@@ -9,7 +9,7 @@ to a naive Bayes classifier to assign a label of 'positive', 'negative', or
 the influence of covariant features.
 
 """
-import random
+import sys, random
 import nltk
 
 
@@ -24,6 +24,16 @@ def getTrainingAndTestData(tweets, ratio):
 
 
 def getTrainingAndTestData2(tweets, ratio):
+
+    from functools import wraps
+
+    def counter(func):
+        @wraps(func)
+        def tmp(*args, **kwargs):
+            tmp.count += 1
+            return func(*args, **kwargs)
+        tmp.count = 0
+        return tmp
 
     tweetsArr = []
     for (words, sentiment) in tweets:
@@ -47,15 +57,26 @@ def getTrainingAndTestData2(tweets, ratio):
 
     word_features = get_word_features(get_words_in_tweets(train_tweets))
 
+    @counter
     def extract_features(document):
         document_words = set(document)
         features = {}
         for word in word_features:
             features['contains(%s)' % word] = (word in document_words)
+        #FIXME why the hell is this line printed after getTrainingAndTestData2 is returned!!!
+        sys.stdout.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
+
+    extract_features.count = 0;
 
     v_train = nltk.classify.apply_features(extract_features,train_tweets)
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
+
+    sys.stdout.write('\n')
+    sys.stdout.flush()
+
+    print('returning from ' + getTrainingAndTestData2.__name__);
+
     return (v_train, v_test)
 
 def trainAndClassify( argument ):
