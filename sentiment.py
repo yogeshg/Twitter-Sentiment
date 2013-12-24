@@ -54,8 +54,9 @@ def getTrainingAndTestData2(tweets, ratio):
             features['contains(%s)' % word] = (word in document_words)
         return features
 
-    return (nltk.classify.apply_features(extract_features,train_tweets),
-    	nltk.classify.apply_features(extract_features,test_tweets) )
+    v_train = nltk.classify.apply_features(extract_features,train_tweets)
+    v_test  = nltk.classify.apply_features(extract_features,test_tweets)
+    return (v_train, v_test)
 
 def trainAndClassify( argument ):
 	import sanderstwitter02
