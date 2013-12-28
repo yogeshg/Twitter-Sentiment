@@ -2,14 +2,14 @@
 import re
 
 # Hashtags
-hash_regex = r"#(\w+)"
+hash_regex = re.compile(r"#(\w+)")
 def hash_repl(match):
-	return 'HASH('+match.group(1).upper()+')'
+	return '__HASH_'+match.group(1).upper()
 
 # Handels
-hndl_regex = r"@(\w+)"
+hndl_regex = re.compile(r"@(\w+)")
 def hndl_repl(match):
-	return 'HNDL('+match.group(1).upper()+')'
+	return '__HNDL_'+match.group(1).upper()
 
 # URLs
 url_regex = \
@@ -17,21 +17,20 @@ url_regex = \
 
 # Emoticons
 emoticons = \
-	[	('EMOT(SMILEY)',	[':-)', ':)', '(:', '(-:', ] )	,\
-		('EMOT(LAUGH)',		[':-D', ':D', 'X-D', 'XD', 'xD', ] )	,\
-		('EMOT(LOVE)',		['<3', ':*', ] )	,\
-		('EMOT(WINK)',		[';-)', ';)', ';-D', ';D', '(;', '(-;', ] )	,\
-		('EMOT(FROWN)',		[':-(', ':(', '(:', '(-:', ] )	,\
-		('EMOT(CRY)',		[':,(', ':\'(', ':"(', ':(('] )	,\
+	[	('__EMOT_SMILEY',	[':-)', ':)', '(:', '(-:', ] )	,\
+		('__EMOT_LAUGH',		[':-D', ':D', 'X-D', 'XD', 'xD', ] )	,\
+		('__EMOT_LOVE',		['<3', ':\*', ] )	,\
+		('__EMOT_WINK',		[';-)', ';)', ';-D', ';D', '(;', '(-;', ] )	,\
+		('__EMOT_FROWN',		[':-(', ':(', '(:', '(-:', ] )	,\
+		('__EMOT_CRY',		[':,(', ':\'(', ':"(', ':(('] )	,\
 	]
 
 # Punctuations
 punctuations = \
-	[	('PUNC(DOT)',		['.', ] )	,\
-		('PUNC(EXCL)',		['!', '¡', ] )	,\
-		('PUNC(QUES)',		['?', '¿', ] )	,\
-		#FIXME : charachter '...' and regex(?)
-		('PUNC(ELLP)',		['...', '…', ] )	,\
+	[	('__PUNC_DOT',		['.', ] )	,\
+		('__PUNC_EXCL',		['!', '¡', ] )	,\
+		('__PUNC_QUES',		['?', '¿', ] )	,\
+		('__PUNC_ELLP',		['...', '…', ] )	,\
 		#FIXME : MORE? http://en.wikipedia.org/wiki/Punctuation
 	]
 
