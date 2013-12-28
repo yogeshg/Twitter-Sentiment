@@ -12,8 +12,9 @@ def hndl_repl(match):
 	return '__HNDL_'+match.group(1).upper()
 
 # URLs
-url_regex = \
-	r"(http|https|ftp)://[a-zA-Z0-9\./]+"
+url_regex = re.compile(r"(http|https|ftp)://[a-zA-Z0-9\./]+")
+# Spliting by word boundaries
+word_bound_regex = re.compile(r"\W+")
 
 # Emoticons
 emoticons = \
@@ -58,8 +59,19 @@ def regex_union(arr):
 emoticons_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
 					for (repl, regx) in emoticons ]
 
-#punctuations_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
-#						for (repl, regx) in punctuations ]
+#For punctuation replacement
+def punctuations_repl(match):
+	str = match.group(0)
+	repl = []
+	for (key, parr) in punctuations :
+		for punc in parr :
+			if punc in str:
+				repl.append(key)
+	if( len(repl)>0 ) :
+		return ' '+' '.join(repl)+' '
+	else :
+		return str
+
 #FIXME: preprocessing.preprocess()! wtf! will need to move.
 def preprocess(str):
 	str = re.sub( hash_regex, hash_repl, str )
