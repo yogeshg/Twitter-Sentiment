@@ -1,6 +1,9 @@
 # Datasets
 *.csv
 
+# Scratch Pad
+scratch.*
+
 # Script generated
 *.bak
 
