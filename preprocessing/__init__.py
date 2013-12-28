@@ -46,3 +46,15 @@ def print_emoticons():
 
 def print_punctuations():
 	print_config(punctuations)
+
+def escape_paren(arr):
+	return [str.replace(')', '[)}\]]').replace('(', '[({\[]') for str in arr]
+
+def regex_union(arr):
+	return '(' + '|'.join( arr ) + ')'
+
+emoticons_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
+					for (repl, regx) in emoticons ]
+
+#punctuations_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
+#						for (repl, regx) in punctuations ]
