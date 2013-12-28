@@ -58,3 +58,14 @@ emoticons_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
 
 #punctuations_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
 #						for (repl, regx) in punctuations ]
+#FIXME: preprocessing.preprocess()! wtf! will need to move.
+def preprocess(str):
+	str = re.sub( hash_regex, hash_repl, str )
+	str = re.sub( hndl_regex, hndl_repl, str )
+
+	for (repl, regx) in emoticons_regex :
+		str = re.sub(regx, ' '+repl+' ', str)
+	str = re.sub( word_bound_regex , punctuations_repl, str )
+
+	return str
+
