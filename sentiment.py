@@ -27,7 +27,11 @@ def getTrainingAndTestData(tweets, ratio):
 def getTrainingAndTestData2(tweets, ratio):
 
     from functools import wraps
+    import re
+    import preprocessing
 
+    procTweets = [ (preprocessing.preprocess(t),s) for (t,s) in tweets]
+    
     def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
         @wraps(func)
         def tmp(*args, **kwargs):
@@ -37,9 +41,12 @@ def getTrainingAndTestData2(tweets, ratio):
         return tmp
 
     tweetsArr = []
-    for (words, sentiment) in tweets:
-        words_filtered = [e.lower() for e in words.split() if len(e) >= 3]
-        tweetsArr.append([words_filtered, sentiment])
+    word_regex = re.compile(r"\w+")
+    for (words, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                    for word in re.findall(word_regex, words) \
+                    if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
 
     random.shuffle( tweetsArr );
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
