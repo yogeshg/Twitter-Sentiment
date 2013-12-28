@@ -34,6 +34,7 @@ punctuations = \
 		#FIXME : MORE? http://en.wikipedia.org/wiki/Punctuation
 	]
 
+#Printing functions for info
 def print_config(cfg):
 	for (x, arr) in cfg:
 		print x, '\t',
@@ -47,6 +48,7 @@ def print_emoticons():
 def print_punctuations():
 	print_config(punctuations)
 
+#For emoticon regexes
 def escape_paren(arr):
 	return [str.replace(')', '[)}\]]').replace('(', '[({\[]') for str in arr]
 
@@ -69,3 +71,14 @@ def preprocess(str):
 
 	return str
 
+#from time import time
+#import preprocessing, sanderstwitter02
+#tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+#start = time()
+#procTweets = [ (preprocessing.preprocess(t),s) for (t,s) in tweets]
+#end = time()
+#end - start
+
+#uni = [ a if(a[0:2]=='__') else a.lower() for a in re.findall(r"\w+", str) ]
+#bi  = nltk.bigrams(uni)
+#tri = nltk.bigrams(uni)
