@@ -64,21 +64,17 @@ def getTrainingAndTestData2(tweets, ratio):
         features = {}
         for word in word_features:
             features['contains(%s)' % word] = (word in document_words)
-        #FIXME why the hell is this line printed after getTrainingAndTestData2 is returned!!!
         sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
 
     extract_features.count = 0;
 
+    # Apply NLTK's Lazy Map
     v_train = nltk.classify.apply_features(extract_features,train_tweets)
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
-    #v_train = [(extract_features(train_tweets[i][0]),train_tweets[i][1]) for i in range(len(train_tweets))]
-    #v_test  = [(extract_features(test_tweets[i][0]) , test_tweets[i][1]) for i in range(len(test_tweets)) ]
 
     sys.stderr.write('\n')
     sys.stderr.flush()
-
-    #print('returning from ' + getTrainingAndTestData2.__name__);
 
     return (v_train, v_test)
 
