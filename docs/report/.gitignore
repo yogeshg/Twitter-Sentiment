@@ -1,0 +1,7 @@
+# ignore all files except tex and img files
+*.aux
+*.bbl
+*.blg
+*.log
+*.pdf
+*.toc
