@@ -1,4 +1,4 @@
-# ignore all files except tex and img files
+# ignore all auto generated files
 *.aux
 *.bbl
 *.blg

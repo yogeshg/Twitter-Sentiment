@@ -1,0 +1,4 @@
+ \verb+PUNC_DOT+	\verb+.+	\verb++
+\verb+PUNC_EXCL+	\verb+!+	\verb+_+
+\verb+PUNC_QUES+	\verb+?+	\verb+_+
+\verb+PUNC_ELLP+	\verb+...+	\verb+_+

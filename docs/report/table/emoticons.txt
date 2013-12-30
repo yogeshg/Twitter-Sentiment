@@ -1,0 +1,6 @@
+\verb+EMOT_SMILEY+	\verb+:-)+	\verb+:)+	\verb+(:+	\verb+(-:+
+\verb+EMOT_LAUGH+	\verb+:-D+	\verb+:D+	\verb+X-D+	\verb+XD+	\verb+xD+
+\verb+EMOT_LOVE+	\verb+<3+	\verb+:*+
+\verb+EMOT_WINK+	\verb+;-)+	\verb+;)+	\verb+;-D+	\verb+;D+	\verb+(;+	\verb+(-;+
+\verb+EMOT_FROWN+	\verb+:-(+	\verb+:(+	\verb+(:+	\verb+(-:+
+ \verb+EMOT_CRY+	\verb+:(+	\verb+:'(+	\verb+:"(+	\verb+:((+
