@@ -1,0 +1,127 @@
+\section{Methodology}
+
+\subsection{Datasets}
+One of the major challenges in Sentiment Analysis of Twitter is to collect a labelled dataset.
+Researchers have made public the following datasets for training and testing classifiers.
+
+\subsubsection{Sanders Twitter Corpus}
+This is a collection of 5,000 tweets. It was collected and annotated(!!!TODO: method of annotation) by Sanders Analytics.
+It contains tweets related to four products: Apple, Microsoft, Twitter, Xyz.
+The corpus has Product name, Tweet ID, and classification (positive, negative, neutral or irrelevant).
+Following Twitter's privacy policy, the text, etc. can be downloaded using Twitter API.
+
+\subsubsection{Stanford Twitter}
+This is a collection of 100,000 tweets. It was collected and annotated(!!!TODO: method of annotation)
+by Stanford Universities' Xyz Research Group.
+The corpus has Product name, Tweet ID, and classification (positive, negative, neutral or irrelevant).
+
+\subsection{Features}
+A wide variety of features can be used to build a classifier for tweets.
+The baseline is feature set is bag of words / unigrams.
+However, there's a lot of domain specific information present in tweets that can also be used for classifying them.
+Preprocessing is needed to normalise(!!!) these features. Relevant preprocessing methods are discussed below.
+
+\subsubsection{Colloquial Language Features}
+	\begin{description}
+	\item[Emoticons]{Keyboard written ASCII Art used to show faces, thus giving a more expressive outlook to the text.}
+	\end{description}
+Emoticons are identified and replaced by a single descriptive word.
+The emoticons are identified by using regular expressions.
+Table \ref{table:emot} lists the emoticons currently identified.
+
+\begin{table}[h]
+\centering
+	\begin{tabular}{|l|llllll|}
+	
+	\hline
+		\multicolumn{1}{|c|}{Emoticons} &
+		\multicolumn{6}{|c|}{Examples} \\
+	\hline
+	\verb+EMOT_SMILEY+ 	& \verb+:-)+ 	& \verb+:)+ 	& \verb+(:+ 	& \verb+(-:+ 	& \verb++ 	& \verb++ \\
+	\verb+EMOT_LAUGH+ 	& \verb+:-D+ 	& \verb+:D+ 	& \verb+X-D+ 	& \verb+XD+ 	& \verb+xD+ 	& \verb++ \\
+	\verb+EMOT_LOVE+ 	& \verb+<3+ 	& \verb+:*+ 	& \verb++ 	& \verb++ 	& \verb++ 	& \verb++ \\
+	\verb+EMOT_WINK+ 	& \verb+;-)+ 	& \verb+;)+ 	& \verb+;-D+ 	& \verb+;D+ 	& \verb+(;+ 	& \verb+(-;+ \\
+	\verb+EMOT_FROWN+ 	& \verb+:-(+ 	& \verb+:(+ 	& \verb+(:+ 	& \verb+(-:+ 	& \verb++ 	& \verb++ \\
+	\verb+EMOT_CRY+ 	& \verb+:,(+ 	& \verb+:'(+ 	& \verb+:"(+ 	& \verb+:((+ 	& \verb++ 	& \verb++ \\
+	\hline
+	
+	\end{tabular}
+\caption{Emoticons}
+\label{table:emot}
+\end{table}
+
+
+Punctuations also provide important information about the sentiments of the text.
+At every word boundary we make a list of punctuations present.
+Table \ref{table:punc} lists the punctuations currently identified
+
+\begin{table}[h]
+\centering
+	\begin{tabular}{|l|ll|}
+	
+	\hline
+		\multicolumn{1}{|c|}{Punctuations} &
+		\multicolumn{2}{|c|}{Examples} \\
+	\hline
+	\verb+PUNC_DOT+ & \verb+.+ & \verb++ \\
+	\verb+PUNC_EXCL+ & \verb+!+ & \verb+¡+!!! \\
+	\verb+PUNC_QUES+ & \verb+?+ & \verb+¿+!!! \\
+	\verb+PUNC_ELLP+ & \verb+...+ & \verb+…+!!! \\
+	\hline
+
+	\end{tabular}
+\caption{Punctuations}
+\label{table:punc}
+\end{table}
+
+\subsubsection{Twitter Specific Features}
+	\begin{description}
+	\item[Hashtags]{These are used to indicate trending topics. Used for both naming subjects and phrases. For example, \verb+#iPad+, \verb+#SoMuchWin+}
+	\item[Handels]{Every Twitter user has a unique handle. For example, Apple Inc's handle is \verb+@Apple+}
+	\end{description}
+These features are identified using regular expressions and replaced by a single word.
+For example the following is changed to later.
+\begin{verbatim}
+	Some #tweet here
+\end{verbatim}
+\begin{verbatim}
+	Some HASH_TWEET here
+\end{verbatim}
+
+\subsubsection{n-grams}
+These features are identified using regular expressions and replaced by a single word.
+For example the following is changed to later.
+
+\begin{table}[h]
+\centering
+Unigram Statistics here
+\caption{n-gram Statistics}
+\label{ngram}
+\end{table}
+
+\subsection{Experimentation}
+The classifier was trained using Naive Bayes model, Maximum Entropy and Decision Tree Model.
+Top classifying features are listed.
+
+\begin{table}[h]
+\centering
+Naive Bayes Statistics here
+\caption{Naive Bayes Statistics}
+\label{naive}
+\end{table}
+
+\begin{table}[h]
+\centering
+Maximum Entropy Statistics here
+\caption{Maximum Entropy Statistics}
+\label{maxent}
+\end{table}
+
+\begin{table}[h]
+\centering
+Decision Tree Statistics here
+\caption{Decision Tree Statistics}
+\label{dtree}
+\end{table}
+
+
