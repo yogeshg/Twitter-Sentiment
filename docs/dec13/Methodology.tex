@@ -10,6 +10,26 @@ It contains tweets related to four products: Apple, Microsoft, Twitter, Xyz.
 The corpus has Product name, Tweet ID, and classification (positive, negative, neutral or irrelevant).
 Following Twitter's privacy policy, the text, etc. can be downloaded using Twitter API.
 
+\begin{table}[h]
+\centering
+	\begin{tabular}{| p{0.6\textwidth} | l | }
+
+	\hline
+		\multicolumn{1}{|c|}{Tweet} &
+		\multicolumn{1}{|c|}{Classification} \\
+	\hline
+	\verb'S/O to @apple for replacing my phone for free...' &  \verb'positive' \\ \hline
+	\verb"+1  RT @Doug_Newton: @apple PLEASE FIX \#Siri!!!!" {...}
+	\verb"She can't connect to your network!!!!!!!" &  \verb'negative' \\ \hline
+	\verb'Apple Users Get The official Kalifornia Cavi App' {...}
+	\verb'on your Apple Device now on  - powered by @Apple' {...}
+	\verb'- Download it free http://t.co/HlGnvlRw' &  \verb'neutral' \\ \hline
+
+	\end{tabular}
+\caption{Tweets}
+\label{table:twt}
+\end{table}
+
 \subsubsection{Stanford Twitter}
 This is a collection of 100,000 tweets. It was collected and annotated(!!!TODO: method of annotation)
 by Stanford Universities' Xyz Research Group.
@@ -21,9 +41,12 @@ The baseline is feature set is bag of words / unigrams.
 However, there's a lot of domain specific information present in tweets that can also be used for classifying them.
 Preprocessing is needed to normalise(!!!) these features. Relevant preprocessing methods are discussed below.
 
-\subsubsection{Colloquial Language Features}
+\subsubsection{Pre Processing}
 	\begin{description}
-	\item[Emoticons]{Keyboard written ASCII Art used to show faces, thus giving a more expressive outlook to the text.}
+	\item[Emoticons]{Keyboard written pictorial representation of a facial expression,
+						used to draw a receiver's attention to the temper of sender's nominal verbal communication,
+						thus changing and improving its interpretation. %% REF: http://en.wikipedia.org/wiki/Emoticon
+					}
 	\end{description}
 Emoticons are identified and replaced by a single descriptive word.
 The emoticons are identified by using regular expressions.
@@ -50,9 +73,8 @@ Table \ref{table:emot} lists the emoticons currently identified.
 \label{table:emot}
 \end{table}
 
-
-Punctuations also provide important information about the sentiments of the text.
-At every word boundary we make a list of punctuations present.
+Punctuations like exclaimation can also provide important information about the sentiments of the text.
+We replace every word boundary by a list of punctuations present at that pont.
 Table \ref{table:punc} lists the punctuations currently identified
 
 \begin{table}[h]
@@ -74,30 +96,52 @@ Table \ref{table:punc} lists the punctuations currently identified
 \label{table:punc}
 \end{table}
 
-\subsubsection{Twitter Specific Features}
 	\begin{description}
 	\item[Hashtags]{These are used to indicate trending topics. Used for both naming subjects and phrases. For example, \verb+#iPad+, \verb+#SoMuchWin+}
 	\item[Handels]{Every Twitter user has a unique handle. For example, Apple Inc's handle is \verb+@Apple+}
 	\end{description}
+	
 These features are identified using regular expressions and replaced by a single word.
-For example the following is changed to later.
-\begin{verbatim}
-	Some #tweet here
-\end{verbatim}
-\begin{verbatim}
-	Some HASH_TWEET here
-\end{verbatim}
+This helps in decreasing the size of the feature set by (!!!) percent.
+Table \ref{table:preproc} illustrates preprocessing methods.
+
+\begin{table}[h]
+\centering
+		\begin{verbatim}
+		S/O to @apple for replacing my phone for free...
+
+		S/O to __HNDL_APPLE for replacing my phone for free __PUNC_ELLP
+		\end{verbatim}
+		\begin{verbatim}
+		+1  RT @Doug_Newton: @apple PLEASE FIX #Siri!!!! 
+		She can't connect to your network!!!!!!!
+
+		+1  RT __HNDL_DOUG_NEWTON: __HNDL_APPLE PLEASE FIX __HASH_SIRI __PUNC_EXCL
+		She can't connect to your network __PUNC_EXCL 
+		\end{verbatim}
+		\begin{verbatim}
+		Apple Users Get The official Kalifornia Cavi App 
+		on your Apple Device now on  - powered by @Apple
+		 - Download it free http://t.co/HlGnvlRw
+
+		Apple Users Get The official Kalifornia Cavi App 
+		on your Apple Device now on  - powered by __HNDL_APPLE 
+		- Download it __URL
+		\end{verbatim}
+\caption{Tweets: Before and After preprocessing}
+\label{table:preproc}
+\end{table}
 
 \subsubsection{n-grams}
 These features are identified using regular expressions and replaced by a single word.
 For example the following is changed to later.
 
-\begin{table}[h]
+\begin{figure}[h]
 \centering
-Unigram Statistics here
-\caption{n-gram Statistics}
-\label{ngram}
-\end{table}
+\includegraphics[width=\textwidth]{img/fdist-moby.png}
+\caption{Cumulative Frequency Plot for 50 Most Frequently Words in Moby Dick: these account for nearly half of the tokens.}
+\label{fig:unigram}
+\end{figure}
 
 \subsection{Experimentation}
 The classifier was trained using Naive Bayes model, Maximum Entropy and Decision Tree Model.
@@ -105,7 +149,23 @@ Top classifying features are listed.
 
 \begin{table}[h]
 \centering
-Naive Bayes Statistics here
+\begin{verbatim}
+         | n   p |
+         | e n o |
+         | g e s |
+         | a u i |
+         | t t t |
+         | i r i |
+         | v a v |
+         | e l e |
+---------+-------+
+negative |<.>1 . |
+ neutral | .<5>. |
+positive | . 3<.>|
+---------+-------+
+
+Accuracy : 0.555555555556
+\end{verbatim}
 \caption{Naive Bayes Statistics}
 \label{naive}
 \end{table}

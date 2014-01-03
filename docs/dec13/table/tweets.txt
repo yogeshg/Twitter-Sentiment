@@ -1,0 +1,3 @@
+\verb'S/O to @apple for replacing my phone for free...'	 \verb'positive']
+\verb"+1  RT @Doug_Newton: @apple PLEASE FIX #Siri!!!! She can't connect to your network!!!!!!!"	 \verb'negative']
+\verb'Apple Users Get The official Kalifornia Cavi App on your Apple Device now on  - powered by @Apple - Download it free http://t.co/HlGnvlRw'	 \verb'neutral']
