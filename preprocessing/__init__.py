@@ -9,12 +9,18 @@ def hash_repl(match):
 # Handels
 hndl_regex = re.compile(r"@(\w+)")
 def hndl_repl(match):
-	return '__HNDL_'+match.group(1).upper()
+	return '__HNDL'#_'+match.group(1).upper()
 
 # URLs
 url_regex = re.compile(r"(http|https|ftp)://[a-zA-Z0-9\./]+")
+
 # Spliting by word boundaries
 word_bound_regex = re.compile(r"\W+")
+
+# Repeating words like hurrrryyyyyy
+rpt_regex = re.compile(r"(.)\1{1,}");
+def rpt_repl(match):
+	return match.group(1)+match.group(1)
 
 # Emoticons
 emoticons = \
@@ -28,7 +34,9 @@ emoticons = \
 
 # Punctuations
 punctuations = \
-	[	('__PUNC_DOT',		['.', ] )	,\
+	[	#('',		['.', ] )	,\
+		#('',		[',', ] )	,\
+		#('',		['\'', '\"', ] )	,\
 		('__PUNC_EXCL',		['!', '¡', ] )	,\
 		('__PUNC_QUES',		['?', '¿', ] )	,\
 		('__PUNC_ELLP',		['...', '…', ] )	,\
@@ -51,7 +59,7 @@ def print_punctuations():
 
 #For emoticon regexes
 def escape_paren(arr):
-	return [str.replace(')', '[)}\]]').replace('(', '[({\[]') for str in arr]
+	return [text.replace(')', '[)}\]]').replace('(', '[({\[]') for text in arr]
 
 def regex_union(arr):
 	return '(' + '|'.join( arr ) + ')'
@@ -61,27 +69,30 @@ emoticons_regex = [ (repl, re.compile(regex_union(escape_paren(regx))) ) \
 
 #For punctuation replacement
 def punctuations_repl(match):
-	str = match.group(0)
+	text = match.group(0)
 	repl = []
 	for (key, parr) in punctuations :
 		for punc in parr :
-			if punc in str:
+			if punc in text:
 				repl.append(key)
 	if( len(repl)>0 ) :
 		return ' '+' '.join(repl)+' '
 	else :
-		return str
+		return ' '
 
 #FIXME: preprocessing.preprocess()! wtf! will need to move.
-def preprocess(str):
-	str = re.sub( hash_regex, hash_repl, str )
-	str = re.sub( hndl_regex, hndl_repl, str )
+def preprocess(text):
+	text = re.sub( hash_regex, hash_repl, text )
+	text = re.sub( hndl_regex, hndl_repl, text )
+	text = re.sub( url_regex, ' __URL ', text )
 
 	for (repl, regx) in emoticons_regex :
-		str = re.sub(regx, ' '+repl+' ', str)
-	str = re.sub( word_bound_regex , punctuations_repl, str )
+		text = re.sub(regx, ' '+repl+' ', text)
 
-	return str
+	text = re.sub( word_bound_regex , punctuations_repl, text )
+	text = re.sub( rpt_regex, rpt_repl, text )
+
+	return text
 
 #from time import time
 #import preprocessing, sanderstwitter02
@@ -91,6 +102,6 @@ def preprocess(str):
 #end = time()
 #end - start
 
-#uni = [ a if(a[0:2]=='__') else a.lower() for a in re.findall(r"\w+", str) ]
+#uni = [ a if(a[0:2]=='__') else a.lower() for a in re.findall(r"\w+", text) ]
 #bi  = nltk.bigrams(uni)
-#tri = nltk.bigrams(uni)
+#tri = nltk.trigrams(uni)
