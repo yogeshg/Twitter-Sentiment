@@ -1,7 +1,16 @@
-# ignore all auto generated files
+# ignore all auto generated files 
+
+# Latex
 *.aux
 *.bbl
 *.blg
 *.log
 *.pdf
 *.toc
+
+# Beamer
+*.nav
+*.out
+*.snm
+*.vrb
+*.pdf
