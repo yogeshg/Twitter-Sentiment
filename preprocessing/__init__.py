@@ -18,7 +18,7 @@ url_regex = re.compile(r"(http|https|ftp)://[a-zA-Z0-9\./]+")
 word_bound_regex = re.compile(r"\W+")
 
 # Repeating words like hurrrryyyyyy
-rpt_regex = re.compile(r"(.)\1{1,}");
+rpt_regex = re.compile(r"(.)\1{1,}", re.IGNORECASE);
 def rpt_repl(match):
 	return match.group(1)+match.group(1)
 

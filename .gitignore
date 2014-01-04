@@ -1,6 +1,9 @@
 # Datasets
 *.csv
 
+# Logs
+logs/*.*
+
 # Scratch Pad
 scratch.*
 
