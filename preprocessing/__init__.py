@@ -80,8 +80,28 @@ def punctuations_repl(match):
 	else :
 		return ' '
 
+def processHashtags(text):
+	return re.sub( hash_regex, hash_repl, text )
+
+def processHandles(text):
+	return re.sub( hndl_regex, hndl_repl, text )
+
+def processUrls(text):
+	return re.sub( url_regex, ' __URL ', text )
+
+def processEmoticons(text):
+	for (repl, regx) in emoticons_regex :
+		text = re.sub(regx, ' '+repl+' ', text)
+	return text
+
+def processPunctuations(text):
+	return re.sub( word_bound_regex , punctuations_repl, text )
+
+def processRepeatings(text):
+	return re.sub( rpt_regex, rpt_repl, text )
+
 #FIXME: preprocessing.preprocess()! wtf! will need to move.
-def preprocess(text):
+def processAll(text):
 	text = re.sub( hash_regex, hash_repl, text )
 	text = re.sub( hndl_regex, hndl_repl, text )
 	text = re.sub( url_regex, ' __URL ', text )
