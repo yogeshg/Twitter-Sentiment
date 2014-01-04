@@ -309,6 +309,19 @@ def getPreprocessingStats( tweets ):
     print 'Urls     ','\t', min_Urls     ,'\t', avg_Urls     ,'\t', max_Urls     
     print 'Emoticons','\t', min_Emoticons,'\t', avg_Emoticons,'\t', max_Emoticons
 
+    print '###########################################################################'
+
+    uni_dist = nltk.FreqDist(unigrams)
+
+    features = uni_dist.keys()
+
+    for word in features:
+        print word, '\t,\t', uni_dist[word]
+    
+
+    #uni_dist.plot(50)
+    uni_dist.plot(50, cumulative=True)
+
 
 def trainAndClassify( tweets, argument ):
 
