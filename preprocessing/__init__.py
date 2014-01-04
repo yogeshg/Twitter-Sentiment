@@ -100,6 +100,18 @@ def processPunctuations(text):
 def processRepeatings(text):
 	return re.sub( rpt_regex, rpt_repl, text )
 
+def countHandles(text):
+	return len( re.findall( hndl_regex, text) )
+def countHashtags(text):
+	return len( re.findall( hash_regex, text) )
+def countUrls(text):
+	return len( re.findall( url_regex, text) )
+def countEmoticons(text):
+	count = 0
+	for (repl, regx) in emoticons_regex :
+		count += len( re.findall( regx, text) )
+	return count
+
 #FIXME: preprocessing.preprocess()! wtf! will need to move.
 def processAll(text):
 	text = re.sub( hash_regex, hash_repl, text )

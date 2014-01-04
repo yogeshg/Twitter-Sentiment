@@ -85,6 +85,231 @@ def getTrainingAndTestData2(tweets, ratio):
 
     return (v_train, v_test)
 
+def getPreprocessingStats( tweets ):
+    import re
+    import preprocessing
+
+    tweetsArr = []
+    for (text, sentiment) in tweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() ]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words before preprocessing :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    tweetsArr = []
+    for (text, sentiment) in tweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after filtering :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processHashtags(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processHashtags :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processHandles(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processHandles :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processUrls(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processUrls :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processEmoticons(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processEmoticons :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processPunctuations(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processPunctuations :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processRepeatings(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processRepeatings :\t',
+    print len(set(unigrams))
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processAll(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() ]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processAll :\t',
+    print len(set(unigrams))
+    a = set(unigrams)
+
+    ###########################################################################
+
+    procTweets = [ (preprocessing.processAll(t),s) for (t,s) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if len(word) >= 3]
+        tweetsArr.append([tweet_uni, sentiment])
+
+    unigrams = []
+    for (words, sentiment) in tweetsArr:
+        unigrams.extend(words)
+
+    print 'number of words after processAll + filtering :\t',
+    print len(set(unigrams))
+    b = set(unigrams)
+
+    print b.symmetric_difference(a)
+
+    print '###########################################################################'
+
+    n = 0
+
+    num_Handles   = 0
+    num_Hashtags  = 0
+    num_Urls      = 0
+    num_Emoticons = 0
+
+    avg_Handles   = 0.0
+    avg_Hashtags  = 0.0
+    avg_Urls      = 0.0
+    avg_Emoticons = 0.0
+
+    max_Handles   = 0.0
+    max_Hashtags  = 0.0
+    max_Urls      = 0.0
+    max_Emoticons = 0.0
+
+    min_Handles   = 0.0
+    min_Hashtags  = 0.0
+    min_Urls      = 0.0
+    min_Emoticons = 0.0
+
+    for (text, sentiment) in tweets:
+        n+=1
+        num_Handles   = preprocessing.countHandles(text)
+        num_Hashtags  = preprocessing.countHashtags(text)
+        num_Urls      = preprocessing.countUrls(text)
+        num_Emoticons = preprocessing.countEmoticons(text)
+
+        avg_Handles   = avg_Handles   * (n-1)/n + 1.0*num_Handles   /n
+        avg_Hashtags  = avg_Hashtags  * (n-1)/n + 1.0*num_Hashtags  /n
+        avg_Urls      = avg_Urls      * (n-1)/n + 1.0*num_Urls      /n
+        avg_Emoticons = avg_Emoticons * (n-1)/n + 1.0*num_Emoticons /n
+
+        max_Handles   = max(max_Handles   , num_Handles   )
+        max_Hashtags  = max(max_Hashtags  , num_Hashtags  )
+        max_Urls      = max(max_Urls      , num_Urls      )
+        max_Emoticons = max(max_Emoticons , num_Emoticons )
+
+        min_Handles   = min(min_Handles   , num_Handles   )
+        min_Hashtags  = min(min_Hashtags  , num_Hashtags  )
+        min_Urls      = min(min_Urls      , num_Urls      )
+        min_Emoticons = min(min_Emoticons , num_Emoticons )
+
+    print 'Feature  ','\t', 'min'        ,'\t', 'avg'        ,'\t', 'max'        ,'\t', 'of', n, 'tweets'
+    print 'Handles  ','\t', min_Handles  ,'\t', avg_Handles  ,'\t', max_Handles  
+    print 'Hashtags ','\t', min_Hashtags ,'\t', avg_Hashtags ,'\t', max_Hashtags 
+    print 'Urls     ','\t', min_Urls     ,'\t', avg_Urls     ,'\t', max_Urls     
+    print 'Emoticons','\t', min_Emoticons,'\t', avg_Emoticons,'\t', max_Emoticons
+
+
 def trainAndClassify( tweets, argument ):
 
     print '######################'
@@ -143,10 +368,12 @@ def main(argv) :
         sys.stdout = open( str(argv[0]), 'w')
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
-    print trainAndClassify(tweets, 0)
-    print trainAndClassify(tweets, 1)
-    print trainAndClassify(tweets, 2)
-    print trainAndClassify(tweets, 3)
+    getPreprocessingStats(tweets)
+
+#    print trainAndClassify(tweets, 0)
+#    print trainAndClassify(tweets, 1)
+#    print trainAndClassify(tweets, 2)
+#    print trainAndClassify(tweets, 3)
 
     sys.stdout.flush()
 
