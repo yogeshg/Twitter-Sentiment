@@ -19,6 +19,9 @@ def getTrainingAndTestData(tweets, ratio):
 def getTrainingAndTestData2(tweets, ratio):
     return None
 
+def trainAndClassify( tweets, argument ):
+    return 0
+
 def preprocessingStats( tweets ):
     import re
     import preprocessing
@@ -110,7 +113,6 @@ def preprocessingStats( tweets ):
         for key in dist.keys():
             print key, '\t,\t', dist[key]
 
-
     #unigrams
     uni_dist = nltk.FreqDist(unigrams)
     print 'Unigrams Distribution'
@@ -128,11 +130,6 @@ def preprocessingStats( tweets ):
     print 'Trigrams Distribution'
     printFreqDistCSV(tri_dist)
     tri_dist.plot(50, cumulative=True)
-
-
-def trainAndClassify( tweets, argument ):
-    print '######################'
-    return 0
 
 def main(argv) :
     import sanderstwitter02
