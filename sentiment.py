@@ -105,14 +105,8 @@ def preprocessingStats( tweets ):
 
     print '###########################################################################'
 
-    uni_dist = nltk.FreqDist(unigrams)
 
-    features = uni_dist.keys()
 
-    for word in features:
-        print word, '\t,\t', uni_dist[word]
-
-    #uni_dist.plot(50)
     uni_dist.plot(50, cumulative=True)
 
 
