@@ -18,7 +18,7 @@ url_regex = re.compile(r"(http|https|ftp)://[a-zA-Z0-9\./]+")
 word_bound_regex = re.compile(r"\W+")
 
 # Repeating words like hurrrryyyyyy
-rpt_regex = re.compile(r"(.)\1{1,}");
+rpt_regex = re.compile(r"(.)\1{1,}", re.IGNORECASE);
 def rpt_repl(match):
 	return match.group(1)+match.group(1)
 
@@ -80,25 +80,29 @@ def punctuations_repl(match):
 	else :
 		return ' '
 
-def processHashtags(text):
+def processHashtags( 	text, subject='', query=[]):
 	return re.sub( hash_regex, hash_repl, text )
 
-def processHandles(text):
+def processHandles( 	text, subject='', query=[]):
 	return re.sub( hndl_regex, hndl_repl, text )
 
-def processUrls(text):
+def processUrls( 		text, subject='', query=[]):
 	return re.sub( url_regex, ' __URL ', text )
 
-def processEmoticons(text):
+def processEmoticons( 	text, subject='', query=[]):
 	for (repl, regx) in emoticons_regex :
 		text = re.sub(regx, ' '+repl+' ', text)
 	return text
 
-def processPunctuations(text):
+def processPunctuations( text, subject='', query=[]):
 	return re.sub( word_bound_regex , punctuations_repl, text )
 
-def processRepeatings(text):
+def processRepeatings( 	text, subject='', query=[]):
 	return re.sub( rpt_regex, rpt_repl, text )
+
+def processQueryTerm( 	text, subject='', query=[]):
+	query_regex = "|".join([ re.escape(q) for q in query])
+	return re.sub( query_regex, '__QUER', text, flags=re.IGNORECASE )
 
 def countHandles(text):
 	return len( re.findall( hndl_regex, text) )
@@ -113,7 +117,12 @@ def countEmoticons(text):
 	return count
 
 #FIXME: preprocessing.preprocess()! wtf! will need to move.
-def processAll(text):
+#FIXME: use process functions inside
+def processAll( 		text, subject='', query=[]):
+
+	query_regex = "|".join([ re.escape(q) for q in query])
+	text = re.sub( query_regex, '__QUER', text, flags=re.IGNORECASE )
+
 	text = re.sub( hash_regex, hash_repl, text )
 	text = re.sub( hndl_regex, hndl_repl, text )
 	text = re.sub( url_regex, ' __URL ', text )
