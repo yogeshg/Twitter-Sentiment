@@ -48,29 +48,63 @@ def getTrainingAndTestData2(tweets, ratio):
                     if len(word) >= 3]
         tweetsArr.append([tweet_uni, sentiment])
 
-    random.shuffle( tweetsArr );
+    random.shuffle( tweetsArr )
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
     test_tweets  = tweetsArr[int(len(tweetsArr)*ratio):]
 
-    def get_words_in_tweets(tweetsArr):
-        all_words = []
-        for (words, sentiment) in tweetsArr:
-            all_words.extend(words)
-        return all_words
+    #def get_words_in_tweets(tweetsArr):
+    #    all_words = []
+    #    for (words, sentiment) in tweetsArr:
+    #        all_words.extend(words)
+    #        all_words.extend(nltk.bigrams(words))
+    #        all_words.extend(nltk.trigrams(words))
+    #    return all_words
+    #def get_word_features(wordlist):
+    #    wordlist = nltk.FreqDist(wordlist)
+    #    return wordlist
 
-    def get_word_features(wordlist):
-        wordlist = nltk.FreqDist(wordlist)
-        word_features = wordlist.keys()
-        return word_features
+    unigrams = []
+    #bigrams  = []
+    #trigrams = []
+    #n_grams  = []
 
-    word_features = get_word_features(get_words_in_tweets(train_tweets))
+    for( words, sentiment ) in train_tweets:
+        words_uni = words
+        #words_bi  = nltk.bigrams(words)
+        #words_tri = nltk.trigrams(words)
+        unigrams.extend( words_uni )
+        #bigrams.extend(  words_bi  )
+        #trigrams.extend( words_tri )
+        #n_grams.extend(  words_uni )
+        #n_grams.extend(  words_bi  )
+        #n_grams.extend(  words_tri )
+
+    uni_dist = nltk.FreqDist(unigrams)
+    #bi_dist  = nltk.FreqDist(bigrams)
+    #tri_dist = nltk.FreqDist(trigrams)
+    #n_dist   = nltk.FreqDist(n_grams)
+
+    #FIXME : Decide wether or not to choose bi & tri grams!
+    #           also chose most "Salient" features!!!
+
+    word_features = uni_dist.keys()
+    #word_features = bi_dist.keys()
+    #word_features = tri_dist.keys()
+    #word_features = n_dist.keys()
+
 
     @counter    #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
-    def extract_features(document):
-        document_words = set(document)
+    def extract_features(words):
+        words_uni = words
+        #words_bi  = nltk.bigrams(words)
+        #words_tri = nltk.trigrams(words)
+        document_words = set(words_uni)
+        #document_words.union(set(words_bi))
+        #document_words.union(set(words_tri))
+
         features = {}
         for word in word_features:
-            features['contains(%s)' % word] = (word in document_words)
+            features['contains(%s)' % str(word)] = (word in document_words)
         sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
 
@@ -105,15 +139,6 @@ def trainAndClassify( tweets, argument ):
     else:
         (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 
-    # dump tweets which our feature selector found nothing
-    #for i in range(0,len(tweets)):
-    #    if tweet_features.is_zero_dict( fvecs[i][0] ):
-    #        print tweets[i][1] + ': ' + tweets[i][0]
-
-    # apply PCA reduction
-    #(v_train, v_test) = \
-    #        tweet_pca.tweet_pca_reduce( v_train, v_test, output_dim=1.0 )
-
     # train classifier
 
     if( (argument/2) % 2 == 0):
@@ -124,7 +149,7 @@ def trainAndClassify( tweets, argument ):
     # classify and dump results for interpretation
 
     accuracy = nltk.classify.accuracy(classifier, v_test)
-    print '\nAccuracy %f\n' % accuracy
+    print 'Accuracy :', accuracy
     print classifier.show_most_informative_features(200)
 
     # build confusion matrix over test set
@@ -134,7 +159,7 @@ def trainAndClassify( tweets, argument ):
     print 'Confusion Matrix'
     print nltk.ConfusionMatrix( test_truth, test_predict )
 
-    return accuracy
+    return classifier
 
 def main(argv) :
     import sanderstwitter02
@@ -143,10 +168,12 @@ def main(argv) :
         sys.stdout = open( str(argv[0]), 'w')
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
-    print trainAndClassify(tweets, 0)
-    print trainAndClassify(tweets, 1)
-    print trainAndClassify(tweets, 2)
-    print trainAndClassify(tweets, 3)
+    #getPreprocessingStats(tweets)
+
+#    trainAndClassify(tweets, 0)
+    trainAndClassify(tweets, 1)
+#    trainAndClassify(tweets, 2)
+#    trainAndClassify(tweets, 3)
 
     sys.stdout.flush()
 
