@@ -30,8 +30,9 @@ def getTrainingAndTestData2(tweets, ratio):
     import re
     import preprocessing
 
-    procTweets = [ (preprocessing.preprocess(t),s) for (t,s) in tweets]
-    
+    procTweets = [ (preprocessing.processAll(text, subject=subj, query=quer), sent)    \
+                        for (text, sent, subj, quer) in tweets]
+
     def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
         @wraps(func)
         def tmp(*args, **kwargs):
@@ -40,13 +41,15 @@ def getTrainingAndTestData2(tweets, ratio):
         tmp.count = 0
         return tmp
 
+    #FIXME: see from other branch
     tweetsArr = []
-    word_regex = re.compile(r"\w+")
-    for (words, sentiment) in procTweets:
-        tweet_uni = [word if(word[0:2]=='__') else word.lower() \
-                    for word in re.findall(word_regex, words) \
+    #word_regex = re.compile(r"\w+")
+    for (text, sentiment) in procTweets:
+        words = [word if(word[0:2]=='__') else word.lower() \
+                    for word in text.split() \
+                                #re.findall(word_regex, words) \
                     if len(word) >= 3]
-        tweetsArr.append([tweet_uni, sentiment])
+        tweetsArr.append([words, sentiment])
 
     random.shuffle( tweetsArr )
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
@@ -114,41 +117,29 @@ def getTrainingAndTestData2(tweets, ratio):
     v_train = nltk.classify.apply_features(extract_features,train_tweets)
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
 
-    sys.stderr.write('\n')
-    sys.stderr.flush()
-
     return (v_train, v_test)
 
 def trainAndClassify( tweets, argument ):
 
-    print '######################'
-
+    print '\n', '######################'
     if( argument % 2 == 0):
-        print 'features\t: sandersfeatures'
-    else:
-        print 'features\t: laurentfeatures'
-
-    if( (argument/2) % 2 == 0):
-        print 'classifier\t: NaiveBayesClassifier'
-    else:
-        print 'classifier\t: train_maxent_classifier_with_gis'
-
-
-    if( argument % 2 == 0):
+        print 'features\t: getTrainingAndTestData'
         (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
     else:
+        print 'features\t: getTrainingAndTestData2'
         (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 
     # train classifier
-
     if( (argument/2) % 2 == 0):
+        print 'classifier\t: NaiveBayesClassifier'
         classifier = nltk.NaiveBayesClassifier.train(v_train);
     else:
+        print 'classifier\t: train_maxent_classifier_with_gis'
         classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
 
     # classify and dump results for interpretation
-
     accuracy = nltk.classify.accuracy(classifier, v_test)
+    print '\n', '######################'
     print 'Accuracy :', accuracy
     print classifier.show_most_informative_features(200)
 
@@ -156,6 +147,9 @@ def trainAndClassify( tweets, argument ):
     test_truth   = [s for (t,s) in v_test]
     test_predict = [classifier.classify(t) for (t,s) in v_test]
 
+    print '\n', '######################'
+    print 'Accuracy :', accuracy
+    print '\n', '######################'
     print 'Confusion Matrix'
     print nltk.ConfusionMatrix( test_truth, test_predict )
 
@@ -173,7 +167,7 @@ def main(argv) :
 #    trainAndClassify(tweets, 0)
     trainAndClassify(tweets, 1)
 #    trainAndClassify(tweets, 2)
-#    trainAndClassify(tweets, 3)
+    trainAndClassify(tweets, 3)
 
     sys.stdout.flush()
 
