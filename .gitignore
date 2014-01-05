@@ -1,14 +1,17 @@
-# Datasets
-*.csv
-
-# Logs
-logs/*.*
+# Archives for exporting purposes
+archives/**
 
 # Scratch Pad
 scratch.*
 
+# Logs
+logs/**
+
 # Script generated
 *.bak
+
+# Datasets
+*.csv
 
 # Byte-compiled / optimized / DLL files
 #__pycache__/
