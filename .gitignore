@@ -1,5 +1,5 @@
-# Datasets
-*.csv
+# Archives for exporting etc
+archives/*.*
 
 # Log files
 logs/*.*
@@ -9,6 +9,9 @@ scratch.*
 
 # Script generated
 *.bak
+
+# Datasets
+*.csv
 
 # Byte-compiled / optimized / DLL files
 #__pycache__/
