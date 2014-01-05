@@ -105,9 +105,29 @@ def preprocessingStats( tweets ):
 
     print '###########################################################################'
 
+    def printFreqDistCSV( dist ):
+        print '<FreqDist with', len(dist.keys()), ' samples and', dist._N, 'outcomes>'
+        for key in dist.keys():
+            print key, '\t,\t', dist[key]
 
 
+    #unigrams
+    uni_dist = nltk.FreqDist(unigrams)
+    print 'Unigrams Distribution'
+    printFreqDistCSV(uni_dist)
     uni_dist.plot(50, cumulative=True)
+
+    bigrams = nltk.bigrams(unigrams)
+    bi_dist = nltk.FreqDist(bigrams)
+    print 'Bigrams Distribution'
+    printFreqDistCSV(bi_dist)
+    bi_dist.plot(50, cumulative=True)
+
+    trigrams = nltk.trigrams(unigrams)
+    tri_dist = nltk.FreqDist(trigrams)
+    print 'Trigrams Distribution'
+    printFreqDistCSV(tri_dist)
+    tri_dist.plot(50, cumulative=True)
 
 
 def trainAndClassify( tweets, argument ):
