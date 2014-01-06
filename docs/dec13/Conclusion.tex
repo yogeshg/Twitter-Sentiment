@@ -1,0 +1,11 @@
+\section{Conclusion}
+We can conclude by saying that using appropriate preprocessing and word unigrams as features,
+	our classifier has been able to reach a baseline accuracy of around 80\%.
+There are however improvements that we need to do for better results.
+First of all, we should notice that our data is not balanced.
+We should probably investigate the results after weight adjustments.
+Secondly, if we take a closer look at Table \ref{table:naive_features} we can see that a lot of
+	positive and negative tweets have been classified as neutral.
+One way to take care of this is to build a two leveled classifier that first separates into
+	subjective or objective and then classifies objective tweets into negative or positive.
+Next we also need to investigate other classifiers such as Maximum Entropy Classifier and Decision Tree Classifier.
