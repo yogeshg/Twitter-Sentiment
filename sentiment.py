@@ -123,9 +123,24 @@ def preprocessingStats( tweets ):
     print '###########################################################################'
 
     def printFreqDistCSV( dist ):
-        print '<FreqDist with', len(dist.keys()), ' samples and', dist._N, 'outcomes>'
+        print '<FreqDist with', len(dist.keys()), 'samples and', dist._N, 'outcomes>'
         for key in dist.keys():
             print key, '\t,\t', dist[key]
+            # can be used to judge entropy of n-grams
+            # FIXME: write code if required
+            # figure out if we need scanner
+            # pos = neg = neu = 0
+            # if type is tuple
+                # for each tweet
+                    # if tweet contains tuple(0)
+                        # if next is tuple(1)
+                            # if next is tuple(2)
+                                # inc pos, neg or neu
+            # else type is single word
+                # for each tweet
+                    # if tweet contains word
+                        # inc pos, neg or neu
+            # print pos, neg, neu
 
     #unigrams
     uni_dist = nltk.FreqDist(unigrams)
