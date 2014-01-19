@@ -81,7 +81,11 @@ def preprocessingStats( tweets ):
 
     num_Handles   =    num_Hashtags  =    num_Urls      =    num_Emoticons = 0
     avg_Handles   =    avg_Hashtags  =    avg_Urls      =    avg_Emoticons = 0.0
-    max_Handles   =    max_Hashtags  =    max_Urls      =    max_Emoticons = 0.0
+    max_Handles   =    max_Hashtags  =    max_Urls      =    max_Emoticons = 0
+
+    cnt_words = cnt_chars = 0
+    avg_words = avg_chars = 0.0
+    max_words = max_chars = 0
 
     for (text, sent, subj, quer) in tweets:
         n+=1
@@ -100,11 +104,21 @@ def preprocessingStats( tweets ):
         max_Urls      = max(max_Urls      , num_Urls      )
         max_Emoticons = max(max_Emoticons , num_Emoticons )
 
+        cnt_words = len(text.split())
+        cnt_chars = len(text)
+        avg_words = avg_words*(n-1)/n + cnt_words*1.0/n
+        avg_chars = avg_chars*(n-1)/n + cnt_chars*1.0/n
+        max_words = max(max_words, cnt_words)
+        max_chars = max(max_chars, cnt_chars)
+
     print 'Feature  ','\t', 'avg'        ,'\t', 'max'        ,'\t', 'of', n, 'tweets'
     print 'Handles  ','\t', avg_Handles  ,'\t', max_Handles  
     print 'Hashtags ','\t', avg_Hashtags ,'\t', max_Hashtags 
     print 'Urls     ','\t', avg_Urls     ,'\t', max_Urls     
     print 'Emoticons','\t', avg_Emoticons,'\t', max_Emoticons
+
+    print 'Words    ','\t', avg_words    ,'\t', max_words
+    print 'Chars    ','\t', avg_chars    ,'\t', max_chars
 
     print '###########################################################################'
 

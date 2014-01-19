@@ -1,11 +1,11 @@
-# Archives for exporting etc
-archives/*.*
-
-# Log files
-logs/*.*
+# Archives for exporting purposes
+archives/**
 
 # Scratch Pad
 scratch.*
+
+# Logs
+logs/**
 
 # Script generated
 *.bak
