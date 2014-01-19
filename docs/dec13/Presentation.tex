@@ -23,7 +23,7 @@
 %\usetheme{Ilmenau}
 %\usetheme{JuanLesPins}
 %\usetheme{Luebeck}
-\usetheme{Madrid}
+%\usetheme{Madrid}
 %\usetheme{Malmoe}
 %\usetheme{Marburg}
 %\usetheme{Montpellier}
@@ -32,7 +32,7 @@
 %\usetheme{Rochester}
 %\usetheme{Singapore}
 %\usetheme{Szeged}
-%\usetheme{Warsaw}
+\usetheme{Warsaw}
 
 % As well as themes, the Beamer class has a number of color themes
 % for any slide theme. Uncomment each of these in turn to see how it
@@ -99,26 +99,38 @@ Indian Institute of Technology, Delhi \\ % Your institution for the title page
 
 %------------------------------------------------
 \section{Introduction}
-% Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Introduction}
 \begin{itemize}
-\item asd
+\item User generated content on the web has two types
+	\begin{itemize}
+	\item Facts : Statements about topics
+	\item Opinions : Display positive or negative sentiments
+	\end{itemize}
+\item Facts are easily collectible from the internet using search engines
+		that index documents based on keywords
+\item Opinionated texts are harder to categorise using keywords
+\end{itemize}
+Aim : 
+\begin{itemize}
+\item Identify and extract opinions expressed in Tweets using
+		text analysis and natural language processing
 \end{itemize}
 \end{frame}
 
 %------------------------------------------------
 \subsection{Applications}
-% A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Applications}
-\begin{itemize}
-\item asd
-\end{itemize}
+\begin{description}
+\item [Business] {Judge the market response of a product, intelligent placement of advertisments}
+\item [Government] {Monitor public response to policies, issues raised during campaigns etc.}
+\item [Finance] {Public opinion can be a good indicatior of a companies performance in the market}
+\end{description}
 \end{frame}
 
 %------------------------------------------------
@@ -135,9 +147,9 @@ Indian Institute of Technology, Delhi \\ % Your institution for the title page
 		Ideal for generics classifier
 \end{itemize}
 
-\begin{block}{}
-Average length of a tweet is (!!!) words and (!!!) characters \\
-Apporoximately (!!!) hashtags per tweet
+\begin{block}{Trivia}
+Average length of a tweet is 14 words and 99 characters \\
+There are aproximately 2 hashtags per tweet
 \end{block}
 
 \end{frame}
@@ -149,13 +161,28 @@ Apporoximately (!!!) hashtags per tweet
 
 \begin{frame}
 \frametitle{Datasets}
-\begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
-\end{itemize}
+
+Twitter Sentiment Corpus
+	\begin{itemize}
+		\item 5513 hand annotated tweets
+		\item 4 different topics: Apple, Google, Microsoft, and Twitter
+		\item Each entry contains the tweet, sentiment, product, and query
+		\item Downloaded using Twitter-Python open source library
+	\end{itemize}
+
+Stanford Twitter
+	\begin{itemize}
+		\item 100000 automatically annotated tweets
+		\item Any tweet with positive emoticons were positive and vice-versa
+	\end{itemize}
+
+\begin{table}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{img/table_tweets.png}
+\caption{Classification of Tweets by sentiments expressed in each}
+\label{table:twt}
+\end{table}
+
 \end{frame}
 
 %------------------------------------------------
@@ -165,29 +192,78 @@ Apporoximately (!!!) hashtags per tweet
 \begin{frame}
 \frametitle{Preprocessing}
 \begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+\item Required to normalize the text and decrease feature size
 \end{itemize}
+Steps:
+\begin{itemize}
+\item Remove product related query terms
+\item Filter out URLs, Handles and Hashtags
+\item Identify and replace emoticons
+\item Filter a list of punctuations
+\item Delete repeating charachters like, hurrrryyyy
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Preprocessing}
+\begin{table}[h]
+\centering
+	\begin{tabular}{ l l l }
+	\toprule
+	\textbf{Step} & \textbf{Number} & \textbf{Percent}	\\
+	\midrule
+	before preprocessing & 19128 & \\
+	\midrule
+	after processing Hashtags & 18649 & 97.50\% \\
+	after processing Handles & 17118 & 89.49\% \\
+	after processing Urls & 16723 & 87.43\% \\
+	after processing Emoticons & 18631 & 97.40\% \\
+	after processing Punctuations & 13724 & 71.75\% \\
+	after processing Repeatings & 18544 & 96.95\% \\
+	\bottomrule
+	after processing All & 11031 & 57.67\% \\
+	\bottomrule
+	\end{tabular}
+\caption{Number of words before and after pre-processing}
+\label{table:preproc_numwords}
+\end{table}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Features}
+
+\begin{table}[h]
+\centering
+	\begin{tabular}{ l l l }
+	\toprule
+	\textbf{Feature    }& \textbf{Avg }& \textbf{Max }\\
+	\midrule
+	Handles    & 0.6761 & 8 \\
+	Hashtags   & 2.028 & 13 \\
+	Urls       & 0.4431 & 4 \\
+	Emoticons  & 0.05500 & 3 \\
+	\bottomrule
+	\end{tabular}
+\caption{Frequency of Features per Tweet}
+\label{table:preproc_freq}
+\end{table}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Emoticons}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
+\begin{table}[h]
+\centering
+\includegraphics[scale=0.5]{img/table_emoticons.png}
+\caption{List of Emoticons}
+\label{table:emot}
 \end{table}
 \end{frame}
 
@@ -195,33 +271,12 @@ Treatment 3 & 0.0009271 & 0.296 \\
 
 \begin{frame}
 \frametitle{Punctuations}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
+\begin{table}[h]
+\centering
+\includegraphics[scale=0.5]{img/table_punctuations.png}
+\caption{List of Punctuations}
+\label{table:punc}
 \end{table}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Example of Preprocessing}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
 \end{frame}
 
 %------------------------------------------------
@@ -231,23 +286,30 @@ $E = mc^2$
 \begin{frame}
 \frametitle{Features}
 \begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+\item Word unigrams are the simplest features used in sentiment analysis
+\item We train a Naive Bayes' Classifier trained on word unigrams
+\item Investigated the relevance of word Bigrams and Trigrams
 \end{itemize}
+Other possible features include:
+\begin{itemize}
+\item Part-of-Speech tagging -- For each tweet, number of verbs, adverbs, adjectives, nouns etc are counted
+\item Emoticons, Abbreviations, and intensifiers common on internet can be used to further improve the results
+\end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
 \frametitle{Unigrams}
-Description here
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{img/fdist-moby.png}
-\caption{Hello}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{img/fdist-unigrams.png}
+\caption{Cumulative Frequency Plot for 50 Most Frequent Words}
+\label{fig:unigrams}
 \end{figure}
+
 \end{frame}
 
 %------------------------------------------------
@@ -257,11 +319,10 @@ Description here
 \begin{frame}
 \frametitle{Experimentation}
 \begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+\item A multi-class classifier to categorise a tweet into positive, negative or neutral
+\item Trained using Naive Bayes model
+\item We were able to get an accuracy of 83.92\%
+\item Performance at par with baseline results discussed in papers
 \end{itemize}
 \end{frame}
 
@@ -271,160 +332,121 @@ Description here
 
 \begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
 \frametitle{Naive Bayes Classifier}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{img/fig_nb_stats.png}
+\caption{Naive Bayes Statistics}
+\label{fig:naive_accuracy}
+\end{figure}
+
 \end{frame}
 
 %------------------------------------------------
-\subsection{Maximum Entropy Classifier}
+\subsection{Best Classification Features}
 %------------------------------------------------
 
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Maximum Entropy Classifier}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
+\frametitle{Best Classification Features}
+\begin{table}[h]
+\centering
+\includegraphics[scale=0.25]{img/table_bestfeatures.png}
+\caption{Best Classification Features for Naive Bayes Classifier}
+\label{table:naive_features}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Best Classification Features}
+\begin{table}[h]
+\centering
+\includegraphics[scale=0.25]{img/table_bestfeatures_pos.png}
+\caption{Best Classification Features for Naive Bayes Classifier}
+\label{table:naive_features}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Best Classification Features}
+\begin{table}[h]
+\centering
+\includegraphics[scale=0.25]{img/table_bestfeatures_neg.png}
+\caption{Best Classification Features for Naive Bayes Classifier}
+\label{table:naive_features}
+\end{table}
+\end{frame}
+
+
+%------------------------------------------------
+\section{Conclusion}
+\subsection{Results}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Results}
+\begin{itemize}
+\item Using relevant pre processing methods most important to improve the results considerably
+\item The top classification features came out to be very relevant
+\item We were able to get an accuracy of 83.92\%
+\item Performance at par with baseline results discussed in papers
+\end{itemize}
+
+\begin{block}{Code}
+The code for downloading the dataset, preprocessing and training the classifier
+is made publicly available in an online repository:\\
+\href{https://github.com/yogeshg/Twitter-Sentiment}
+{\beamergotobutton{Link} github.com/yogeshg/Twitter-Sentiment}
+\end{block}
+
+\end{frame}
+%------------------------------------------------
+\subsection{Future Work}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Future Work}
+\begin{itemize}
+\item Use normalising techniques for imbalanced data
+\item Two leveled classifier two classify into
+		subjective or objective and then into, negative or positive
+\item Also need to investigate performance on Maximum Entropy Classifier and Decision Trees
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
-\subsection{Decision Tree Classifier}
+\section*{Bibliography}
 %------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Decision Tree Classifier}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
-\end{frame}
-
-%%------------------------------------------------
-%
-%\begin{frame}
-%\frametitle{Blocks of Highlighted Text}
-%\begin{block}{Block 1}
-%Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet %augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-%\end{block}
-%
-%\begin{block}{Block 2}
-%Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. %Vestibulum quis magna at risus dictum tempor eu vitae velit.
-%\end{block}
-%
-%\begin{block}{Block 3}
-%Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed %blandit justo nisi ac lacus.
-%\end{block}
-%\end{frame}
-%
-%%------------------------------------------------
-%
-%\begin{frame}
-%\frametitle{Multiple Columns}
-%\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical %alignment
-%
-%\column{.45\textwidth} % Left column and width
-%\textbf{Heading}
-%\begin{enumerate}
-%\item Statement
-%\item Explanation
-%\item Example
-%\end{enumerate}
-%
-%\column{.5\textwidth} % Right column and width
-%Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet %augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-%
-%\end{columns}
-%\end{frame}
-%
-%%------------------------------------------------
-%\section{Second Section}
-%%------------------------------------------------
-%
-%\begin{frame}
-%\frametitle{Table}
-%\begin{table}
-%\begin{tabular}{l l l}
-%\toprule
-%\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-%\midrule
-%Treatment 1 & 0.0003262 & 0.562 \\
-%Treatment 2 & 0.0015681 & 0.910 \\
-%Treatment 3 & 0.0009271 & 0.296 \\
-%\bottomrule
-%\end{tabular}
-%\caption{Table caption}
-%\end{table}
-%\end{frame}
-%
-%%------------------------------------------------
-%
-%\begin{frame}
-%\frametitle{Theorem}
-%\begin{theorem}[Mass--energy equivalence]
-%$E = mc^2$
-%\end{theorem}
-%\end{frame}
-%
-%%------------------------------------------------
-%
-%\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-%\frametitle{Verbatim}
-%\begin{example}[Theorem Slide Code]
-%\begin{verbatim}
-%\begin{frame}
-%\frametitle{Theorem}
-%\begin{theorem}[Mass--energy equivalence]
-%$E = mc^2$
-%\end{theorem}
-%\end{frame}\end{verbatim}
-%\end{example}
-%\end{frame}
-%
-%%------------------------------------------------
-%
-%\begin{frame}
-%\frametitle{Figure}
-%Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%%\begin{figure}
-%%\includegraphics[width=0.8\linewidth]{test}
-%%\end{figure}
-%\end{frame}
-%
-%%------------------------------------------------
-%
-%\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-%\frametitle{Citation}
-%An example of the \verb|\cite| command to cite within the presentation:\\~
-%
-%This statement requires citation \cite{p1}.
-%\end{frame}
-%
-%%------------------------------------------------
 
 \begin{frame}
 \frametitle{References}
 \footnotesize{
 \begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
-\bibitem[Smith, 2012]{p1} John Smith (2012)
-\newblock Title of the publication
-\newblock \emph{Journal Name} 12(3), 45 -- 678.
+
+%\bibitem[Smith, 2012]{p1} John Smith (2012)
+%\newblock Title of the publication
+%\newblock \emph{Journal Name} 12(3), 45 -- 678.
+
+	\bibitem{survey}
+				Bo Pang and Lillian Lee,
+				``Opinion Mining and Sentiment Analysis''
+				in \textit{Found. Trends Inf. Retr., 2(1-2)}:1–135.
+
+	\bibitem{KWM}
+				Efthymios Kouloumpis and Theresa Wilson and Johanna Moore,
+				``Twitter Sentiment Analysis: The Good the Bad and the OMG!''
+				in \textit{ICWSM, The AAAI Press}, (2011).
+
+	\bibitem{PP}
+				Alexander Pak and Patrick Paroubek,
+				``Twitter as a Corpus for Sentiment Analysis and Opinion Mining''
+				in \textit{Proceedings of the Seventh conference on International Language Resources and Evaluation LREC'10,
+							Valletta, Malta, European Language Resources Association ELRA} (2010).
+
+	\bibitem{SHA}
+				Hassan Saif and Yulan He and Harith Alani,
+				``Semantic Sentiment Analysis of Twitter''
+				in \textit{The Semantic Web – ISWC} (2012).
+
 \end{thebibliography}
 }
 \end{frame}
@@ -432,7 +454,45 @@ $E = mc^2$
 %------------------------------------------------
 
 \begin{frame}
-\Huge{\centerline{The End}}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+
+%\bibitem[Smith, 2012]{p1} John Smith (2012)
+%\newblock Title of the publication
+%\newblock \emph{Journal Name} 12(3), 45 -- 678.
+
+	\bibitem{S140}
+				Alec Go and Richa Bhayani and Lei Huang,
+				``Twitter Sentiment Classification using Distant Supervision''
+				at Sentiment140, \textit{http://help.sentiment140.com/home} 
+				in \textit{Processing} (2009).
+
+	\bibitem{Pri}
+				Balakrishnan Gokulakrishnan and Pavalanathan Priyanthan and
+				Thiruchittampalam Ragavan and Nadarajah Prasath and AShehan Perera,
+				``Opinion Mining and Sentiment Analysis on a Twitter Data Stream,''
+				in \textit{The International Conference on Advances in ICT for Emerging Regions - ICTer} (2012).
+
+	\bibitem{SA}
+				Niek Sanders,
+				\textit{http://www.sananalytics.com}
+
+\end{thebibliography}
+}
+\end{frame}
+
+%------------------------------------------------
+\section*{The End}
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{Questions and Suggestions?}}
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{Thanks}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
