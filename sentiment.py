@@ -155,6 +155,71 @@ def trainAndClassify( tweets, argument ):
 
     return classifier
 
+def trainAndClassify2( tweets, argument ):
+
+    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+
+    v_train_obj = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
+                for (text, sent) in v_train ]
+    v_train_sen = [ (text, sent) for (text, sent) in v_train if ((sent=='neg')|(sent=='pos')) ]
+
+    v_test_obj  = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
+                for (text, sent) in v_test ]
+    v_test_sen  = [ (text, sent) for (text, sent) in v_test if ((sent=='neg')|(sent=='pos')) ]
+
+
+    # train classifier
+    classifier_obj = nltk.NaiveBayesClassifier.train(v_train_obj);
+    classifier_sen = nltk.NaiveBayesClassifier.train(v_train_sen);
+
+    test_truth   = [s for (t,s) in v_test]
+    v_test2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
+    test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test2]
+
+    correct = [ t==p for (t,p) in zip(test_truth, test_predict)]
+    accuracy = float(sum(correct))/len(correct) if correct else 0
+
+    print '\n', '2 - Step Classifier'
+    print '\n', '######################'
+    print 'Accuracy :', accuracy
+    print '\n', '######################'
+    print 'Confusion Matrix'
+    print nltk.ConfusionMatrix( test_truth, test_predict )
+
+    print '\n', '######################'
+    print 'Objectivity Classifier'
+    accuracy_obj = nltk.classify.accuracy(classifier_obj, v_test_obj)
+    print '\n', '######################'
+    print 'Accuracy :', accuracy_obj
+    print classifier_obj.show_most_informative_features(200)
+
+    print '\n', '######################'
+    print 'Sentiment Classifier'
+    accuracy_sen = nltk.classify.accuracy(classifier_sen, v_test_sen)
+    print '\n', '######################'
+    print 'Accuracy :', accuracy_sen
+    print classifier_sen.show_most_informative_features(200)
+
+    test_truth_obj   = [s for (t,s) in v_test_obj]
+    test_predict_obj = [classifier_obj.classify(t) for (t,s) in v_test_obj]
+
+    print '\n', '######################'
+    print 'Accuracy :', accuracy_obj
+    print '\n', '######################'
+    print 'Confusion Matrix'
+    print nltk.ConfusionMatrix( test_truth_obj, test_predict_obj )
+
+    test_truth_sen   = [s for (t,s) in v_test_sen]
+    test_predict_sen = [classifier_sen.classify(t) for (t,s) in v_test_sen]
+
+    print '\n', '######################'
+    print 'Accuracy :', accuracy_sen
+    print '\n', '######################'
+    print 'Confusion Matrix'
+    print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
+
+    return None
+
 def preprocessingStats( tweets ):
     import re
     import preprocessing
@@ -301,11 +366,8 @@ def main(argv) :
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
 #    preprocessingStats(tweets)
-
-#    trainAndClassify(tweets, 0)
     trainAndClassify(tweets, 1)
-#    trainAndClassify(tweets, 2)
-    trainAndClassify(tweets, 3)
+    trainAndClassify2(tweets, 1)
 
     sys.stdout.flush()
 
