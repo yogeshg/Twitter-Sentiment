@@ -14,15 +14,19 @@ import nltk
 
 
 def getTrainingAndTestData(tweets, ratio):
-    return None
+    import sandersfeatures
+    # tweet_features, tweet_pca
+    random.shuffle( tweets );
+
+    #fvecs = nltk.classify.apply_features(sandersfeatures.tweet_features.make_tweet_dict,tweets)
+    fvecs = [(sandersfeatures.tweet_features.make_tweet_dict(tweets[i][0]),tweets[i][1]) for i in range(len(tweets))]
+
+    return (fvecs[:int(len(fvecs)*ratio)],fvecs[int(len(fvecs)*ratio):])
+
 
 def getTrainingAndTestData2(tweets, ratio):
-    return None
 
-def trainAndClassify( tweets, argument ):
-    return 0
-
-def preprocessingStats( tweets ):
+    from functools import wraps
     import re
     import preprocessing
 
@@ -150,6 +154,10 @@ def trainAndClassify( tweets, argument ):
     print nltk.ConfusionMatrix( test_truth, test_predict )
 
     return classifier
+
+def preprocessingStats( tweets ):
+    import re
+    import preprocessing
 
     def printStats( tweets, function, filtering=True):
         if( function ):
@@ -292,14 +300,12 @@ def main(argv) :
         sys.stdout = open( str(argv[0]), 'w')
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
-    #getPreprocessingStats(tweets)
+#    preprocessingStats(tweets)
 
-    #trainAndClassify(tweets, 0)
+#    trainAndClassify(tweets, 0)
     trainAndClassify(tweets, 1)
-    #trainAndClassify(tweets, 2)
+#    trainAndClassify(tweets, 2)
     trainAndClassify(tweets, 3)
-
-    #preprocessingStats(tweets)
 
     sys.stdout.flush()
 
