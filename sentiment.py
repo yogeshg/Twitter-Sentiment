@@ -12,6 +12,9 @@ the influence of covariant features.
 import sys, random
 import nltk
 
+import time
+TIME_STAMP = time.strftime("%y%m%d-%H%M%S-%Z")
+
 
 def getTrainingAndTestData(tweets, ratio):
     import sandersfeatures
@@ -118,6 +121,18 @@ def getTrainingAndTestData2(tweets, ratio):
     v_test  = nltk.classify.apply_features(extract_features,test_tweets)
 
     return (v_train, v_test)
+
+def generateARFF( tweets, filename ):
+
+    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+
+    arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
+
+    arff_formatter.write(filename+'_'+TIME_STAMP+'_train.arff', v_train)
+    arff_formatter.write(filename+'_'+TIME_STAMP+'_test.arff', v_test)
+    arff_formatter.write(filename+'_'+TIME_STAMP+'.arff', v_train+v_test)
+
+    return True
 
 def trainAndClassify( tweets, argument ):
 
@@ -361,13 +376,22 @@ def preprocessingStats( tweets ):
 def main(argv) :
     import sanderstwitter02
 
+    filename = ''
+
     if (len(argv) > 0) :
-        sys.stdout = open( str(argv[0]), 'w')
+        filename = str(argv[0])
+        sys.stdout = open( filename+'_'+TIME_STAMP , 'w')
     tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
 
 #    preprocessingStats(tweets)
-    trainAndClassify(tweets, 1)
-    trainAndClassify2(tweets, 1)
+#    trainAndClassify(tweets, 1)
+#    trainAndClassify2(tweets, 1)
+#    sys.stdout.flush()
+
+    if( filename=='' ):
+        filename = 'logs/data'
+
+    generateARFF(tweets, filename)
 
     sys.stdout.flush()
 
