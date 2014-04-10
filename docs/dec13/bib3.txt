@@ -1,0 +1,58 @@
+\begin{thebibliography}{1}
+
+			Author	Bo Pang and Lillian Lee,
+			Title	Opinion Mining and Sentiment Analysis
+			Public	Found. Trends Inf. Retr., 2(1-2):1–135.
+
+			Author	Efthymios Kouloumpis and Theresa Wilson and Johanna Moore,
+			Title	Twitter Sentiment Analysis: The Good the Bad and the OMG!
+			Public	ICWSM, The AAAI Press
+			Year	2011
+
+			Author	Alexander Pak and Patrick Paroubek,
+			Title	Twitter as a Corpus for Sentiment Analysis and Opinion Mining
+			Public	Proceedings of the Seventh conference on International Language Resources and Evaluation LREC'10, Valletta, Malta, European Language Resources Association ELRA
+			Year	2010
+
+			Author	Hassan Saif and Yulan He and Harith Alani,
+			Title	Semantic Sentiment Analysis of Twitter
+			Public	The Semantic Web – ISWC
+			Year	2012
+
+			Author	Alec Go and Richa Bhayani and Lei Huang,
+			Title	Twitter Sentiment Classification using Distant Supervision
+			Public	Processing
+			Year	2009
+			Note	Sentiment140, http://help.sentiment140.com/home 
+
+			Author	Balakrishnan Gokulakrishnan and Pavalanathan Priyanthan and Thiruchittampalam Ragavan and Nadarajah Prasath and AShehan Perera,
+			Title	Opinion Mining and Sentiment Analysis on a Twitter Data Stream,
+			Public	The International Conference on Advances in ICT for Emerging Regions
+			Year	2012
+
+			Author	Niek Sanders,
+			Note	http://www.sananalytics.com
+
+			Author	Smirnov, Ilia
+			Title	Overview of Stemming Algorithms
+			Public	Mechanical Translation
+			Year	2008
+			Note	http://the-smirnovs.org/info/stemming.pdf
+
+			Author	Porter, Martin
+			Title	The Porter Stemming Algorithm
+			Year	2006
+			Note	http://tartarus.org/~martin/PorterStemmer/
+					
+
+			Author	Councill, Isaac G. and McDonald, Ryan and Velikovich, Leonid
+			Title	What's great and what's not: learning to classify the scope of for improved sentiment analysis
+			Public	NeSp-NLP '10 Proceedings of the Workshop on Negation and Speculation in Natural Language Processing p51-59
+			Year	2010
+
+			Author	Quinlan, J. R.
+			Title	C4.5: Programs for Machine Learning
+			Public	Morgan Kaufmann Publishers
+			Year	1993
+
+\end{thebibliography}

@@ -1,0 +1,676 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+           "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<meta name="GENERATOR" content="TtH 4.03">
+ <style type="text/css"> div.p { margin-top: 7pt;}</style>
+ <style type="text/css"><!--
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td div.norm {line-height:normal;}
+ span.roman {font-family: serif; font-style: normal; font-weight: normal;} 
+ span.overacc2 {position: relative;  left: .8em; top: -1.2ex;}
+ span.overacc1 {position: relative;  left: .6em; top: -1.2ex;} --></style>
+ <style type="text/css"><!--
+ .tiny {font-size:30%;}
+ .scriptsize {font-size:xx-small;}
+ .footnotesize {font-size:x-small;}
+ .smaller {font-size:smaller;}
+ .small {font-size:small;}
+ .normalsize {font-size:medium;}
+ .large {font-size:large;}
+ .larger {font-size:x-large;}
+ .largerstill {font-size:xx-large;}
+ .huge {font-size:300%;}
+ --></style>
+
+ 
+<title>No Title</title>
+
+   
+
+<div class="p"><!----></div>
+
+<title>
+	\rule{0.9\textwidth }{.4pt}\ \vspace{10pt}
+	{
+		Sentiment Analysis of Twitter Feeds
+	}\
+	\rule{0.9\textwidth }{.4pt}
+\vfill
+	\includegraphics[height=100pt]{img/iitd_logo.png}\
+\vspace{10pt}
+	{\Large{
+		Departmemt of Mathematics\
+		Indian Institute of Technology, Delhi
+	}}
+\vspace{100pt}
+</title>
+    
+<h1 align="center">
+	<br />
+	 
+		S<span style="font-size:x-small">ENTIMENT</span> A<span style="font-size:x-small">NALYSIS</span> <span style="font-size:x-small">OF</span> T<span style="font-size:x-small">WITTER</span> F<span style="font-size:x-small">EEDS</span>
+	<br />
+	
+
+	<a href="img/iitd_logo.png">Figure</a><br />
+
+	 <span class="larger">
+		D<span style="font-size:x-small">EPARTMEMT</span> <span style="font-size:x-small">OF</span> M<span style="font-size:x-small">ATHEMATICS</span><br />
+		I<span style="font-size:x-small">NDIAN</span> I<span style="font-size:x-small">NSTITUTE</span> <span style="font-size:x-small">OF</span> T<span style="font-size:x-small">ECHNOLOGY</span>, D<span style="font-size:x-small">ELHI</span>
+	</span>
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+ </h1>
+
+<div class="p"><!----></div>
+
+<h3 align="center">
+<br /><table border="0" align="left"><tr><td><div style="text-align:center">
+	<span class="small">Submitted by:<br />
+	Yogesh Garg<br />
+	<span class="small">2009MT50635<br />
+</span></span></div>
+</td></tr></table><!--vbox--><!--hbox--><br clear="all" /><table border="0"><tr><td></td><td><table border="0"><tr><td><div style="text-align:center">
+	<span class="small">Supervised by:<br />
+	Dr. Niladri Chatterjee<br />
+	<span class="small">Department of Mathematics<br />
+</span></span></div>
+</td></tr></table><!--vbox-->
+</td><td></td></tr></table><!--hboxt--><br />	 </h3>
+
+<div class="p"><!----></div>
+
+<h3 align="center">January, 2014 </h3>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<div style="text-align:center">	
+<h2>Certificate</h2>
+</div>
+
+<div class="p"><!----></div>
+This is to certify that the report entitled "Sentiment Analysis of Twitter Feeds" submitted by me
+	in partial fulfilment of the requirement of the award of Integrated Masters in Technology in Mathematics and Computing,
+	as a part of course MAD853 is an authentic record of my own work carried out under the supervision of Dr. Niladri Chatterjee and
+	refers other researchers' work which are duly listed in the reference section.<br />
+<br />
+<br />
+<br />
+
+<div align="right"><b>
+Yogesh Garg<br />
+(2009MT50635)</b>
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+<div class="p"><!----></div>
+This is to certify that the above statement made by the candidate is correct and true to the best of my knowledge.<br />
+<br />
+<br />
+<br />
+
+<div align="right"><b>
+Dr. Niladri Chatterjee<br />
+Department of Mathematics,<br />
+Indian Institute of Technology, Delhi<br /></b>
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<h1>Contents </h1><a href="#tth_sEc1"
+>1&nbsp; Introduction</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc1.1"
+>1.1&nbsp; Sentiment Analysis</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc1.2"
+>1.2&nbsp; Twitter</a><br />
+<a href="#tth_sEc2"
+>2&nbsp; Methodology</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1"
+>2.1&nbsp; Datasets</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1.1"
+>2.1.1&nbsp; Twitter Sentiment Corpus</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.1.2"
+>2.1.2&nbsp; Stanford Twitter</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2"
+>2.2&nbsp; Features</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2.1"
+>2.2.1&nbsp; Pre Processing</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2.2"
+>2.2.2&nbsp; n-grams</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.2.3"
+>2.2.3&nbsp; Other Features</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_sEc2.3"
+>2.3&nbsp; Experimentation</a><br />
+<a href="#tth_sEc3"
+>3&nbsp; Conclusion</a><br />
+
+
+<h1>List of Tables </h1>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb1"
+>1&nbsp;  Classification of Tweets by sentiments expressed in each</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb2"
+>2&nbsp;  Number of words before and after pre-processing</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb3"
+>3&nbsp;  Frequency of Features per Tweet</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb4"
+>4&nbsp;  List of Emoticons</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb5"
+>5&nbsp;  List of Punctuations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_tAb6"
+>6&nbsp;  Best Classification Features for Naive Bayes Classifier</a><br />
+
+
+<h1>List of Figures </h1>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_fIg1"
+>1&nbsp;  Cumulative Frequency Plot for 50 Most Frequent Words</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_fIg2"
+>2&nbsp;  Cumulative Frequency Plot for 50 Most Frequent Word Bigrams</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_fIg3"
+>3&nbsp;  Cumulative Frequency Plot for 50 Most Frequent Word Trigrams</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#tth_fIg4"
+>4&nbsp;  Naive Bayes Statistics</a><br />
+
+
+
+<div class="p"><!----></div>
+
+
+<div class="p"><!----></div>
+ <a id="tth_sEc1"></a><h2>
+1&nbsp;&nbsp;Introduction</h2>
+
+<div class="p"><!----></div>
+     <a id="tth_sEc1.1"></a><h3>
+1.1&nbsp;&nbsp;Sentiment Analysis</h3>
+There are two type of user-generated content available on the web – facts and opinions.
+Facts are statements about topics and in the current scenario, easily collectible from the Internet
+	using search engines that index documents based on topic keywords.
+Opinions are user specific statement exhibiting positive or negative sentiments about a certain topic.
+Generally opinions are hard to categorize using keywords. Sentiment Analysis refers to the use of text analysis and natural language processing
+	to identify and extract subjective information in textual contents. Sentiment Analysis finds its application in a variety of domains:
+
+<div class="p"><!----></div>
+
+<dl>
+ <dt><b>Business</b></dt>
+	<dd>
+Businesses may use sentiment analysis on blogs, review websites etc. to judge the market response of a product.
+This information may also be used for intelligent placement of advertisements.
+For example, if product A and B are competitor and an online merchant business M sells both,
+	then M may advertise for A if the user displays positive sentiments towards A, its brand or related products,
+	or B if they display negative sentiments towards A.
+</dd>
+ <dt><b>Government</b></dt>
+	<dd>
+Governments and politicians can actively monitor public sentiments as a response to their current policies, speeches made during campaigns etc. This will help them make create better public awareness regarding policies and even drive campaigns intelligently.
+</dd>
+ <dt><b>Financial Markets</b></dt>
+	<dd>
+Public opinion regarding companies can be used to predict performance of their stocks in the financial markets. If people have a positive opinion about a product that a company A has launched, then the share prices of A are likely to go higher and vice versa. Public opinion can be used as an additional feature in existing models that try to predict market performances based on historical data.
+</dd>
+</dl>
+
+<div class="p"><!----></div>
+     <a id="tth_sEc1.2"></a><h3>
+1.2&nbsp;&nbsp;Twitter</h3>
+Twitter is an online social networking and micro-blogging service that enables users
+	to create and read short messages, called "tweets".
+It is a global town center with the presence of eminent personalities from
+	the field of entertainment, industry and politics.
+People tweet about their life, events and express opinion about various topics
+	using text messages limited to 140 characters.
+Registered users can read and post tweets, but any unregistered users can read them.
+Twitter can be accessed via Web, SMS, or mobile apps.
+Traditionally a large volume of research in sentiment analysis and opinion mining
+	has been directed towards larger pieces of text like movie reviews.
+From the perspective of Sentiment Analysis, we discuss a few characteristics of Twitter:
+
+<div class="p"><!----></div>
+
+<dl>
+ <dt><b>Length</b></dt>
+	<dd>
+The maximum length of a Twitter message is 140 characters.
+This means that we can practically consider a tweet to be a single sentence,
+	void of complex grammatical constructs.
+Which, as described earlier, is a vast difference from traditional
+	subjects of Sentiment Analysis, such as movie reviews.
+</dd>
+ <dt><b>Language model</b></dt>
+	<dd>
+Twitter is used via a variety of media including SMS and mobile phone apps.
+Because of this and the 140-character limit, language used in Tweets tend be more colloquial,
+	and filled with slang and misspellings, as compared to other user-generated content on the web.
+Use of Hashtags also gained popularity on Twitter and is a primary feature in any given tweet.
+</dd>
+ <dt><b>Data availability</b></dt>
+	<dd>
+Another difference is the magnitude of data available.
+With the Twitter API, it is very easy to collect millions of tweets for training.
+There exist a few datasets that have manually labeled the tweets.
+</dd>
+ <dt><b>Domain</b></dt>
+	<dd>
+Twitter is a global town center with the presence of eminent personalities from
+	the field of entertainment, industry and politics.
+Registered users frequently interact with each other including their friends,
+	strangers and even the eminent personalities.
+This makes twitter a unique place to model a generic classifier as opposed to
+	domain specific classifiers that could be build on websites such as movie reviews.
+</dd>
+</dl>
+
+
+<div class="p"><!----></div>
+ <a id="tth_sEc2"></a><h2>
+2&nbsp;&nbsp;Methodology</h2>
+
+<div class="p"><!----></div>
+     <a id="tth_sEc2.1"></a><h3>
+2.1&nbsp;&nbsp;Datasets</h3>
+One of the major challenges in Sentiment Analysis of Twitter is to collect a labeled dataset.
+Researchers have made public the following datasets for training and testing classifiers.
+
+<div class="p"><!----></div>
+      <a id="tth_sEc2.1.1"></a><h4>
+2.1.1&nbsp;&nbsp;Twitter Sentiment Corpus</h4>
+This is a collection of 5513 tweets collected for four different topics, namely, Apple, Google, Microsoft, Twitter
+It is collected and hand-classified by Sanders Analytics LLC [<a href="#SA" id="CITESA">7</a>].
+Each entry in the corpus contains, Tweet id, Topic and a Sentiment label.
+We use Twitter-Python library to enrich this data by downloading data like Tweet text, Creation Date, Creator etc. for every Tweet id. Each Tweet is classified by an American male into the following four categories.
+
+<div class="p"><!----></div>
+
+<dl>
+ <dt><b>Positive</b></dt>
+	<dd> For showing positive sentiment towards the topic</dd>
+ <dt><b>Positive</b></dt>
+	<dd> For showing no or mixed or weak sentiments towards the topic</dd>
+ <dt><b>Negative</b></dt>
+	<dd> For showing negative sentiment towards the topic</dd>
+ <dt><b>Irrelevant</b></dt>
+	<dd> For non English text or off-topic comments
+	For showing positive sentiment towards the topic</dd>
+</dl>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb1">
+</a> <div style="text-align:center">	
+<table border="1">
+<tr><td colspan="1" align="center">Tweet </td><td colspan="1" align="center">Classification </td></tr>
+<tr><td width="0"><tt>S/O&nbsp;to&nbsp;@apple&nbsp;for&nbsp;replacing&nbsp;my&nbsp;phone&nbsp;for&nbsp;free...</tt> </td><td align="left"><tt>positive</tt> </td></tr>
+<tr><td width="0"><tt>+1&nbsp;&nbsp;RT&nbsp;@Doug_Newton:&nbsp;@apple&nbsp;PLEASE&nbsp;FIX&nbsp;#Siri!!!!</tt> ...
+	<tt>She&nbsp;can't&nbsp;connect&nbsp;to&nbsp;your&nbsp;network!!!!!!!</tt> </td><td align="left"><tt>negative</tt> </td></tr>
+<tr><td width="0"><tt>Apple&nbsp;Users&nbsp;Get&nbsp;The&nbsp;official&nbsp;Kalifornia&nbsp;Cavi&nbsp;App</tt> ...
+	<tt>on&nbsp;your&nbsp;Apple&nbsp;Device&nbsp;now&nbsp;on&nbsp;&nbsp;-&nbsp;powered&nbsp;by&nbsp;@Apple</tt> ...
+	<tt>-&nbsp;Download&nbsp;it&nbsp;free&nbsp;http://t.co/HlGnvlRw</tt> </td><td align="left"><tt>neutral</tt> </td></tr></table>
+
+
+<div style="text-align:center">Table 1: Classification of Tweets by sentiments expressed in each</div>
+<a id="table:twt">
+</a>
+</div>
+<div class="p"><!----></div>
+      <a id="tth_sEc2.1.2"></a><h4>
+2.1.2&nbsp;&nbsp;Stanford Twitter</h4>
+This is a collection of 100000 tweets labeled 0 (negative), 2 (neutral) or 4 (positive).
+This data was automatically annotated, not by human.
+The authors assume that any tweet with positive emoticon like <tt>:)</tt> were positive
+	and the tweets with negative emoticon like <tt>:(</tt> were negative [<a href="#S140" id="CITES140">5</a>].
+
+<div class="p"><!----></div>
+     <a id="tth_sEc2.2"></a><h3>
+2.2&nbsp;&nbsp;Features</h3>
+A wide variety of features can be used to build a classifier for tweets.
+The most widely used and basic feature set is word n-grams.
+However, there's a lot of domain specific information present in tweets that can also be used for classifying them.
+Preprocessing is needed to normalise these features. Relevant preprocessing methods are discussed below.
+
+<div class="p"><!----></div>
+      <a id="tth_sEc2.2.1"></a><h4>
+2.2.1&nbsp;&nbsp;Pre Processing</h4>
+
+<div class="p"><!----></div>
+User-generated content on the web is seldom present in a form usable for learning.
+It becomes important to normalise the text by applying a series of preprocessing steps.
+In this paper we have applied an extensive set of preprocessing steps to
+	decrease the size of the feature set to make it suitable for learning algorithms.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb2">
+</a> <div style="text-align:center">	
+<table border="1">
+<tr><td align="left">Step </td><td align="left">Number </td><td align="left">Percent	</td></tr>
+<tr><td align="left">before preprocessing </td><td align="left">19128 </td><td align="left"></td></tr>
+<tr><td align="left">after processing Hashtags </td><td align="left">18649 </td><td align="left">97.50% </td></tr>
+<tr><td align="left">after processing Handles </td><td align="left">17118 </td><td align="left">89.49% </td></tr>
+<tr><td align="left">after processing Urls </td><td align="left">16723 </td><td align="left">87.43% </td></tr>
+<tr><td align="left">after processing Emoticons </td><td align="left">18631 </td><td align="left">97.40% </td></tr>
+<tr><td align="left">after processing Punctuations </td><td align="left">13724 </td><td align="left">71.75% </td></tr>
+<tr><td align="left">after processing Repeatings </td><td align="left">18544 </td><td align="left">96.95% </td></tr>
+<tr><td align="left">after processing All </td><td align="left">11031 </td><td align="left">57.67% </td></tr></table>
+
+
+<div style="text-align:center">Table 2: Number of words before and after pre-processing</div>
+<a id="table:preproc_numwords">
+</a>
+</div>
+<div class="p"><!----></div>
+We have started by removing the query terms from the text.
+This is important so that no particular query word becomes a feature in our classifier.
+Next we have removed links, including URLs, Handles and Hashtags.
+A particular URL is not important. However, presence of a URL can be an important feature for classification.
+We give below a description of some popular features present in tweet text.
+
+<div class="p"><!----></div>
+	
+<dl>
+ <dt><b>Hashtags</b></dt>
+	<dd>A hashtag is a word or an un-spaced phrase prefixed with the hash symbol (#)
+					These are used to both naming subjects and phrases that are currently in trending topics.
+					For example, <tt>#iPad</tt>, <tt>#news</tt></dd>
+ <dt><b>Handles</b></dt>
+	<dd>Every Twitter user has a unique username.
+					Any thing directed towards that user can be indicated be writing their username preceded by .
+					Thus, these are like proper nouns.
+						For example, <tt>@Apple</tt></dd>
+ <dt><b>Emoticons</b></dt>
+	<dd>Keyboard written pictorial representation of a facial expression,
+						used to draw a receiver's attention to the temper of sender's nominal verbal communication,
+						thus changing and improving its interpretation.
+					Table <a href="#table:emot">4</a> lists the emoticons currently identified. </dd>
+</dl>
+
+<div class="p"><!----></div>
+These features are identified using regular expressions and replaced by a single word.
+Table <a href="#table:preproc_numwords">2</a> lists the decrease in feature set due to processing each of these features.
+Table <a href="#table:preproc_freq">3</a> illustrates the frequency of these features per tweet.
+A brief description of the preprocessing steps is given below.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb3">
+</a> <div style="text-align:center">	
+<table border="1">
+<tr><td align="left">Feature    </td><td align="left">Avg </td><td align="left">Max </td></tr>
+<tr><td align="left">Handles    </td><td align="left">0.6761 </td><td align="left">8 </td></tr>
+<tr><td align="left">Hashtags   </td><td align="left">2.028 </td><td align="left">13 </td></tr>
+<tr><td align="left">Urls       </td><td align="left">0.4431 </td><td align="left">4 </td></tr>
+<tr><td align="left">Emoticons  </td><td align="left">0.05500 </td><td align="left">3 </td></tr></table>
+
+
+<div style="text-align:center">Table 3: Frequency of Features per Tweet</div>
+<a id="table:preproc_freq">
+</a>
+</div>
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb4">
+</a> <div style="text-align:center">	
+<table border="1">
+<tr><td colspan="1" align="center">Emoticons </td><td colspan="6" align="center">Examples </td></tr>
+<tr><td align="left"><tt>EMOT_SMILEY</tt> 	</td><td align="left"><tt>:-)</tt> 	</td><td align="left"><tt>:)</tt> 	</td><td align="left"><tt>(:</tt> 	</td><td align="left"><tt>(-:</tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_LAUGH</tt> 	</td><td align="left"><tt>:-D</tt> 	</td><td align="left"><tt>:D</tt> 	</td><td align="left"><tt>X-D</tt> 	</td><td align="left"><tt>XD</tt> 	</td><td align="left"><tt>xD</tt> 	</td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_LOVE</tt> 	</td><td align="left"><tt>&lt;3</tt> 	</td><td align="left"><tt>:*</tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_WINK</tt> 	</td><td align="left"><tt>;-)</tt> 	</td><td align="left"><tt>;)</tt> 	</td><td align="left"><tt>;-D</tt> 	</td><td align="left"><tt>;D</tt> 	</td><td align="left"><tt>(;</tt> 	</td><td align="left"><tt>(-;</tt> </td></tr>
+<tr><td align="left"><tt>EMOT_FROWN</tt> 	</td><td align="left"><tt>:-(</tt> 	</td><td align="left"><tt>:(</tt> 	</td><td align="left"><tt>(:</tt> 	</td><td align="left"><tt>(-:</tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_CRY</tt> 	</td><td align="left"><tt>:,(</tt> 	</td><td align="left"><tt>:'(</tt> 	</td><td align="left"><tt>:"(</tt> 	</td><td align="left"><tt>:((</tt> 	</td><td align="left"><tt></tt> 	</td><td align="left"><tt></tt> </td></tr></table>
+
+
+<div style="text-align:center">Table 4: List of Emoticons</div>
+<a id="table:emot">
+</a>
+</div>
+<div class="p"><!----></div>
+Although not all Punctuations are important from the point of view of classification but some of these,
+	like question mark, exclamation mark can also provide information about the sentiments of the text.
+We replace every word boundary by a list of relevant punctuations present at that pont.
+Table <a href="#table:punc">5</a> lists the punctuations currently identified
+As a final step, we replace charachters repeating more than twice as two charachters.
+This takes care of words like hurrryyyyy, yaaayyyyy often present in user-generated content on the internet.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb5">
+</a> <div style="text-align:center">	
+<table border="1">
+<tr><td colspan="1" align="center">Punctuations </td><td colspan="2" align="center">Examples </td></tr>
+<tr><td align="left"><tt>PUNC_DOT</tt> </td><td align="left"><tt>.</tt> </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>PUNC_EXCL</tt> </td><td align="left"><tt>!</tt> </td><td align="left"><tt>¡</tt> </td></tr>
+<tr><td align="left"><tt>PUNC_QUES</tt> </td><td align="left"><tt>?</tt> </td><td align="left"><tt>¿</tt> </td></tr>
+<tr><td align="left"><tt>PUNC_ELLP</tt> </td><td align="left"><tt>...</tt> </td><td align="left"><tt>…</tt> </td></tr></table>
+
+
+<div style="text-align:center">Table 5: List of Punctuations</div>
+<a id="table:punc">
+</a>
+</div>
+<div class="p"><!----></div>
+      <a id="tth_sEc2.2.2"></a><h4>
+2.2.2&nbsp;&nbsp;n-grams</h4>
+
+<div class="p"><!----></div>
+Word unigrams are the simplest features are being used for sentiment analysis of tweets data.
+Models trained from word unigrams were shown to outperform random classifiers by a decent margin of 20% .
+To build our first baseline model, we have used Naive Bayes' Classifier trained on word unigrams.
+Figure <a href="#fig:unigrams">1</a> illustrates the most frequent word unigrams in our dataset.
+
+<div class="p"><!----></div>
+      <a id="tth_sEc2.2.3"></a><h4>
+2.2.3&nbsp;&nbsp;Other Features</h4>
+
+<div class="p"><!----></div>
+Research papers in this field describe other features that can be used.
+Among these, the most important are Part-of-Speech tagging (POS).
+For each tweet, number of verbs, adverbs, adjectives, nouns, and any other parts of speech can be counted and made into a feature[<a href="#KWM" id="CITEKWM">2</a>].
+Emoticons, Abbreviations, and intensifiers (e.g., all-caps and character repetitions) can also be used to further improve the results [<a href="#KWM">2</a>].
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_fIg1">
+</a> <div style="text-align:center"><a href="img/fdist-unigrams.png">Figure</a>
+
+<div style="text-align:center">Figure 1: Cumulative Frequency Plot for 50 Most Frequent Words</div>
+<a id="fig:unigrams">
+</a>
+</div>
+<div class="p"><!----></div>
+Based on previous research [<a href="#survey" id="CITEsurvey">1</a>], it is not clear whether higher-order n-grams are useful features or not.
+For example, some researchers report that unigrams outperform bigrams when classifying movie reviews by sentiment polarity,
+while others find that in some settings, bigrams and trigrams yield better product-review polarity classification.
+We proceed to test the most frequent bigrams and trigrams.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_fIg2">
+</a> <div style="text-align:center"><a href="img/fdist-bigrams.png">Figure</a>
+
+<div style="text-align:center">Figure 2: Cumulative Frequency Plot for 50 Most Frequent Word Bigrams</div>
+<a id="fig:bigrams">
+</a>
+</div>
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_fIg3">
+</a> <div style="text-align:center"><a href="img/fdist-trigrams.png">Figure</a>
+
+<div style="text-align:center">Figure 3: Cumulative Frequency Plot for 50 Most Frequent Word Trigrams</div>
+<a id="fig:trigrams">
+</a>
+</div>
+<div class="p"><!----></div>
+From the list of most frequent word bigrams and trigrams, it is not completely apparent if these features will be helpful
+	for classification or not.
+We can consider some of most frequent of these for features and test our classifier with those.
+And then we can compare the results vis-a-vis unigrams.
+
+<div class="p"><!----></div>
+     <a id="tth_sEc2.3"></a><h3>
+2.3&nbsp;&nbsp;Experimentation</h3>
+We train a multi-class classifier that categorises a tweet into positive, neutral or negative.
+We break our data into training and testing sets with a ratio of <tt>9:1</tt>.
+The classifier was trained using Naive Bayes model. Previous works have shown that applying machine learning techniques based on unigram models can achieve over <tt>80%</tt> in accuracy [<a href="#survey">1</a>]
+We were able to get a an accuracy of <tt>83.92%</tt>.
+Thus we can say that our classifier performs at par with the state of the around result.
+Figure <a href="#fig:naive_accuracy">4</a> illustrates the confusion matrix and accuracy of our classifier.
+In Table <a href="#table:naive_features">6</a>, top classifying features are listed.
+It can be noticed from the features that we have good results.
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_fIg4">
+</a> <div style="text-align:center">[t]
+	
+<pre>
+Accuracy&nbsp;:&nbsp;0.839248434238
+
+Confusion&nbsp;Matrix
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;p&nbsp;|
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;e&nbsp;&nbsp;&nbsp;e&nbsp;&nbsp;&nbsp;o&nbsp;|
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;g&nbsp;&nbsp;&nbsp;u&nbsp;&nbsp;&nbsp;s&nbsp;|
+----+-------------+
+neg&nbsp;|&nbsp;&nbsp;&lt;8&#62;&nbsp;39&nbsp;&nbsp;&nbsp;.&nbsp;|
+neu&nbsp;|&nbsp;&nbsp;&nbsp;2&lt;393&#62;&nbsp;&nbsp;.&nbsp;|
+pos&nbsp;|&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;36&nbsp;&nbsp;&lt;1&#62;|
+----+-------------+
+	
+</pre>
+
+
+<div style="text-align:center">Figure 4: Naive Bayes Statistics</div>
+<a id="fig:naive_accuracy">
+</a>
+</div>
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+<a id="tth_tAb6">
+</a> <div style="text-align:center">
+<table border="1">
+<tr><td align="left">Feature </td><td align="left">Classification </td><td align="left">Odds </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(fix)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>76.8&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(hate)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>67.5&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;contains(eclipsed)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>48.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;contains(restore)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>48.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(loving)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>pos&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>47.8&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(wtf)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>39.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;contains(amazing)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>pos&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>35.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(issues)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>34.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(blue)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>34.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(sucks)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>34.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;contains(impressive)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>pos&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>27.7&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(charge)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>25.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(dead)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>25.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;contains(missing)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>25.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>contains(reservation)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>25.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(since)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>24.9&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(won)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>23.7&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(fixed)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>neg&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>23.7&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;contains(replaced)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>pos&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>22.6&nbsp;:&nbsp;1.0</tt> </td></tr>
+<tr><td align="left"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains(usage)&nbsp;=&nbsp;True</tt> </td><td align="left"><tt>pos&nbsp;:&nbsp;neu</tt> </td><td align="left"><tt>22.6&nbsp;:&nbsp;1.0</tt> </td></tr></table>
+
+
+<div style="text-align:center">Table 6: Best Classification Features for Naive Bayes Classifier</div>
+<a id="table:naive_features">
+</a>
+</div>
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+ <a id="tth_sEc3"></a><h2>
+3&nbsp;&nbsp;Conclusion</h2>
+We can conclude by saying that using appropriate preprocessing and word unigrams as features,
+	our classifier has been able to reach a baseline accuracy of around 80%.
+There are however improvements that we need to do for better results.
+First of all, we should notice that our data is not balanced.
+We should probably investigate the results after weight adjustments.
+Secondly, if we take a closer look at Table <a href="#table:naive_features">6</a> we can see that a lot of
+	positive and negative tweets have been classified as neutral.
+One way to take care of this is to build a two leveled classifier that first separates into
+	subjective or objective and then classifies objective tweets into negative or positive.
+Next we also need to investigate other classifiers such as Maximum Entropy Classifier and Decision Tree Classifier.
+
+
+<div class="p"><!----></div>
+
+<div class="p"><!----></div>
+
+<h2>References</h2>
+
+<dl>
+	 <dt><a href="#CITEsurvey" id="survey">[1]</a></dt><dd>
+				Bo Pang and Lillian Lee,
+				"Opinion Mining and Sentiment Analysis"
+				in <i>Found. Trends Inf. Retr., 2(1-2)</i>:1–135.
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITEKWM" id="KWM">[2]</a></dt><dd>
+				Efthymios Kouloumpis and Theresa Wilson and Johanna Moore,
+				"Twitter Sentiment Analysis: The Good the Bad and the OMG!"
+				in <i>ICWSM, The AAAI Press</i>, (2011).
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITEPP" id="PP">[3]</a></dt><dd>
+				Alexander Pak and Patrick Paroubek,
+				"Twitter as a Corpus for Sentiment Analysis and Opinion Mining"
+				in <i>Proceedings of the Seventh conference on International Language Resources and Evaluation LREC'10,
+							Valletta, Malta, European Language Resources Association ELRA</i> (2010).
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITESHA" id="SHA">[4]</a></dt><dd>
+				Hassan Saif and Yulan He and Harith Alani,
+				"Semantic Sentiment Analysis of Twitter"
+				in <i>The Semantic Web – ISWC</i> (2012).
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITES140" id="S140">[5]</a></dt><dd>
+				Alec Go and Richa Bhayani and Lei Huang,
+				"Twitter Sentiment Classification using Distant Supervision"
+				at Sentiment140, <i>http://help.sentiment140.com/home</i> 
+				in <i>Processing</i> (2009).
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITEPri" id="Pri">[6]</a></dt><dd>
+				Balakrishnan Gokulakrishnan and Pavalanathan Priyanthan and
+				Thiruchittampalam Ragavan and Nadarajah Prasath and AShehan Perera,
+				"Opinion Mining and Sentiment Analysis on a Twitter Data Stream,"
+				in <i>The International Conference on Advances in ICT for Emerging Regions - ICTer</i> (2012).
+
+<div class="p"><!----></div>
+	</dd>
+ <dt><a href="#CITESA" id="SA">[7]</a></dt><dd>
+				Niek Sanders,
+				<i>http://www.sananalytics.com</i></dd>
+</dl>
+
+
+<div class="p"><!----></div>
+
+<br /><br /><hr /><small>File translated from
+T<sub><span class="small">E</span></sub>X
+by <a href="http://hutchinson.belmont.ma.us/tth/">
+T<sub><span class="small">T</span></sub>H</a>,
+version 4.03.<br />On 18 Feb 2014, 23:58.</small>
+</html>
