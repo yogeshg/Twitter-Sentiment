@@ -65,19 +65,10 @@ def getTrainingAndTestData2(tweets, ratio):
         #n_grams.extend(  words_bi  )
         #n_grams.extend(  words_tri )
 
-    uni_dist = nltk.FreqDist(unigrams)
-    #bi_dist  = nltk.FreqDist(bigrams)
-    #tri_dist = nltk.FreqDist(trigrams)
-    #n_dist   = nltk.FreqDist(n_grams)
-
-    #FIXME : Decide wether or not to choose bi & tri grams!
-    #           also chose most "Salient" features!!!
-
-    word_features = uni_dist.keys()
-    #word_features = bi_dist.keys()
-    #word_features = tri_dist.keys()
-    #word_features = n_dist.keys()
-
+    unigrams_sorted = nltk.FreqDist(unigrams).keys()
+    #bigrams_sorted = nltk.FreqDist(bigrams).keys()
+    #trigrams_sorted = nltk.FreqDist(trigrams).keys()
+    #ngrams_sorted = nltk.FreqDist(n_grams).keys()
 
     @counter    #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
     def extract_features(words):
