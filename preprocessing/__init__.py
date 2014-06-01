@@ -120,8 +120,9 @@ def countEmoticons(text):
 #FIXME: use process functions inside
 def processAll( 		text, subject='', query=[]):
 
-	query_regex = "|".join([ re.escape(q) for q in query])
-	text = re.sub( query_regex, '__QUER', text, flags=re.IGNORECASE )
+	if(len(query)>0):
+		query_regex = "|".join([ re.escape(q) for q in query])
+		text = re.sub( query_regex, '__QUER', text, flags=re.IGNORECASE )
 
 	text = re.sub( hash_regex, hash_repl, text )
 	text = re.sub( hndl_regex, hndl_repl, text )
@@ -129,6 +130,10 @@ def processAll( 		text, subject='', query=[]):
 
 	for (repl, regx) in emoticons_regex :
 		text = re.sub(regx, ' '+repl+' ', text)
+
+
+	text = text.replace('\'','')
+	# FIXME: Jugad
 
 	text = re.sub( word_bound_regex , punctuations_repl, text )
 	text = re.sub( rpt_regex, rpt_repl, text )
