@@ -67,7 +67,11 @@ def getTrainingAndTestData2(tweets, ratio):
 
     def word_features(words):
         words_uni = words
+        #words_bi  = nltk.bigrams(words)
+        #words_tri = nltk.trigrams(words)
         bag = collections.Counter(words_uni)
+        #document_words.union(set(words_bi))
+        #document_words.union(set(words_tri))
         return bag
 
     import re
