@@ -11,6 +11,7 @@ the influence of covariant features.
 """
 import sys, random
 import nltk
+import collections
 
 import time
 TIME_STAMP = time.strftime("%y%m%d-%H%M%S-%Z")
@@ -27,13 +28,7 @@ def getTrainingAndTestData2(tweets, ratio):
     procTweets = [ (preprocessing.processAll(text, subject=subj, query=quer), sent)    \
                         for (text, sent, subj, quer) in tweets]
 
-    def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
-        @wraps(func)
-        def tmp(*args, **kwargs):
-            tmp.count += 1
-            return func(*args, **kwargs)
-        tmp.count = 0
-        return tmp
+    
 
     stemmer = nltk.stem.PorterStemmer()
 
@@ -70,18 +65,66 @@ def getTrainingAndTestData2(tweets, ratio):
     #trigrams_sorted = nltk.FreqDist(trigrams).keys()
     #ngrams_sorted = nltk.FreqDist(n_grams).keys()
 
+    def word_features(words):
+        words_uni = words
+        bag = collections.Counter(words_uni)
+        return bag
+
+    import re
+
+    negn_regex = re.compile( r"""(?:
+        ^(?:never|no|nothing|nowhere|noone|none|not|
+            havent|hasnt|hadnt|cant|couldnt|shouldnt|
+            wont|wouldnt|dont|doesnt|didnt|isnt|arent|aint
+        )$
+    )
+    |
+    n't
+    """, re.X)
+
+    def negation_features(words):
+        INF = 10000
+        negn = [ bool(negn_regex.search(w)) for w in words ]
+    
+        left = [INF] * len(words)
+        prev = INF
+        for i in range(0,len(words)):
+            if( negn[i] ):
+                prev = 0
+            left[i] = prev
+            prev = min( INF, prev+1)
+    
+        right = [INF] * len(words)
+        prev = INF
+        for i in reversed(range(0,len(words))):
+            if( negn[i] ):
+                prev = 0
+            right[i] = prev
+            prev = min( INF, prev+1)
+    
+        return dict( zip(
+                        ['left('+w+')' for w in  words] + ['right('+w+')' for w in  words],
+                        left + right ) )
+    
+    def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
+        @wraps(func)
+        def tmp(*args, **kwargs):
+            tmp.count += 1
+            return func(*args, **kwargs)
+        tmp.count = 0
+        return tmp
+
     @counter    #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
     def extract_features(words):
-        words_uni = words
-        #words_bi  = nltk.bigrams(words)
-        #words_tri = nltk.trigrams(words)
-        document_words = set(words_uni)
-        #document_words.union(set(words_bi))
-        #document_words.union(set(words_tri))
+
+        bag = word_features(words)
+        negn_features = negation_features(words)
 
         features = {}
-        for word in word_features:
-            features['contains(%s)' % str(word)] = (word in document_words)
+        for word in unigrams_sorted:
+            features['count(%s)' % str(word)] = bag[word]
+        features.update( negn_features )
+ 
         sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
 
