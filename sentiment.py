@@ -44,6 +44,9 @@ def getTrainingAndTestData2(tweets, ratio):
         tmp.count = 0
         return tmp
 
+
+    stemmer = nltk.stem.PorterStemmer()
+
     #FIXME: see from other branch
     tweetsArr = []
     #word_regex = re.compile(r"\w+")
@@ -52,6 +55,7 @@ def getTrainingAndTestData2(tweets, ratio):
                     for word in text.split() \
                                 #re.findall(word_regex, words) \
                     if len(word) >= 3]
+        words = [stemmer.stem(w) for w in words]
         tweetsArr.append([words, sentiment])
 
     random.shuffle( tweetsArr )
@@ -130,7 +134,7 @@ def generateARFF( tweets, filename ):
 
     arff_formatter.write(filename+'_'+TIME_STAMP+'_train.arff', v_train)
     arff_formatter.write(filename+'_'+TIME_STAMP+'_test.arff', v_test)
-    arff_formatter.write(filename+'_'+TIME_STAMP+'.arff', v_train+v_test)
+    arff_formatter.write(filename+'_'+TIME_STAMP+'_all.arff', v_train+v_test)
 
     return True
 
