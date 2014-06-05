@@ -255,13 +255,16 @@ def trainAndClassify2( tweets, argument ):
 
 def main(argv) :
     import sanderstwitter02
+    import stanfordcorpus
 
     filename = ''
 
     if (len(argv) > 0) :
         filename = str(argv[0])
         sys.stdout = open( filename+'_'+TIME_STAMP , 'w')
-    tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+    
+    #tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+    tweets = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.norm.csv')
 
 #    preprocessingStats(tweets)
 #    trainAndClassify(tweets, 1)
