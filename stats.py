@@ -3,9 +3,14 @@ import nltk
 
 import time
 
-def preprocessingStats( tweets ):
-    import re
-    import preprocessing
+import re
+import preprocessing
+
+import pylab
+
+def preprocessingStats( tweets, fileprefix ):
+
+    sys.stdout = open( fileprefix+'_stats.txt' , 'w')
 
     def printStats( tweets, function, filtering=True):
         if( function ):
@@ -124,19 +129,33 @@ def preprocessingStats( tweets ):
             # print pos, neg, neu
 
     #unigrams
+
     uni_dist = nltk.FreqDist(unigrams)
     print 'Unigrams Distribution'
     printFreqDistCSV(uni_dist)
+    pylab
+    pylab.show = lambda : pylab.savefig(fileprefix+'_1grams.pdf')
     uni_dist.plot(50, cumulative=True)
+    pylab.close()
 
     bigrams = nltk.bigrams(unigrams)
     bi_dist = nltk.FreqDist(bigrams)
     print 'Bigrams Distribution'
     printFreqDistCSV(bi_dist)
+    pylab.show = lambda : pylab.savefig(fileprefix+'_2grams.pdf')
     bi_dist.plot(50, cumulative=True)
+    pylab.close()
 
     trigrams = nltk.trigrams(unigrams)
     tri_dist = nltk.FreqDist(trigrams)
     print 'Trigrams Distribution'
     printFreqDistCSV(tri_dist)
+    pylab.show = lambda : pylab.savefig(fileprefix+'_3grams.pdf')
     tri_dist.plot(50, cumulative=True)
+    pylab.close()
+
+    pylab.show = lambda : pylab.savefig(fileprefix+'_ngrams.pdf')
+    uni_dist.plot(50, cumulative=True)
+    bi_dist.plot(50, cumulative=True)
+    tri_dist.plot(50, cumulative=True)
+    pylab.close()    

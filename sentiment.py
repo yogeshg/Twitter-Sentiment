@@ -60,6 +60,8 @@ def getTrainingAndTestData2(tweets, ratio):
         #n_grams.extend(  words_bi  )
         #n_grams.extend(  words_tri )
 
+    print 'len( unigrams )', len( unigrams )
+
     unigrams_sorted = nltk.FreqDist(unigrams).keys()
     #bigrams_sorted = nltk.FreqDist(bigrams).keys()
     #trigrams_sorted = nltk.FreqDist(trigrams).keys()
@@ -140,15 +142,15 @@ def getTrainingAndTestData2(tweets, ratio):
 
     return (v_train, v_test)
 
-def generateARFF( tweets, filename ):
+def generateARFF( tweets, fileprefix ):
 
     (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 
     arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
 
-    arff_formatter.write(filename+'_'+TIME_STAMP+'_train.arff', v_train)
-    arff_formatter.write(filename+'_'+TIME_STAMP+'_test.arff', v_test)
-    arff_formatter.write(filename+'_'+TIME_STAMP+'_all.arff', v_train+v_test)
+    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_train.arff', v_train)
+    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_test.arff', v_test)
+    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_all.arff', v_train+v_test)
 
     return True
 
@@ -256,25 +258,30 @@ def trainAndClassify2( tweets, argument ):
 def main(argv) :
     import sanderstwitter02
     import stanfordcorpus
+    import stats
 
-    filename = ''
+    fileprefix = ''
 
     if (len(argv) > 0) :
-        filename = str(argv[0])
-        sys.stdout = open( filename+'_'+TIME_STAMP , 'w')
+        fileprefix = str(argv[0])
+
+    if( fileprefix=='' ):
+        fileprefix = 'logs/data_'+TIME_STAMP
+
+    #sys.stdout = open( fileprefix+'_'+TIME_STAMP , 'w')
     
-    #tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
-    tweets = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.norm.csv')
+    tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
+    #tweets = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.norm.csv')
 
 #    preprocessingStats(tweets)
 #    trainAndClassify(tweets, 1)
 #    trainAndClassify2(tweets, 1)
 #    sys.stdout.flush()
 
-    if( filename=='' ):
-        filename = 'logs/data'
+    stats.preprocessingStats( tweets, fileprefix )
 
-    generateARFF(tweets, filename)
+    #generateARFF(tweets, fileprefix)
+
 
     sys.stdout.flush()
 
