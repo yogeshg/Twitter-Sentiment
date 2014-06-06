@@ -8,6 +8,29 @@ import preprocessing
 
 import pylab
 
+def stepStats( tweets, fileprefix, num_bins=10, split='easy' ):
+    sizes = [     10000,
+                  50000,
+                 100000,
+                 500000,
+                1000000,
+                1600000  ]
+
+    tot_size = len(tweets)
+    max_digits = len(str(tot_size))
+
+    inc = tot_size/num_bins
+    rem = tot_size%num_bins
+
+    if split=='equal':
+        sizes = [ int((r+1.0)/num_bins*tot_size) for r in range( num_bins ) ]
+    else: # split=='easy'
+        sizes = range( 0, tot_size, inc)
+        sizes = sizes[1:]+[tot_size]
+
+    for s in sizes:
+        preprocessingStats( tweets[0:s], fileprefix+'_%0{0}d'.format(sdig) % s )
+
 def preprocessingStats( tweets, fileprefix ):
 
     sys.stdout = open( fileprefix+'_stats.txt' , 'w')
