@@ -8,6 +8,48 @@ import preprocessing
 
 import pylab
 
+import csv
+
+def oldStats2CSV( in_file, fileprefix=''):
+    if fileprefix == '':
+        fileprefix = in_file.rstrip('_stats.txt')
+    fp = open( in_file, 'r' )
+    fq = open( fileprefix+'_statsnew.txt', 'w' )
+
+    line = ''
+    line_start = 0
+    line_count = 20
+    line_end   = line_start+line_count
+    for line_num in range(line_start, line_end):   # write Statistics
+        line = fp.readline()
+        fq.write( line )
+
+    for section in [1,2,3]:
+        line_start = line_end
+        line_count = 2
+        line_end   = line_start+line_count
+        for line_num in range( line_start, line_end ):
+            line = fp.readline()
+            fq.write( line )
+    
+        line_start = line_end
+        line_count = [int(l) for l in line.split() if l.isdigit()][0]
+        line_end = line_start+line_count
+        fr = open( fileprefix+'_%dgrams.csv'%section, 'w')
+        fwrt = csv.writer( fr, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
+        for line_num in range( line_start, line_end ):  # write unigrams
+            line = fp.readline()
+            row = line.split('\t,\t')
+            row[0] = row[0].strip()
+            row[1] = int(row[1])
+            fwrt.writerow( row )
+        fr.close()
+
+    fp.close()
+    fq.close()
+
+
+
 def stepStats( tweets, fileprefix, num_bins=10, split='easy' ):
     sizes = [     10000,
                   50000,
@@ -132,10 +174,15 @@ def preprocessingStats( tweets, fileprefix ):
 
     print '###########################################################################'
 
-    def printFreqDistCSV( dist ):
+    def printFreqDistCSV( dist, filename ):
         print '<FreqDist with', len(dist.keys()), 'samples and', dist._N, 'outcomes>'
+        
+        fcsv = open( filename, 'w' ) # fileprefix+'_%dgram.csv'%section
+        distwriter = csv.writer( fr, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
+        
         for key in dist.keys():
-            print key, '\t,\t', dist[key]
+            distwriter.writerow( [key, dist[key]] ) #print key, '\t,\t', dist[key]
+            
             # can be used to judge entropy of n-grams
             # FIXME: write code if required
             # figure out if we need scanner
@@ -156,7 +203,7 @@ def preprocessingStats( tweets, fileprefix ):
 
     uni_dist = nltk.FreqDist(unigrams)
     print 'Unigrams Distribution'
-    printFreqDistCSV(uni_dist)
+    printFreqDistCSV(uni_dist, fileprefix+'_%dgrams.csv'%1)
     pylab
     pylab.show = lambda : pylab.savefig(fileprefix+'_1grams.pdf')
     uni_dist.plot(50, cumulative=True)
