@@ -278,7 +278,7 @@ def main(argv) :
 #    trainAndClassify2(tweets, 1)
 #    sys.stdout.flush()
 
-    stats.preprocessingStats( tweets, fileprefix )
+    stats.stepStats( tweets, fileprefix )
 
     #generateARFF(tweets, fileprefix)
 
