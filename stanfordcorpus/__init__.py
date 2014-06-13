@@ -135,3 +135,6 @@ def countlines( filename ):
 #sampleCSV(TESTDATA, TESTDATA+'.sample.csv')
 
 #getNormalisedCSV(FULLDATA+'.sample.csv', FULLDATA+'.norm.csv')
+
+#randomSampleCSV(FULLDATA, FULLDATA+'.100000.sample.csv', K=100000)
+#getNormalisedCSV(FULLDATA+'.100000.sample.csv', FULLDATA+'.100000.norm.csv')

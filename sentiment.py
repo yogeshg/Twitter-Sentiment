@@ -19,7 +19,7 @@ TIME_STAMP = time.strftime("%y%m%d-%H%M%S-%Z")
 NUM_SHOW_FEATURES = 50
 
 
-def getTrainingAndTestData2(tweets, ratio):
+def getTrainingAndTestData(tweets, ratio):
 
     from functools import wraps
     import re
@@ -144,7 +144,7 @@ def getTrainingAndTestData2(tweets, ratio):
 
 def generateARFF( tweets, fileprefix ):
 
-    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+    (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
 
     arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
 
@@ -153,46 +153,6 @@ def generateARFF( tweets, fileprefix ):
     arff_formatter.write(fileprefix+'_all.arff', v_train+v_test)
 
     return True
-
-def trainAndClassify1( tweets, argument ):
-
-    print '######################'
-    if( False ):
-        print 'features\t: getTrainingAndTestData'
-        (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
-    else:
-        print 'features\t: getTrainingAndTestData2'
-        (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
-
-    # train classifier
-    if( (argument/2) % 2 == 0):
-        print 'classifier\t: NaiveBayesClassifier'
-        classifier = nltk.classify.NaiveBayesClassifier.train(v_train);
-    else:
-        print 'classifier\t: train_maxent_classifier_with_gis'
-        classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
-
-    # classify and dump results for interpretation
-    accuracy = nltk.classify.accuracy(classifier, v_test)
-    print '######################'
-    print 'Accuracy :', accuracy
-    print classifier.show_most_informative_features(NUM_SHOW_FEATURES)
-
-    # build confusion matrix over test set
-    test_truth   = [s for (t,s) in v_test]
-    test_predict = [classifier.classify(t) for (t,s) in v_test]
-
-    print '######################'
-    print 'Accuracy :', accuracy
-    print '######################'
-    print 'Confusion Matrix'
-    print nltk.ConfusionMatrix( test_truth, test_predict )
-
-    return classifier
-
-def trainAndClassify2( tweets, argument ):
-
-    return False;
 
 def trainAndClassify( tweets, classifier, method ):
 
@@ -212,7 +172,7 @@ def trainAndClassify( tweets, classifier, method ):
             print text
         CLASSIFIER.show_most_informative_features = DecisionTreeClassifier_show_most_informative_features
 
-    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9) #Refactor
+    (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
     if '1step' == method:
         classifier_tot = CLASSIFIER.train( v_train )
         
@@ -303,30 +263,17 @@ def main(argv) :
 
     if( fileprefix=='' ):
         fileprefix = 'logs/data_'+TIME_STAMP
-
-    #sys.stdout = open( fileprefix+'_'+TIME_STAMP , 'w')
     
     tweets1 = sanderstwitter02.getTweetsRawData('sentiment.csv')
     tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.10000.norm.csv')
-
-#    preprocessingStats(tweets)
-#    trainAndClassify(tweets, 1)
-#    trainAndClassify2(tweets, 1)
-#    sys.stdout.flush()
+    random.shuffle(tweets1)
+    random.shuffle(tweets2)
+    tweets = tweets1[0:50] + tweets2[0:50]
 
     #stats.stepStats( tweets, fileprefix )
     #generateARFF(tweets, fileprefix)
 
-    random.shuffle(tweets1)
-    random.shuffle(tweets2)
-
-    tweets = tweets1[0:50] + tweets2[0:50]
-
     trainAndClassify( tweets, classifier='DecisionTreeClassifier', method='1step')
-
-    #trainAndClassify1(tweets, 1)
-    
-    #trainAndClassify2(tweets, 1)
 
     sys.stdout.flush()
 
