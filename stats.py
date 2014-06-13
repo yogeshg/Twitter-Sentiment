@@ -48,6 +48,80 @@ def oldStats2CSV( in_file, fileprefix=''):
     fp.close()
     fq.close()
 
+def newStats2CSV(files, out_file):
+    stats_regex = re.compile(r'''for (\d+) tweets:
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+number of words [\w \t]+?(\d+)
+###########################################################################
+Feat[\w \t]+?
+Hand[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+Hash[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+Urls[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+Emot[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+Word[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+Char[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
+###########################################################################
+Unigrams Distribution
+<FreqDist with (\d+) samples and (\d+) outcomes>
+Bigrams Distribution
+<FreqDist with (\d+) samples and (\d+) outcomes>
+Trigrams Distribution
+<FreqDist with (\d+) samples and (\d+) outcomes>
+''')
+    stats_tiltes = [
+'"# tweets"',
+'"# words before preprocessing not filt"',
+'"# words before preprocessing filtered"',
+'"# words after processHashtags filtered"',
+'"# words after processHandles filtered"',
+'"# words after processUrls filtered"',
+'"# words after processEmoticons filtered"',
+'"# words after processPunctuations filtered"',
+'"# words after processRepeatings filtered"',
+'"# words after processAll not filt"',
+'"# words after processAll filtered"',
+'"avg(Handles)"',
+'"max(Handles)"',
+'"avg(Hashtags)"',
+'"max(Hashtags)"',
+'"avg(Urls)"',
+'"max(Urls)"',
+'"avg(Emoticons)"',
+'"max(Emoticons)"',
+'"avg(Words)"',
+'"max(Words)"',
+'"avg(Chars)"',
+'"max(Chars)"',
+'"# Unigrams samples"',
+'"# Unigrams outcomes"',
+'"# Bigrams samples"',
+'"# Bigrams outcomes"',
+'"# Trigrams samples"',
+'"# Trigrams outcomes"',
+]
+
+    arr = [ [] ] * len(files)
+
+    for j in range( len(files)):
+        text = ''
+        with open(files[j], 'r') as fp:
+            text = fp.read()
+        match = stats_regex.match( text )
+        arr[j] = [match.group( i ) for i in range(1, 30)]
+
+    with open(out_file, 'w') as fq:
+        stats_writer = csv.writer( fq, delimiter=',', quotechar='\'')#, quoting=csv.QUOTE_NONE )
+        for i in range(0,29):
+            row = [stats_tiltes[i]] + [arr[j][i] for j in range(len(files))]
+            stats_writer.writerow( row )
 
 
 def stepStats( tweets, fileprefix, num_bins=10, split='easy' ):
@@ -178,7 +252,7 @@ def preprocessingStats( tweets, fileprefix ):
         print '<FreqDist with', len(dist.keys()), 'samples and', dist._N, 'outcomes>'
         
         fcsv = open( filename, 'w' ) # fileprefix+'_%dgram.csv'%section
-        distwriter = csv.writer( fr, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
+        distwriter = csv.writer( fcsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
         
         for key in dist.keys():
             distwriter.writerow( [key, dist[key]] ) #print key, '\t,\t', dist[key]
@@ -203,8 +277,7 @@ def preprocessingStats( tweets, fileprefix ):
 
     uni_dist = nltk.FreqDist(unigrams)
     print 'Unigrams Distribution'
-    printFreqDistCSV(uni_dist, fileprefix+'_%dgrams.csv'%1)
-    pylab
+    printFreqDistCSV(uni_dist, fileprefix+'_1grams.csv')
     pylab.show = lambda : pylab.savefig(fileprefix+'_1grams.pdf')
     uni_dist.plot(50, cumulative=True)
     pylab.close()
@@ -212,7 +285,7 @@ def preprocessingStats( tweets, fileprefix ):
     bigrams = nltk.bigrams(unigrams)
     bi_dist = nltk.FreqDist(bigrams)
     print 'Bigrams Distribution'
-    printFreqDistCSV(bi_dist)
+    printFreqDistCSV(bi_dist, fileprefix+'_1grams.csv')
     pylab.show = lambda : pylab.savefig(fileprefix+'_2grams.pdf')
     bi_dist.plot(50, cumulative=True)
     pylab.close()
@@ -220,7 +293,7 @@ def preprocessingStats( tweets, fileprefix ):
     trigrams = nltk.trigrams(unigrams)
     tri_dist = nltk.FreqDist(trigrams)
     print 'Trigrams Distribution'
-    printFreqDistCSV(tri_dist)
+    printFreqDistCSV(tri_dist, fileprefix+'_1grams.csv')
     pylab.show = lambda : pylab.savefig(fileprefix+'_3grams.pdf')
     tri_dist.plot(50, cumulative=True)
     pylab.close()
