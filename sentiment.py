@@ -89,27 +89,27 @@ def getTrainingAndTestData2(tweets, ratio):
     """, re.X)
 
     def negation_features(words):
-        INF = 10000
+        INF = 0.0
         negn = [ bool(negn_regex.search(w)) for w in words ]
     
-        left = [INF] * len(words)
-        prev = INF
+        left = [0.0] * len(words)
+        prev = 0.0
         for i in range(0,len(words)):
             if( negn[i] ):
-                prev = 0
+                prev = 1.0
             left[i] = prev
-            prev = min( INF, prev+1)
+            prev = max( 0.0, prev-0.1)
     
-        right = [INF] * len(words)
-        prev = INF
+        right = [0.0] * len(words)
+        prev = 0.0
         for i in reversed(range(0,len(words))):
             if( negn[i] ):
-                prev = 0
+                prev = 1.0
             right[i] = prev
-            prev = min( INF, prev+1)
+            prev = max( 0.0, prev-0.1)
     
         return dict( zip(
-                        ['left('+w+')' for w in  words] + ['right('+w+')' for w in  words],
+                        ['negLeft('+w+')' for w in  words] + ['negRight('+w+')' for w in  words],
                         left + right ) )
     
     def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
@@ -131,7 +131,7 @@ def getTrainingAndTestData2(tweets, ratio):
             features['count(%s)' % str(word)] = bag[word]
         features.update( negn_features )
  
-        sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
+        #sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
 
     extract_features.count = 0;
@@ -148,13 +148,13 @@ def generateARFF( tweets, fileprefix ):
 
     arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
 
-    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_train.arff', v_train)
-    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_test.arff', v_test)
-    arff_formatter.write(fileprefix+'_'+TIME_STAMP+'_all.arff', v_train+v_test)
+    arff_formatter.write(fileprefix+'_train.arff', v_train)
+    arff_formatter.write(fileprefix+'_test.arff', v_test)
+    arff_formatter.write(fileprefix+'_all.arff', v_train+v_test)
 
     return True
 
-def trainAndClassify( tweets, argument ):
+def trainAndClassify1( tweets, argument ):
 
     print '\n', '######################'
     if( argument % 2 == 0):
@@ -191,6 +191,8 @@ def trainAndClassify( tweets, argument ):
     return classifier
 
 def trainAndClassify2( tweets, argument ):
+
+def trainAndClassify( tweets, argument ):
 
     (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
 
@@ -270,18 +272,28 @@ def main(argv) :
 
     #sys.stdout = open( fileprefix+'_'+TIME_STAMP , 'w')
     
-    tweets = sanderstwitter02.getTweetsRawData('sentiment.csv')
-    #tweets = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.norm.csv')
+    tweets1 = sanderstwitter02.getTweetsRawData('sentiment.csv')
+    tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.10000.norm.csv')
 
 #    preprocessingStats(tweets)
 #    trainAndClassify(tweets, 1)
 #    trainAndClassify2(tweets, 1)
 #    sys.stdout.flush()
 
-    stats.stepStats( tweets, fileprefix )
-
+    #stats.stepStats( tweets, fileprefix )
     #generateARFF(tweets, fileprefix)
 
+    random.shuffle(tweets1)
+    random.shuffle(tweets2)
+
+    tweets = tweets1[0:500] + tweets2[0:500]
+
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step')
+
+
+    trainAndClassify1(tweets, 1)
+    
+    trainAndClassify2(tweets, 1)
 
     sys.stdout.flush()
 
