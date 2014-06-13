@@ -16,7 +16,7 @@ import collections
 import time
 TIME_STAMP = time.strftime("%y%m%d-%H%M%S-%Z")
 
-
+NUM_SHOW_FEATURES = 50
 
 
 def getTrainingAndTestData2(tweets, ratio):
@@ -109,7 +109,7 @@ def getTrainingAndTestData2(tweets, ratio):
             prev = max( 0.0, prev-0.1)
     
         return dict( zip(
-                        ['negLeft('+w+')' for w in  words] + ['negRight('+w+')' for w in  words],
+                        ['neg_l('+w+')' for w in  words] + ['neg_r('+w+')' for w in  words],
                         left + right ) )
     
     def counter(func):  #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
@@ -156,8 +156,8 @@ def generateARFF( tweets, fileprefix ):
 
 def trainAndClassify1( tweets, argument ):
 
-    print '\n', '######################'
-    if( argument % 2 == 0):
+    print '######################'
+    if( False ):
         print 'features\t: getTrainingAndTestData'
         (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
     else:
@@ -167,24 +167,24 @@ def trainAndClassify1( tweets, argument ):
     # train classifier
     if( (argument/2) % 2 == 0):
         print 'classifier\t: NaiveBayesClassifier'
-        classifier = nltk.NaiveBayesClassifier.train(v_train);
+        classifier = nltk.classify.NaiveBayesClassifier.train(v_train);
     else:
         print 'classifier\t: train_maxent_classifier_with_gis'
         classifier = nltk.classify.maxent.train_maxent_classifier_with_gis(v_train);
 
     # classify and dump results for interpretation
     accuracy = nltk.classify.accuracy(classifier, v_test)
-    print '\n', '######################'
+    print '######################'
     print 'Accuracy :', accuracy
-    print classifier.show_most_informative_features(200)
+    print classifier.show_most_informative_features(NUM_SHOW_FEATURES)
 
     # build confusion matrix over test set
     test_truth   = [s for (t,s) in v_test]
     test_predict = [classifier.classify(t) for (t,s) in v_test]
 
-    print '\n', '######################'
+    print '######################'
     print 'Accuracy :', accuracy
-    print '\n', '######################'
+    print '######################'
     print 'Confusion Matrix'
     print nltk.ConfusionMatrix( test_truth, test_predict )
 
@@ -192,68 +192,102 @@ def trainAndClassify1( tweets, argument ):
 
 def trainAndClassify2( tweets, argument ):
 
-def trainAndClassify( tweets, argument ):
+    return False;
 
-    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9)
+def trainAndClassify( tweets, classifier, method ):
 
-    v_train_obj = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
-                for (text, sent) in v_train ]
-    v_train_sen = [ (text, sent) for (text, sent) in v_train if ((sent=='neg')|(sent=='pos')) ]
+    print classifier
+    if('NaiveBayesClassifier' == classifier):
+        CLASSIFIER = nltk.classify.NaiveBayesClassifier
+    elif('MaxentClassifier' == classifier):
+        CLASSIFIER = nltk.classify.MaxentClassifier
+    elif('DecisionTreeClassifier' == classifier):
+        CLASSIFIER = nltk.classify.DecisionTreeClassifier
+        def DecisionTreeClassifier_show_most_informative_features( self, n=10 ):
+            text = ''
+            for i in range( 1, 10 ):
+                text = nltk.classify.DecisionTreeClassifier.pp(self,depth=i)
+                if len( text.split('\n') ) > n:
+                    break
+            print text
+        CLASSIFIER.show_most_informative_features = DecisionTreeClassifier_show_most_informative_features
 
-    v_test_obj  = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
-                for (text, sent) in v_test ]
-    v_test_sen  = [ (text, sent) for (text, sent) in v_test if ((sent=='neg')|(sent=='pos')) ]
+    (v_train, v_test) = getTrainingAndTestData2(tweets,0.9) #Refactor
+    if '1step' == method:
+        classifier_tot = CLASSIFIER.train( v_train )
+        
+        print '######################'
+        print '1 Step Classifier :', classifier
+        accuracy_tot = nltk.classify.accuracy(classifier_tot, v_test)
+        print 'Accuracy :', accuracy_tot
+        print '######################'
+        print classifier_tot.show_most_informative_features(NUM_SHOW_FEATURES)
+        print '######################'
 
+        # build confusion matrix over test set
+        test_truth   = [s for (t,s) in v_test]
+        test_predict = [classifier_tot.classify(t) for (t,s) in v_test]
 
-    # train classifier
-    classifier_obj = nltk.NaiveBayesClassifier.train(v_train_obj);
-    classifier_sen = nltk.NaiveBayesClassifier.train(v_train_sen);
+        print 'Accuracy :', accuracy_tot
+        print 'Confusion Matrix'
+        print nltk.ConfusionMatrix( test_truth, test_predict )
 
-    test_truth   = [s for (t,s) in v_test]
-    v_test2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
-    test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test2]
+    elif '2step' == method:
+        v_train_obj = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
+                    for (text, sent) in v_train ]
+        v_train_sen = [ (text, sent) for (text, sent) in v_train if ((sent=='neg')|(sent=='pos')) ]
+        
+        v_test_obj  = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
+                    for (text, sent) in v_test ]
+        v_test_sen  = [ (text, sent) for (text, sent) in v_test if ((sent=='neg')|(sent=='pos')) ]
 
-    correct = [ t==p for (t,p) in zip(test_truth, test_predict)]
-    accuracy = float(sum(correct))/len(correct) if correct else 0
+        classifier_obj = CLASSIFIER.train(v_train_obj);
+        classifier_sen = CLASSIFIER.train(v_train_sen);
 
-    print '\n', '2 - Step Classifier'
-    print '\n', '######################'
-    print 'Accuracy :', accuracy
-    print '\n', '######################'
-    print 'Confusion Matrix'
-    print nltk.ConfusionMatrix( test_truth, test_predict )
+        print '######################'
+        print 'Objectivity Classifier :', classifier
+        accuracy_obj = nltk.classify.accuracy(classifier_obj, v_test_obj)
+        print 'Accuracy :', accuracy_obj
+        print '######################'
+        print classifier_obj.show_most_informative_features(NUM_SHOW_FEATURES)
+        print '######################'
 
-    print '\n', '######################'
-    print 'Objectivity Classifier'
-    accuracy_obj = nltk.classify.accuracy(classifier_obj, v_test_obj)
-    print '\n', '######################'
-    print 'Accuracy :', accuracy_obj
-    print classifier_obj.show_most_informative_features(200)
+        test_truth_obj   = [s for (t,s) in v_test_obj]
+        test_predict_obj = [classifier_obj.classify(t) for (t,s) in v_test_obj]
 
-    print '\n', '######################'
-    print 'Sentiment Classifier'
-    accuracy_sen = nltk.classify.accuracy(classifier_sen, v_test_sen)
-    print '\n', '######################'
-    print 'Accuracy :', accuracy_sen
-    print classifier_sen.show_most_informative_features(200)
+        print 'Accuracy :', accuracy_obj
+        print 'Confusion Matrix'
+        print nltk.ConfusionMatrix( test_truth_obj, test_predict_obj )
+        
+        print '######################'
+        print 'Sentiment Classifier :', classifier
+        accuracy_sen = nltk.classify.accuracy(classifier_sen, v_test_sen)
+        print 'Accuracy :', accuracy_sen
+        print '######################'
+        print classifier_sen.show_most_informative_features(NUM_SHOW_FEATURES)
+        print '######################'
 
-    test_truth_obj   = [s for (t,s) in v_test_obj]
-    test_predict_obj = [classifier_obj.classify(t) for (t,s) in v_test_obj]
+        test_truth_sen   = [s for (t,s) in v_test_sen]
+        test_predict_sen = [classifier_sen.classify(t) for (t,s) in v_test_sen]
 
-    print '\n', '######################'
-    print 'Accuracy :', accuracy_obj
-    print '\n', '######################'
-    print 'Confusion Matrix'
-    print nltk.ConfusionMatrix( test_truth_obj, test_predict_obj )
+        print 'Accuracy :', accuracy_sen
+        print 'Confusion Matrix'
+        print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
 
-    test_truth_sen   = [s for (t,s) in v_test_sen]
-    test_predict_sen = [classifier_sen.classify(t) for (t,s) in v_test_sen]
+        v_test2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
 
-    print '\n', '######################'
-    print 'Accuracy :', accuracy_sen
-    print '\n', '######################'
-    print 'Confusion Matrix'
-    print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
+        test_truth   = [s for (t,s) in v_test]
+        test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test2]
+
+        correct = [ t==p for (t,p) in zip(test_truth, test_predict)]
+        accuracy = float(sum(correct))/len(correct) if correct else 0
+
+        print '######################'
+        print '2 - Step Classifier :', classifier
+        print 'Accuracy :', accuracy
+        print 'Confusion Matrix'
+        print nltk.ConfusionMatrix( test_truth, test_predict )
+        print '######################'
 
     return None
 
@@ -286,14 +320,13 @@ def main(argv) :
     random.shuffle(tweets1)
     random.shuffle(tweets2)
 
-    tweets = tweets1[0:500] + tweets2[0:500]
+    tweets = tweets1[0:50] + tweets2[0:50]
 
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step')
+    trainAndClassify( tweets, classifier='DecisionTreeClassifier', method='1step')
 
-
-    trainAndClassify1(tweets, 1)
+    #trainAndClassify1(tweets, 1)
     
-    trainAndClassify2(tweets, 1)
+    #trainAndClassify2(tweets, 1)
 
     sys.stdout.flush()
 
