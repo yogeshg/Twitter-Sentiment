@@ -1,14 +1,7 @@
 """
-Twitter sentiment analysis.
-
-This code performs sentiment analysis on Tweets.
-
-A custom feature extractor looks for key words and emoticons.  These are fed in
-to a naive Bayes classifier to assign a label of 'positive', 'negative', or
-'neutral'.  Optionally, a principle components transform (PCT) is used to lessen
-the influence of covariant features.
-
+Sentiment Analysis of Twitter Feeds
 """
+
 import sys, random
 import nltk, re
 import collections
@@ -17,13 +10,19 @@ import time
 
 def get_time_stamp():
     return time.strftime("%y%m%d-%H%M%S-%Z")
+def grid(alist, blist):
+    for a in alist:
+        for b in blist:
+            yield(a, b)
 
 TIME_STAMP = get_time_stamp()
 
-NUM_SHOW_FEATURES = 50
+NUM_SHOW_FEATURES = 500
+SPLIT_RATIO = 0.9
+LIST_CLASSIFIERS = [ 'NaiveBayesClassifier', 'MaxentClassifier', 'DecisionTreeClassifier', 'SvmClassifier' ] 
+LIST_METHODS = ['1step', '2step']
 
-
-def getTrainingAndTestData(tweets, ratio, feature_set):
+def getTrainingAndTestData(tweets, ratio, method, feature_set):
 
     add_ngram_feat = feature_set.get('ngram', 1)
     add_negtn_feat = feature_set.get('negtn', False)
@@ -40,16 +39,16 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
 
     stemmer = nltk.stem.PorterStemmer()
 
-    tweetsArr = []
+    all_tweets = []                                             #DATADICT: all_tweets =   [ (words, sentiment), ... ]
     for (text, sentiment) in procTweets:
         words = [word if(word[0:2]=='__') else word.lower() \
                     for word in text.split() \
                     if len(word) >= 3]
-        words = [stemmer.stem(w) for w in words]
-        tweetsArr.append([words, sentiment])
+        words = [stemmer.stem(w) for w in words]                #DATADICT: words = [ 'word1', 'word2', ... ]
+        all_tweets.append((words, sentiment))
 
-    train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
-    test_tweets  = tweetsArr[int(len(tweetsArr)*ratio):]
+    train_tweets = all_tweets[:int(len(all_tweets)*ratio)]      #DATADICT: train_tweets = [ (words, sentiment), ... ]
+    test_tweets  = all_tweets[int(len(all_tweets)*ratio):]      #DATADICT: test_tweets  = [ (words, sentiment), ... ]
 
     unigrams_fd = nltk.FreqDist()
     if add_ngram_feat > 1 :
@@ -85,7 +84,7 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
         bag = collections.Counter(words_uni+words_bi+words_tri)
         return bag
 
-    negn_regex = re.compile( r"""(?:
+    negtn_regex = re.compile( r"""(?:
         ^(?:never|no|nothing|nowhere|noone|none|not|
             havent|hasnt|hadnt|cant|couldnt|shouldnt|
             wont|wouldnt|dont|doesnt|didnt|isnt|arent|aint
@@ -97,12 +96,12 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
 
     def get_negation_features(words):
         INF = 0.0
-        negn = [ bool(negn_regex.search(w)) for w in words ]
+        negtn = [ bool(negtn_regex.search(w)) for w in words ]
     
         left = [0.0] * len(words)
         prev = 0.0
         for i in range(0,len(words)):
-            if( negn[i] ):
+            if( negtn[i] ):
                 prev = 1.0
             left[i] = prev
             prev = max( 0.0, prev-0.1)
@@ -110,7 +109,7 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
         right = [0.0] * len(words)
         prev = 0.0
         for i in reversed(range(0,len(words))):
-            if( negn[i] ):
+            if( negtn[i] ):
                 prev = 1.0
             right[i] = prev
             prev = max( 0.0, prev-0.1)
@@ -133,11 +132,11 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
 
         bag = get_word_features(words)
         for ug in unigrams_sorted:
-            features['count(%s)' % str(ug)] = bag[ug]
+            features['has(%s)' % str(ug)] = bag[ug]>0
         
         if add_ngram_feat > 1:
             for ng in ngrams_sorted:
-                features['count(%s)' % str(ng)] = bag[ng]
+                features['has(%s)' % str(ng)] = bag[ng]>0
         
         if add_negtn_feat :
             negation_features = get_negation_features(words)
@@ -148,15 +147,40 @@ def getTrainingAndTestData(tweets, ratio, feature_set):
 
     extract_features.count = 0;
 
-    # Apply NLTK's Lazy Map
-    v_train = nltk.classify.apply_features(extract_features,train_tweets)
-    v_test  = nltk.classify.apply_features(extract_features,test_tweets)
+    
+    if( '1step' == method ):
+        # Apply NLTK's Lazy Map
+        v_train = nltk.classify.apply_features(extract_features,train_tweets)
+        v_test  = nltk.classify.apply_features(extract_features,test_tweets)
+        return (v_train, v_test)
 
-    return (v_train, v_test)
+    elif( '2step' == method ):
+        isObj   = lambda sent: sent in ['neg','pos']
+        makeObj = lambda sent: 'obj' if isObj(sent) else sent
+        
+        train_tweets_obj = [ (words, makeObj(sent)) for (words, sent) in train_tweets ]
+        test_tweets_obj  = [ (words, makeObj(sent)) for (words, sent) in test_tweets ]
+
+        train_tweets_sen = [ (words, sent) for (words, sent) in train_tweets if isObj(sent) ]
+        test_tweets_sen  = [ (words, sent) for (words, sent) in test_tweets if isObj(sent) ]
+
+        v_train_obj = nltk.classify.apply_features(extract_features,train_tweets_obj)
+        v_train_sen = nltk.classify.apply_features(extract_features,train_tweets_sen)
+        v_test_obj  = nltk.classify.apply_features(extract_features,test_tweets_obj)
+        v_test_sen  = nltk.classify.apply_features(extract_features,test_tweets_sen)
+
+        test_truth = [ sent for (words, sent) in test_tweets ]
+
+        return (v_train_obj,v_train_sen,v_test_obj,v_test_sen,test_truth)
+
+    else:
+        return nltk.classify.apply_features(extract_features,all_tweets)
+
+    
 
 def generateARFF( tweets, fileprefix ):
 
-    (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
+    (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, '1step')
 
     arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
 
@@ -166,9 +190,11 @@ def generateARFF( tweets, fileprefix ):
 
     return True
 
-def trainAndClassify( tweets, classifier, method, feature_set ):
+def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
-    INFO = ' '.join( [TIME_STAMP, str(classifier), str(method)] + [ str(k)+':'+str(v) for (k,v) in feature_set.items()] )
+    INFO = '_'.join( [str(classifier), str(method)] + [ str(k)+'_'+str(v) for (k,v) in feature_set.items()] )
+    realstdout = sys.stdout
+    sys.stdout = open( fileprefix+'_'+INFO , 'w')
 
     print INFO
     sys.stderr.write( '\n'+ '#'*80 +'\n' + INFO )
@@ -179,6 +205,9 @@ def trainAndClassify( tweets, classifier, method, feature_set ):
         CLASSIFIER = nltk.classify.MaxentClassifier
     elif('SvmClassifier' == classifier):
         CLASSIFIER = nltk.classify.SvmClassifier
+        def SvmClassifier_show_most_informative_features( self, n=10 ):
+            print 'unimplemented'
+        CLASSIFIER.show_most_informative_features = SvmClassifier_show_most_informative_features
     elif('DecisionTreeClassifier' == classifier):
         CLASSIFIER = nltk.classify.DecisionTreeClassifier
         def DecisionTreeClassifier_show_most_informative_features( self, n=10 ):
@@ -190,12 +219,11 @@ def trainAndClassify( tweets, classifier, method, feature_set ):
             print text
         CLASSIFIER.show_most_informative_features = DecisionTreeClassifier_show_most_informative_features
 
-    (v_train, v_test) = getTrainingAndTestData(tweets,0.9, feature_set)
-
     if '1step' == method:
+        (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
+
         sys.stderr.write( '\n[training start]' )
         classifier_tot = CLASSIFIER.train( v_train )
-        sys.stderr.flush()
         sys.stderr.write( ' [training complete]' )
         
         print '######################'
@@ -215,22 +243,14 @@ def trainAndClassify( tweets, classifier, method, feature_set ):
         print nltk.ConfusionMatrix( test_truth, test_predict )
 
     elif '2step' == method:
-        v_train_obj = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
-                    for (text, sent) in v_train ]
-        v_train_sen = [ (text, sent) for (text, sent) in v_train if ((sent=='neg')|(sent=='pos')) ]
-        
-        v_test_obj  = [ (text, 'obj') if ((sent=='neg')|(sent=='pos')) else (text, sent) \
-                    for (text, sent) in v_test ]
-        v_test_sen  = [ (text, sent) for (text, sent) in v_test if ((sent=='neg')|(sent=='pos')) ]
+        (v_train_obj, v_train_sen, v_test_obj, v_test_sen, test_truth) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
         classifier_obj = CLASSIFIER.train(v_train_obj)
-        sys.stderr.flush()
         sys.stderr.write( ' [training complete]' )
 
         sys.stderr.write( '\n[training start]' )
         classifier_sen = CLASSIFIER.train(v_train_sen)
-        sys.stderr.flush()
         sys.stderr.write( ' [training complete]' )
 
         print '######################'
@@ -264,10 +284,8 @@ def trainAndClassify( tweets, classifier, method, feature_set ):
         if( len(test_truth_sen) > 0 ):
             print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
 
-        v_test2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
-
-        test_truth   = [s for (t,s) in v_test]
-        test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test2]
+        v_test_sen2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
+        test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test_sen2]
 
         correct = [ t==p for (t,p) in zip(test_truth, test_predict)]
         accuracy_tot = float(sum(correct))/len(correct) if correct else 0
@@ -280,7 +298,13 @@ def trainAndClassify( tweets, classifier, method, feature_set ):
         print '######################'
 
     sys.stderr.write('\nAccuracy : %0.5f\n'%accuracy_tot)
-    return None
+    sys.stderr.flush()
+    
+    sys.stdout.flush()
+    sys.stdout.close()
+    sys.stdout = realstdout
+
+    return True
 
 def main(argv) :
     import sanderstwitter02
@@ -293,25 +317,37 @@ def main(argv) :
         fileprefix = str(argv[0])
 
     if( fileprefix=='' ):
-        fileprefix = 'logs/data_'+TIME_STAMP
+        fileprefix = 'logs/run'
     
     tweets1 = sanderstwitter02.getTweetsRawData('sentiment.csv')
     tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.10000.norm.csv')
     random.shuffle(tweets1)
     random.shuffle(tweets2)
-    tweets = tweets1[0:500] + tweets2[0:500]
+    tweets = tweets1 + tweets2[0:5000]
+    sys.stderr.write( '\nlen( tweets ) = '+str(len( tweets )) )
+
 
     #stats.stepStats( tweets, fileprefix )
     #generateARFF(tweets, fileprefix)
 
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':1, 'negn':False})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':3, 'negn':False})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':1, 'negn':True})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':3, 'negn':True})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':1, 'negn':False})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':3, 'negn':False})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':1, 'negn':True})
-    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':3, 'negn':True})
+    #for (((cname, mname), ngramVal), negtnVal) in grid( grid( grid( LIST_CLASSIFIERS, LIST_METHODS), [1,3] ), [True, False] ):
+    #    print cname, mname, ngramVal, negtnVal
+
+    #for cname in LIST_CLASSIFIERS:
+    #    for mname in LIST_METHODS:
+    #        for (ngramVal, negtnVal) in grid([1, 3], [True, False])
+
+    for cname in [ 'NaiveBayesClassifier' ]:
+        for mname in [ '1step' ]:
+            for (ngramVal, negtnVal) in [ (1, False), (1, True), (2, False), (3, True) ]:
+                try:
+                    TIME_STAMP = get_time_stamp()
+                    trainAndClassify(
+                        tweets, classifier=cname, method=mname,
+                        feature_set={'ngram':ngramVal, 'negtn':negtnVal},
+                        fileprefix=fileprefix+'_'+TIME_STAMP )
+                except Exception, e:
+                    print e
     
     sys.stdout.flush()
 

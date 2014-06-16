@@ -108,7 +108,7 @@ def getNormalisedCSV( in_file, out_file ):
 def getNormalisedTweets(in_file):
     fp = open(in_file , 'r')
     rd = csv.reader(fp, delimiter=',', quotechar='"' )
-    print in_file, countlines( in_file )
+    #print in_file, countlines( in_file )
 
     tweets = []
     count = 0
@@ -117,8 +117,8 @@ def getNormalisedTweets(in_file):
         tweets.append( row[:3] + [row[4:4+numQueries]] )
         count+=1
 
-    print count
-    print 'len(tweets) =', len(tweets)
+    #print count
+    #print 'len(tweets) =', len(tweets)
     return tweets
 
 def countlines( filename ):
