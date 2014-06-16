@@ -10,16 +10,24 @@ the influence of covariant features.
 
 """
 import sys, random
-import nltk
+import nltk, re
 import collections
 
 import time
-TIME_STAMP = time.strftime("%y%m%d-%H%M%S-%Z")
+
+def get_time_stamp():
+    return time.strftime("%y%m%d-%H%M%S-%Z")
+
+TIME_STAMP = get_time_stamp()
 
 NUM_SHOW_FEATURES = 50
 
 
-def getTrainingAndTestData(tweets, ratio):
+def getTrainingAndTestData(tweets, ratio, feature_set):
+
+    add_ngram_feat = feature_set.get('ngram', 1)
+    add_negtn_feat = feature_set.get('negtn', False)
+
 
     from functools import wraps
     import re
@@ -40,43 +48,42 @@ def getTrainingAndTestData(tweets, ratio):
         words = [stemmer.stem(w) for w in words]
         tweetsArr.append([words, sentiment])
 
-    random.shuffle( tweetsArr )
     train_tweets = tweetsArr[:int(len(tweetsArr)*ratio)]
     test_tweets  = tweetsArr[int(len(tweetsArr)*ratio):]
 
-    unigrams = []
-    #bigrams  = []
-    #trigrams = []
-    #n_grams  = []
+    unigrams_fd = nltk.FreqDist()
+    if add_ngram_feat > 1 :
+        n_grams_fd = nltk.FreqDist()
 
     for( words, sentiment ) in train_tweets:
         words_uni = words
-        #words_bi  = nltk.bigrams(words)
-        #words_tri = nltk.trigrams(words)
-        unigrams.extend( words_uni )
-        #bigrams.extend(  words_bi  )
-        #trigrams.extend( words_tri )
-        #n_grams.extend(  words_uni )
-        #n_grams.extend(  words_bi  )
-        #n_grams.extend(  words_tri )
+        unigrams_fd.update(words)
 
-    print 'len( unigrams )', len( unigrams )
+        if add_ngram_feat>=2 :
+            words_bi  = [ ','.join(map(str,bg)) for bg in nltk.bigrams(words) ]
+            n_grams_fd.update( words_bi )
 
-    unigrams_sorted = nltk.FreqDist(unigrams).keys()
+        if add_ngram_feat>=3 :
+            words_tri  = [ ','.join(map(str,bg)) for tg in nltk.trigrams(words) ]
+            n_grams_fd.update( words_tri )
+
+    sys.stderr.write( '\nlen( unigrams ) = '+str(len( unigrams_fd.keys() )) )
+
+    #unigrams_sorted = nltk.FreqDist(unigrams).keys()
+    unigrams_sorted = unigrams_fd.keys()
     #bigrams_sorted = nltk.FreqDist(bigrams).keys()
     #trigrams_sorted = nltk.FreqDist(trigrams).keys()
-    #ngrams_sorted = nltk.FreqDist(n_grams).keys()
+    if add_ngram_feat > 1 :
+        sys.stderr.write( '\nlen( n_grams ) = '+str(len( n_grams_fd )) )
+        ngrams_sorted = [ k for (k,v) in n_grams_fd.items() if v>1]
+        sys.stderr.write( '\nlen( ngrams_sorted ) = '+str(len( ngrams_sorted )) )
 
-    def word_features(words):
+    def get_word_features(words):
         words_uni = words
-        #words_bi  = nltk.bigrams(words)
-        #words_tri = nltk.trigrams(words)
-        bag = collections.Counter(words_uni)
-        #document_words.union(set(words_bi))
-        #document_words.union(set(words_tri))
+        words_bi  = [ ','.join(map(str,bg)) for bg in nltk.bigrams(words) ]
+        words_tri = [ ','.join(map(str,bg)) for tg in nltk.trigrams(words) ]
+        bag = collections.Counter(words_uni+words_bi+words_tri)
         return bag
-
-    import re
 
     negn_regex = re.compile( r"""(?:
         ^(?:never|no|nothing|nowhere|noone|none|not|
@@ -88,7 +95,7 @@ def getTrainingAndTestData(tweets, ratio):
     n't
     """, re.X)
 
-    def negation_features(words):
+    def get_negation_features(words):
         INF = 0.0
         negn = [ bool(negn_regex.search(w)) for w in words ]
     
@@ -122,16 +129,21 @@ def getTrainingAndTestData(tweets, ratio):
 
     @counter    #http://stackoverflow.com/questions/13512391/to-count-no-times-a-function-is-called
     def extract_features(words):
-
-        bag = word_features(words)
-        negn_features = negation_features(words)
-
         features = {}
-        for word in unigrams_sorted:
-            features['count(%s)' % str(word)] = bag[word]
-        features.update( negn_features )
+
+        bag = get_word_features(words)
+        for ug in unigrams_sorted:
+            features['count(%s)' % str(ug)] = bag[ug]
+        
+        if add_ngram_feat > 1:
+            for ng in ngrams_sorted:
+                features['count(%s)' % str(ng)] = bag[ng]
+        
+        if add_negtn_feat :
+            negation_features = get_negation_features(words)
+            features.update( negation_features )
  
-        #sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
+        sys.stderr.write( '\rfeatures extracted for ' + str(extract_features.count) + ' tweets' )
         return features
 
     extract_features.count = 0;
@@ -154,13 +166,19 @@ def generateARFF( tweets, fileprefix ):
 
     return True
 
-def trainAndClassify( tweets, classifier, method ):
+def trainAndClassify( tweets, classifier, method, feature_set ):
 
-    print classifier
+    INFO = ' '.join( [TIME_STAMP, str(classifier), str(method)] + [ str(k)+':'+str(v) for (k,v) in feature_set.items()] )
+
+    print INFO
+    sys.stderr.write( '\n'+ '#'*80 +'\n' + INFO )
+
     if('NaiveBayesClassifier' == classifier):
         CLASSIFIER = nltk.classify.NaiveBayesClassifier
     elif('MaxentClassifier' == classifier):
         CLASSIFIER = nltk.classify.MaxentClassifier
+    elif('SvmClassifier' == classifier):
+        CLASSIFIER = nltk.classify.SvmClassifier
     elif('DecisionTreeClassifier' == classifier):
         CLASSIFIER = nltk.classify.DecisionTreeClassifier
         def DecisionTreeClassifier_show_most_informative_features( self, n=10 ):
@@ -172,9 +190,13 @@ def trainAndClassify( tweets, classifier, method ):
             print text
         CLASSIFIER.show_most_informative_features = DecisionTreeClassifier_show_most_informative_features
 
-    (v_train, v_test) = getTrainingAndTestData(tweets,0.9)
+    (v_train, v_test) = getTrainingAndTestData(tweets,0.9, feature_set)
+
     if '1step' == method:
+        sys.stderr.write( '\n[training start]' )
         classifier_tot = CLASSIFIER.train( v_train )
+        sys.stderr.flush()
+        sys.stderr.write( ' [training complete]' )
         
         print '######################'
         print '1 Step Classifier :', classifier
@@ -201,8 +223,15 @@ def trainAndClassify( tweets, classifier, method ):
                     for (text, sent) in v_test ]
         v_test_sen  = [ (text, sent) for (text, sent) in v_test if ((sent=='neg')|(sent=='pos')) ]
 
-        classifier_obj = CLASSIFIER.train(v_train_obj);
-        classifier_sen = CLASSIFIER.train(v_train_sen);
+        sys.stderr.write( '\n[training start]' )
+        classifier_obj = CLASSIFIER.train(v_train_obj)
+        sys.stderr.flush()
+        sys.stderr.write( ' [training complete]' )
+
+        sys.stderr.write( '\n[training start]' )
+        classifier_sen = CLASSIFIER.train(v_train_sen)
+        sys.stderr.flush()
+        sys.stderr.write( ' [training complete]' )
 
         print '######################'
         print 'Objectivity Classifier :', classifier
@@ -232,7 +261,8 @@ def trainAndClassify( tweets, classifier, method ):
 
         print 'Accuracy :', accuracy_sen
         print 'Confusion Matrix'
-        print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
+        if( len(test_truth_sen) > 0 ):
+            print nltk.ConfusionMatrix( test_truth_sen, test_predict_sen )
 
         v_test2 = [(t,classifier_obj.classify(t)) for (t,s) in v_test_obj]
 
@@ -240,15 +270,16 @@ def trainAndClassify( tweets, classifier, method ):
         test_predict = [classifier_sen.classify(t) if s=='obj' else s for (t,s) in v_test2]
 
         correct = [ t==p for (t,p) in zip(test_truth, test_predict)]
-        accuracy = float(sum(correct))/len(correct) if correct else 0
+        accuracy_tot = float(sum(correct))/len(correct) if correct else 0
 
         print '######################'
         print '2 - Step Classifier :', classifier
-        print 'Accuracy :', accuracy
+        print 'Accuracy :', accuracy_tot
         print 'Confusion Matrix'
         print nltk.ConfusionMatrix( test_truth, test_predict )
         print '######################'
 
+    sys.stderr.write('\nAccuracy : %0.5f\n'%accuracy_tot)
     return None
 
 def main(argv) :
@@ -268,13 +299,20 @@ def main(argv) :
     tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.10000.norm.csv')
     random.shuffle(tweets1)
     random.shuffle(tweets2)
-    tweets = tweets1[0:50] + tweets2[0:50]
+    tweets = tweets1[0:500] + tweets2[0:500]
 
     #stats.stepStats( tweets, fileprefix )
     #generateARFF(tweets, fileprefix)
 
-    trainAndClassify( tweets, classifier='DecisionTreeClassifier', method='1step')
-
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':1, 'negn':False})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':3, 'negn':False})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':1, 'negn':True})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='1step', feature_set={'ngram':3, 'negn':True})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':1, 'negn':False})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':3, 'negn':False})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':1, 'negn':True})
+    trainAndClassify( tweets, classifier='NaiveBayesClassifier', method='2step', feature_set={'ngram':3, 'negn':True})
+    
     sys.stdout.flush()
 
 if __name__ == "__main__":
