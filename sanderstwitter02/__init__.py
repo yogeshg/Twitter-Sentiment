@@ -24,3 +24,10 @@ def getTweetsRawData( fileName ):
             t[1] = 'neu'
 
     return tweets # 0: Text # 1: class # 2: subject # 3: query
+
+SampleTweetsStats = '''
+   Class    Count Example
+     neg      529 #Skype often crashing: #microsoft, what are you doing?
+     neu     3770 How #Google Ventures Chooses Which Startups Get Its $200 Million http://t.co/FCWXoUd8 via @mashbusiness @mashable
+     pos      483 Now all @Apple has to do is get swype on the iphone and it will be crack. Iphone that is
+'''

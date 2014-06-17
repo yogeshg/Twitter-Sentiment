@@ -1,23 +1,171 @@
-import sys, random
-import nltk
+import sys, time, os
+import random, re, csv, collections
+import nltk, pylab, numpy
 
-import time
-
-import re
 import preprocessing
 
-import pylab
+def printClassStats( tweets ):
+    tweets_counter = collections.Counter( [t[1] for t in tweets] )
+    print '%8s %8s %s' % ('Class', 'Count', 'Example')
+    for (sent, count) in tweets_counter.items():
+        print '%8s %8d %s' % (sent, count, random.choice([t for (t,s,_,_) in tweets if s==sent ]) )
 
-import csv
+def printFeaturesStats( tweets ):
+    arr_Handles   = numpy.array( [0]*len(tweets) )
+    arr_Hashtags  = numpy.array( [0]*len(tweets) )
+    arr_Urls      = numpy.array( [0]*len(tweets) )
+    arr_Emoticons = numpy.array( [0]*len(tweets) )
+    arr_Words     = numpy.array( [0]*len(tweets) )
+    arr_Chars     = numpy.array( [0]*len(tweets) )
+    
 
-def stepStats( tweets, fileprefix, num_bins=10, split='easy' ):
-    sizes = [     10000,
-                  50000,
-                 100000,
-                 500000,
-                1000000,
-                1600000  ]
+    i=0
+    for (text, sent, subj, quer) in tweets:
+        arr_Handles[i]   = preprocessing.countHandles(text)
+        arr_Hashtags[i]  = preprocessing.countHashtags(text)
+        arr_Urls[i]      = preprocessing.countUrls(text)
+        arr_Emoticons[i] = preprocessing.countEmoticons(text)
+        arr_Words[i]     = len(text.split())
+        arr_Chars[i]     = len(text)
+        i+=1
 
+    print '%-10s %-010s %-4s '%('Features',  'Average',            'Maximum')
+    print '%10s %10.6f %10d'%('Handles',   arr_Handles.mean(),   arr_Handles.max()   )
+    print '%10s %10.6f %10d'%('Hashtags',  arr_Hashtags.mean(),  arr_Hashtags.max()  )
+    print '%10s %10.6f %10d'%('Urls',      arr_Urls.mean(),      arr_Urls.max()      )
+    print '%10s %10.6f %10d'%('Emoticons', arr_Emoticons.mean(), arr_Emoticons.max() )
+    print '%10s %10.6f %10d'%('Words',     arr_Words.mean(),     arr_Words.max()     )
+    print '%10s %10.6f %10d'%('Chars',     arr_Chars.mean(),     arr_Chars.max()     )
+
+def printReductionStats( tweets, function, filtering=True):
+    if( function ):
+        procTweets = [ (function(text, subject=subj, query=quer), sent)    \
+                        for (text, sent, subj, quer) in tweets]
+    else:
+        procTweets = [ (text, sent)    \
+                        for (text, sent, subj, quer) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        words = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if ( (not filtering) | (len(word) >= 3) ) ]
+        tweetsArr.append([words, sentiment])
+    # tweetsArr
+    bag = collections.Counter()
+    for (words, sentiment) in tweetsArr:
+        bag.update(words)
+    # unigram
+
+    print '%20s %-10s %12d'% (
+                ('None' if function is None else function.__name__),
+                ( 'gte3' if filtering else 'all' ),
+                sum(bag.values())
+            )
+    return True
+
+def printAllRecuctionStats(tweets):
+    print '%-20s %-10s %-12s'% ( 'Preprocessing', 'Filter', 'Words' )
+    printReductionStats( tweets, None,                   False   )
+    #printReductionStats( tweets, None,                   True    )
+    printReductionStats( tweets, preprocessing.processHashtags,        True    )
+    printReductionStats( tweets, preprocessing.processHandles,         True    )
+    printReductionStats( tweets, preprocessing.processUrls,            True    )
+    printReductionStats( tweets, preprocessing.processEmoticons,       True    )
+    printReductionStats( tweets, preprocessing.processPunctuations,    True    )
+    printReductionStats( tweets, preprocessing.processRepeatings,      True    )
+    #printReductionStats( tweets, preprocessing.processAll,             False   )
+    printReductionStats( tweets, preprocessing.processAll,             True    )
+
+def printFreqDistCSV( dist, filename='' ):
+    n_samples = len(dist.keys())
+    n_repeating_samples = sum([ 1 for (k,v) in dist.items
+        () if v>1 ])
+    n_outcomes = dist._N
+    print '%-12s %-12s %-12s'%( 'Samples', 'RepSamples', 'Outcomes' )
+    print '%12d %12d %12d'%( n_samples, n_repeating_samples, n_outcomes )
+    
+    if( len(filename)>0 and '_'!=filename[0] ):
+        with open( filename, 'w' ) as fcsv:
+            distwriter = csv.writer( fcsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
+            
+            for (key,value) in dist.items():
+                distwriter.writerow( [key, value] ) #print key, '\t,\t', dist[key]
+
+def preprocessingStats( tweets, fileprefix='' ):
+
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        directory = os.path.dirname(fileprefix)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        print 'writing to', fileprefix+'_stats.txt'
+        realstdout = sys.stdout
+        sys.stdout = open( fileprefix+'_stats.txt' , 'w')
+
+    ###########################################################################  
+
+    print 'for', len(tweets), 'tweets:'
+
+    print '###########################################################################'
+
+    printFeaturesStats( tweets )
+
+    print '###########################################################################'
+
+    printAllRecuctionStats( tweets )
+
+    print '###########################################################################'
+
+    procTweets = [ (preprocessing.processAll(text, subject=subj, query=quer), sent)    \
+                        for (text, sent, subj, quer) in tweets]
+    tweetsArr = []
+    for (text, sentiment) in procTweets:
+        words = [word if(word[0:2]=='__') else word.lower() \
+                        for word in text.split() \
+                        if ( (len(word) >= 3) ) ]
+        tweetsArr.append([words, sentiment])
+    unigrams_fd = nltk.FreqDist()
+    bigrams_fd = nltk.FreqDist()
+    trigrams_fd = nltk.FreqDist()
+    for (words, sentiment) in tweetsArr:
+        words_bi = [ ','.join(map(str,bg)) for bg in nltk.bigrams(words) ]
+        words_tri  = [ ','.join(map(str,tg)) for tg in nltk.trigrams(words) ]
+        unigrams_fd.update( words )
+        bigrams_fd.update( words_bi )
+        trigrams_fd.update( words_tri )
+
+    print 'Unigrams Distribution'
+    printFreqDistCSV(unigrams_fd, filename=fileprefix+'_1grams.csv')
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        pylab.show = lambda : pylab.savefig(fileprefix+'_1grams.pdf')
+    unigrams_fd.plot(50, cumulative=True)
+    pylab.close()
+
+    print 'Bigrams Distribution'
+    printFreqDistCSV(bigrams_fd, filename=fileprefix+'_2grams.csv')
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        pylab.show = lambda : pylab.savefig(fileprefix+'_2grams.pdf')
+    bigrams_fd.plot(50, cumulative=True)
+    pylab.close()
+
+    print 'Trigrams Distribution'
+    printFreqDistCSV(trigrams_fd, filename=fileprefix+'_3grams.csv')
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        pylab.show = lambda : pylab.savefig(fileprefix+'_3grams.pdf')
+    trigrams_fd.plot(50, cumulative=True)
+    pylab.close()
+
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        pylab.show = lambda : pylab.savefig(fileprefix+'_ngrams.pdf')
+    unigrams_fd.plot(50, cumulative=True)
+    bigrams_fd.plot(50, cumulative=True)
+    trigrams_fd.plot(50, cumulative=True)
+    pylab.close()    
+
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        sys.stdout.close()
+        sys.stdout = realstdout
+
+def stepStats( tweets, num_bins=10, split='easy', fileprefix='' ):
     tot_size = len(tweets)
     num_digits = len(str(tot_size))
 
@@ -31,145 +179,6 @@ def stepStats( tweets, fileprefix, num_bins=10, split='easy' ):
     for s in sizes:
         print 'processing stats for %d tweets'%s
         preprocessingStats( tweets[0:s], fileprefix+'_%0{0}d'.format(num_digits) % s )
-
-def preprocessingStats( tweets, fileprefix ):
-
-    print 'writing to', fileprefix+'_stats.txt'
-    realstdout = sys.stdout
-    sys.stdout = open( fileprefix+'_stats.txt' , 'w')
-
-    def printStats( tweets, function, filtering=True):
-        if( function ):
-            procTweets = [ (function(text, subject=subj, query=quer), sent)    \
-                            for (text, sent, subj, quer) in tweets]
-        else:
-            procTweets = [ (text, sent)    \
-                            for (text, sent, subj, quer) in tweets]
-        tweetsArr = []
-        for (text, sentiment) in procTweets:
-            words = [word if(word[0:2]=='__') else word.lower() \
-                            for word in text.split() \
-                            if ( (not filtering) | (len(word) >= 3) ) ]
-            tweetsArr.append([words, sentiment])
-        # tweetsArr
-        unigrams = []
-        for (words, sentiment) in tweetsArr:
-            unigrams.extend(words)
-        # unigram
-        message = 'number of words '
-        if( function ) :
-            message += 'after '+function.__name__+' '
-        else :
-            message += 'before preprocessing '
-        message += ( 'filtered' if filtering else 'not filt' )
-        message += '\t'
-        # message    
-        print message, len(set(unigrams))
-        return unigrams
-
-    ###########################################################################  
-
-    print 'for', len(tweets), 'tweets:'
-
-    printStats( tweets, None,                   False   )
-    printStats( tweets, None,                   True    )
-    printStats( tweets, preprocessing.processHashtags,        True    )
-    printStats( tweets, preprocessing.processHandles,         True    )
-    printStats( tweets, preprocessing.processUrls,            True    )
-    printStats( tweets, preprocessing.processEmoticons,       True    )
-    printStats( tweets, preprocessing.processPunctuations,    True    )
-    printStats( tweets, preprocessing.processRepeatings,      True    )
-    printStats( tweets, preprocessing.processAll,             False   )
-    unigrams = \
-    printStats( tweets, preprocessing.processAll,             True    )
-
-    print '###########################################################################'
-
-    n = 0
-
-    num_Handles   =    num_Hashtags  =    num_Urls      =    num_Emoticons = 0
-    avg_Handles   =    avg_Hashtags  =    avg_Urls      =    avg_Emoticons = 0.0
-    max_Handles   =    max_Hashtags  =    max_Urls      =    max_Emoticons = 0
-
-    cnt_words = cnt_chars = 0
-    avg_words = avg_chars = 0.0
-    max_words = max_chars = 0
-
-    for (text, sent, subj, quer) in tweets:
-        n+=1
-        num_Handles   = preprocessing.countHandles(text)
-        num_Hashtags  = preprocessing.countHashtags(text)
-        num_Urls      = preprocessing.countUrls(text)
-        num_Emoticons = preprocessing.countEmoticons(text)
-
-        avg_Handles   = avg_Handles   * (n-1)/n + 1.0*num_Handles   /n
-        avg_Hashtags  = avg_Hashtags  * (n-1)/n + 1.0*num_Hashtags  /n
-        avg_Urls      = avg_Urls      * (n-1)/n + 1.0*num_Urls      /n
-        avg_Emoticons = avg_Emoticons * (n-1)/n + 1.0*num_Emoticons /n
-
-        max_Handles   = max(max_Handles   , num_Handles   )
-        max_Hashtags  = max(max_Hashtags  , num_Hashtags  )
-        max_Urls      = max(max_Urls      , num_Urls      )
-        max_Emoticons = max(max_Emoticons , num_Emoticons )
-
-        cnt_words = len(text.split())
-        cnt_chars = len(text)
-        avg_words = avg_words*(n-1)/n + cnt_words*1.0/n
-        avg_chars = avg_chars*(n-1)/n + cnt_chars*1.0/n
-        max_words = max(max_words, cnt_words)
-        max_chars = max(max_chars, cnt_chars)
-
-    print 'Feature  ','\t', 'avg'        ,'\t', 'max'        ,'\t', 'of', n, 'tweets'
-    print 'Handles  ','\t', avg_Handles  ,'\t', max_Handles  
-    print 'Hashtags ','\t', avg_Hashtags ,'\t', max_Hashtags 
-    print 'Urls     ','\t', avg_Urls     ,'\t', max_Urls     
-    print 'Emoticons','\t', avg_Emoticons,'\t', max_Emoticons
-
-    print 'Words    ','\t', avg_words    ,'\t', max_words
-    print 'Chars    ','\t', avg_chars    ,'\t', max_chars
-
-    print '###########################################################################'
-
-    def printFreqDistCSV( dist, filename ):
-        print '<FreqDist with', len(dist.keys()), 'samples and', dist._N, 'outcomes>'
-        
-        fcsv = open( filename, 'w' ) # fileprefix+'_%dgram.csv'%section
-        distwriter = csv.writer( fcsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC )
-        
-        for key in dist.keys():
-            distwriter.writerow( [key, dist[key]] ) #print key, '\t,\t', dist[key]
-
-    uni_dist = nltk.FreqDist(unigrams)
-    print 'Unigrams Distribution'
-    printFreqDistCSV(uni_dist, fileprefix+'_1grams.csv')
-    pylab.show = lambda : pylab.savefig(fileprefix+'_1grams.pdf')
-    uni_dist.plot(50, cumulative=True)
-    pylab.close()
-
-    bigrams = nltk.bigrams(unigrams)
-    bi_dist = nltk.FreqDist(bigrams)
-    print 'Bigrams Distribution'
-    printFreqDistCSV(bi_dist, fileprefix+'_1grams.csv')
-    pylab.show = lambda : pylab.savefig(fileprefix+'_2grams.pdf')
-    bi_dist.plot(50, cumulative=True)
-    pylab.close()
-
-    trigrams = nltk.trigrams(unigrams)
-    tri_dist = nltk.FreqDist(trigrams)
-    print 'Trigrams Distribution'
-    printFreqDistCSV(tri_dist, fileprefix+'_1grams.csv')
-    pylab.show = lambda : pylab.savefig(fileprefix+'_3grams.pdf')
-    tri_dist.plot(50, cumulative=True)
-    pylab.close()
-
-    pylab.show = lambda : pylab.savefig(fileprefix+'_ngrams.pdf')
-    uni_dist.plot(50, cumulative=True)
-    bi_dist.plot(50, cumulative=True)
-    tri_dist.plot(50, cumulative=True)
-    pylab.close()    
-
-    sys.stdout.close()
-    sys.stdout = realstdout
 
 def oldStats2CSV( in_file, fileprefix=''):
     if fileprefix == '':
@@ -209,46 +218,8 @@ def oldStats2CSV( in_file, fileprefix=''):
     fp.close()
     fq.close()
 
-def newStats2CSV(files, out_file):
-    stats_regex = re.compile(r'''for (\d+) tweets:
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-number of words [\w \t]+?(\d+)
-###########################################################################
-Feat[\w \t]+?
-Hand[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-Hash[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-Urls[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-Emot[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-Word[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-Char[\w \t]+?([\d\.]+)[\w \t]+?(\d+)
-###########################################################################
-Unigrams Distribution
-<FreqDist with (\d+) samples and (\d+) outcomes>
-Bigrams Distribution
-<FreqDist with (\d+) samples and (\d+) outcomes>
-Trigrams Distribution
-<FreqDist with (\d+) samples and (\d+) outcomes>
-''')
-    stats_tiltes = [
+stats_tiltes = [
 '"# tweets"',
-'"# words before preprocessing not filt"',
-'"# words before preprocessing filtered"',
-'"# words after processHashtags filtered"',
-'"# words after processHandles filtered"',
-'"# words after processUrls filtered"',
-'"# words after processEmoticons filtered"',
-'"# words after processPunctuations filtered"',
-'"# words after processRepeatings filtered"',
-'"# words after processAll not filt"',
-'"# words after processAll filtered"',
 '"avg(Handles)"',
 '"max(Handles)"',
 '"avg(Hashtags)"',
@@ -261,26 +232,57 @@ Trigrams Distribution
 '"max(Words)"',
 '"avg(Chars)"',
 '"max(Chars)"',
-'"# Unigrams samples"',
-'"# Unigrams outcomes"',
-'"# Bigrams samples"',
-'"# Bigrams outcomes"',
-'"# Trigrams samples"',
-'"# Trigrams outcomes"',
+'"preprocessing(None)"',
+'"preprocessing(Hashtags)"',
+'"preprocessing(Handles)"',
+'"preprocessing(Urls)"',
+'"preprocessing(Emoticons)"',
+'"preprocessing(Punctuations)"',
+'"preprocessing(Repeatings)"',
+'"preprocessing(All)"',
+'"Unigrams samples"',
+'"Unigrams repeating samples"',
+'"Unigrams outcomes"',
+'"Bigrams samples"',
+'"Bigrams repeating samples"',
+'"Bigrams outcomes"',
+'"Trigrams samples"',
+'"Trigrams repeating samples"',
+'"Trigrams outcomes"',
 ]
+
+def newStats2CSV(files, out_file):
 
     arr = [ [] ] * len(files)
 
     for j in range( len(files)):
-        text = ''
+        values = []
         with open(files[j], 'r') as fp:
-            text = fp.read()
-        match = stats_regex.match( text )
-        arr[j] = [match.group( i ) for i in range(1, 30)]
+            for line in fp:
+                values += [ float(w) for w in line.split()\
+                                if  w[0] in ['0','1','2','3','4','5','6','7','8','9'] ]
+        arr[j] = values
 
     with open(out_file, 'w') as fq:
         stats_writer = csv.writer( fq, delimiter=',', quotechar='\'')#, quoting=csv.QUOTE_NONE )
-        for i in range(0,29):
+        for i in range(0,len(stats_tiltes)):
             row = [stats_tiltes[i]] + [arr[j][i] for j in range(len(files))]
             stats_writer.writerow( row )
 
+
+filelist = [
+'logs/stats_140617-214922-IST/Both_0978_stats.txt',
+'logs/stats_140617-214922-IST/Both_1956_stats.txt',
+'logs/stats_140617-214922-IST/Both_2934_stats.txt',
+'logs/stats_140617-214922-IST/Both_3912_stats.txt',
+'logs/stats_140617-214922-IST/Both_4890_stats.txt',
+'logs/stats_140617-214922-IST/Both_5868_stats.txt',
+'logs/stats_140617-214922-IST/Both_6846_stats.txt',
+'logs/stats_140617-214922-IST/Both_7824_stats.txt',
+'logs/stats_140617-214922-IST/Both_8802_stats.txt',
+'logs/stats_140617-214922-IST/Both_9780_stats.txt',
+'logs/stats_140617-214922-IST/Both_9782_stats.txt',
+]
+
+
+['0','1','2','3','4','5','6','7','8','9']

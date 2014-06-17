@@ -28,9 +28,9 @@ regex = re.compile( r'\w+|\".*?\"' )
 
 def get_class( polarity ):
     if polarity in ['0', '1']:
-        return 'pos'
-    elif polarity in ['3', '4']:
         return 'neg'
+    elif polarity in ['3', '4']:
+        return 'pos'
     elif polarity == '2':
         return 'neu'
     else:
@@ -59,12 +59,12 @@ def getAllQueries(in_file):
 
     return queries
 
-def sampleCSV( in_file, out_file ):
+def sampleCSV( in_file, out_file, K=100 ):
 
     fp = open(in_file , 'r')
     fp2 = open(out_file , 'w')
 
-    for i in range(0,100):
+    for i in range(0,K):
         line = fp.readline()
         fp2.write(line)
 
@@ -138,3 +138,10 @@ def countlines( filename ):
 
 #randomSampleCSV(FULLDATA, FULLDATA+'.100000.sample.csv', K=100000)
 #getNormalisedCSV(FULLDATA+'.100000.sample.csv', FULLDATA+'.100000.norm.csv')
+
+
+SampleTweetsStats = '''
+   Class    Count Example
+     neg     2449 @jbrotherlove I thought it was a great love story 
+     pos     2551 I hope that these kitchen renos don't last any longer... they are so annoying 
+'''
