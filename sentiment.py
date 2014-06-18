@@ -63,7 +63,7 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
             n_grams_fd.update( words_bi )
 
         if add_ngram_feat>=3 :
-            words_tri  = [ ','.join(map(str,bg)) for tg in nltk.trigrams(words) ]
+            words_tri  = [ ','.join(map(str,tg)) for tg in nltk.trigrams(words) ]
             n_grams_fd.update( words_tri )
 
     sys.stderr.write( '\nlen( unigrams ) = '+str(len( unigrams_fd.keys() )) )
@@ -194,7 +194,7 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
     INFO = '_'.join( [str(classifier), str(method)] + [ str(k)+'_'+str(v) for (k,v) in feature_set.items()] )
     realstdout = sys.stdout
-    sys.stdout = open( fileprefix+'_'+INFO , 'w')
+    sys.stdout = open( fileprefix+'_'+INFO+'.txt' , 'w')
 
     print INFO
     sys.stderr.write( '\n'+ '#'*80 +'\n' + INFO )
@@ -307,48 +307,75 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
     return True
 
 def main(argv) :
+    __usage__='''
+    usage: python sentiment.py logs/fileprefix ClassifierName,s methodName,s ngramVal,s negtnVal,s
+
+    '''
     import sanderstwitter02
     import stanfordcorpus
     import stats
 
     fileprefix = ''
 
-    if (len(argv) > 0) :
+    if (len(argv) >= 1) :
         fileprefix = str(argv[0])
-
-    if( fileprefix=='' ):
+    else :
         fileprefix = 'logs/run'
+
+    classifierNames = []
+    if (len(argv) >= 2) :
+        classifierNames = [name for name in argv[1].split(',') if name in LIST_CLASSIFIERS]
+    else :
+        classifierNames = ['NaiveBayesClassifier']
+
+    methodNames = []
+    if (len(argv) >= 3) :
+        methodNames = [name for name in argv[2].split(',') if name in LIST_METHODS]
+    else :
+        methodNames = ['1step']
+
+    ngramVals = []
+    if (len(argv) >= 4) :
+        ngramVals = [int(val) for val in argv[3].split(',') if val.isdigit()]
+    else :
+        ngramVals = [ 1 ]
+
+    negtnVals = []
+    if (len(argv) >= 5) :
+        negtnVals = [bool(val) for val in argv[4].split(',') if val[0].lower() in ['t', 'f', '0', '1']]
+    else :
+        negtnVals = [ False ]
+
+    if (len( fileprefix )==0 or len( classifierNames )==0 or len( methodNames )==0 or len( ngramVals )==0 or len( negtnVals )==0 ):
+        print __usage__
     
     tweets1 = sanderstwitter02.getTweetsRawData('sentiment.csv')
-    tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.10000.norm.csv')
-    random.shuffle(tweets1)
-    random.shuffle(tweets2)
-    tweets = tweets1 + tweets2[0:5000]
+    tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.5000.norm.csv')
+    #random.shuffle(tweets1)
+    #random.shuffle(tweets2)
+    tweets = tweets1 + tweets2
+    random.shuffle( tweets )
     sys.stderr.write( '\nlen( tweets ) = '+str(len( tweets )) )
 
+    #sys.stderr.write( '\n' )
+    #stats.preprocessingStats( tweets1, fileprefix='logs/stats_'+TIME_STAMP+'/TSC' )
+    #sys.stderr.write( '\n' )
+    #stats.preprocessingStats( tweets2, fileprefix='')#logs/stats_'+TIME_STAMP+'/STAN' )
+    #sys.stderr.write( '\n' )
+    #stats.stepStats( tweets , fileprefix='logs/stats_'+TIME_STAMP+'/Both' )
 
-    #stats.stepStats( tweets, fileprefix )
     #generateARFF(tweets, fileprefix)
 
-    #for (((cname, mname), ngramVal), negtnVal) in grid( grid( grid( LIST_CLASSIFIERS, LIST_METHODS), [1,3] ), [True, False] ):
-    #    print cname, mname, ngramVal, negtnVal
-
-    #for cname in LIST_CLASSIFIERS:
-    #    for mname in LIST_METHODS:
-    #        for (ngramVal, negtnVal) in grid([1, 3], [True, False])
-
-    for cname in [ 'NaiveBayesClassifier' ]:
-        for mname in [ '1step' ]:
-            for (ngramVal, negtnVal) in [ (1, False), (1, True), (2, False), (3, True) ]:
-                try:
-                    TIME_STAMP = get_time_stamp()
-                    trainAndClassify(
-                        tweets, classifier=cname, method=mname,
-                        feature_set={'ngram':ngramVal, 'negtn':negtnVal},
-                        fileprefix=fileprefix+'_'+TIME_STAMP )
-                except Exception, e:
-                    print e
-    
+    #print classifierNames, methodNames, ngramVals, negtnVals
+    for (((cname, mname), ngramVal), negtnVal) in grid( grid( grid( classifierNames, methodNames), ngramVals ), negtnVals ):
+        try:
+            TIME_STAMP = get_time_stamp()
+            trainAndClassify(
+                tweets, classifier=cname, method=mname,
+                feature_set={'ngram':ngramVal, 'negtn':negtnVal},
+                fileprefix=fileprefix+'_'+TIME_STAMP )
+        except Exception, e:
+            print e
     sys.stdout.flush()
 
 if __name__ == "__main__":
