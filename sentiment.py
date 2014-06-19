@@ -78,10 +78,23 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
         sys.stderr.write( '\nlen( ngrams_sorted ) = '+str(len( ngrams_sorted )) )
 
     def get_word_features(words):
-        words_uni = words
-        words_bi  = [ ','.join(map(str,bg)) for bg in nltk.bigrams(words) ]
-        words_tri = [ ','.join(map(str,bg)) for tg in nltk.trigrams(words) ]
-        bag = collections.Counter(words_uni+words_bi+words_tri)
+        bag = {}
+        words_uni = [ 'has(%s)'% ug for ug in words ]
+
+        if( add_ngram_feat>=2 ):
+            words_bi  = [ 'has(%s)'% ','.join(map(str,bg)) for bg in nltk.bigrams(words) ]
+        else:
+            words_bi  = []
+
+        if( add_ngram_feat>=3 ):
+            words_tri = [ 'has(%s)'% ','.join(map(str,tg)) for tg in nltk.trigrams(words) ]
+        else:
+            words_tri = []
+
+        for f in words_uni+words_bi+words_tri:
+            bag[f] = 1
+
+        #bag = collections.Counter(words_uni+words_bi+words_tri)
         return bag
 
     negtn_regex = re.compile( r"""(?:
@@ -130,14 +143,16 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
     def extract_features(words):
         features = {}
 
-        bag = get_word_features(words)
-        for ug in unigrams_sorted:
-            features['has(%s)' % str(ug)] = bag[ug]>0
-        
-        if add_ngram_feat > 1:
-            for ng in ngrams_sorted:
-                features['has(%s)' % str(ng)] = bag[ng]>0
-        
+        word_features = get_word_features(words)
+        #for ug in unigrams_sorted:                              #FIXME: is it correct? try to use features.update( bag )
+        #    features['has(%s)' % str(ug)] = bag[ug]>0
+        # 
+        #if add_ngram_feat > 1:
+        #    for ng in ngrams_sorted:
+        #        features['has(%s)' % str(ng)] = bag[ng]>0
+        #
+        features.update( word_features )
+
         if add_negtn_feat :
             negation_features = get_negation_features(words)
             features.update( negation_features )
@@ -193,8 +208,12 @@ def generateARFF( tweets, fileprefix ):
 def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
     INFO = '_'.join( [str(classifier), str(method)] + [ str(k)+'_'+str(v) for (k,v) in feature_set.items()] )
-    realstdout = sys.stdout
-    sys.stdout = open( fileprefix+'_'+INFO+'.txt' , 'w')
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        directory = os.path.dirname(fileprefix)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            realstdout = sys.stdout
+            sys.stdout = open( fileprefix+'_'+INFO+'.txt' , 'w')
 
     print INFO
     sys.stderr.write( '\n'+ '#'*80 +'\n' + INFO )
@@ -301,8 +320,9 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
     sys.stderr.flush()
     
     sys.stdout.flush()
-    sys.stdout.close()
-    sys.stdout = realstdout
+    if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
+        sys.stdout.close()
+        sys.stdout = realstdout
 
     return True
 
@@ -342,7 +362,7 @@ def main(argv) :
 
     negtnVals = []
     if (len(argv) >= 5) :
-        negtnVals = [bool(val) for val in argv[4].split(',') if val[0].lower() in ['t', 'f', '0', '1']]
+        negtnVals = [bool(int(val)) for val in argv[4].split(',') if val.isdigit()]
     else :
         negtnVals = [ False ]
 
