@@ -2,7 +2,7 @@
 Sentiment Analysis of Twitter Feeds
 """
 
-import sys, random
+import sys, os, random
 import nltk, re
 import collections
 
@@ -212,8 +212,8 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         directory = os.path.dirname(fileprefix)
         if not os.path.exists(directory):
             os.makedirs(directory)
-            realstdout = sys.stdout
-            sys.stdout = open( fileprefix+'_'+INFO+'.txt' , 'w')
+        realstdout = sys.stdout
+        sys.stdout = open( fileprefix+'_'+INFO+'.txt' , 'w')
 
     print INFO
     sys.stderr.write( '\n'+ '#'*80 +'\n' + INFO )
@@ -242,7 +242,10 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
-        classifier_tot = CLASSIFIER.train( v_train )
+        if( 'MaxentClassifier'==classifier ):
+            classifier_tot = CLASSIFIER.train(v_train, algorithm='IIS', max_iter=10)
+        else:
+            classifier_tot = CLASSIFIER.train(v_train)
         sys.stderr.write( ' [training complete]' )
         
         print '######################'
@@ -265,11 +268,17 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         (v_train_obj, v_train_sen, v_test_obj, v_test_sen, test_truth) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
-        classifier_obj = CLASSIFIER.train(v_train_obj)
+        if( 'MaxentClassifier'==classifier ):
+            classifier_obj = CLASSIFIER.train(v_train_obj, algorithm='IIS', max_iter=10)
+        else:
+            classifier_obj = CLASSIFIER.train(v_train_obj)
         sys.stderr.write( ' [training complete]' )
 
         sys.stderr.write( '\n[training start]' )
-        classifier_sen = CLASSIFIER.train(v_train_sen)
+        if( 'MaxentClassifier'==classifier ):
+            classifier_sen = CLASSIFIER.train(v_train_sen, algorithm='IIS', max_iter=10)
+        else:
+            classifier_sen = CLASSIFIER.train(v_train_sen)
         sys.stderr.write( ' [training complete]' )
 
         print '######################'
@@ -329,8 +338,11 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 def main(argv) :
     __usage__='''
     usage: python sentiment.py logs/fileprefix ClassifierName,s methodName,s ngramVal,s negtnVal,s
-
-    '''
+        ClassifierName,s:   %s
+        methodName,s:       %s
+        ngramVal,s:         %s
+        negtnVal,s:         %s
+    ''' % ( str( LIST_CLASSIFIERS ), str( LIST_METHODS ), str([1,3]), str([0,1]) )
     import sanderstwitter02
     import stanfordcorpus
     import stats
@@ -368,6 +380,7 @@ def main(argv) :
 
     if (len( fileprefix )==0 or len( classifierNames )==0 or len( methodNames )==0 or len( ngramVals )==0 or len( negtnVals )==0 ):
         print __usage__
+        return
     
     tweets1 = sanderstwitter02.getTweetsRawData('sentiment.csv')
     tweets2 = stanfordcorpus.getNormalisedTweets('stanfordcorpus/'+stanfordcorpus.FULLDATA+'.5000.norm.csv')
