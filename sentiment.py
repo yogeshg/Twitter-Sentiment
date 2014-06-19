@@ -220,13 +220,19 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
     if('NaiveBayesClassifier' == classifier):
         CLASSIFIER = nltk.classify.NaiveBayesClassifier
+        def train_function(v_train):
+            return CLASSIFIER.train(v_train)
     elif('MaxentClassifier' == classifier):
         CLASSIFIER = nltk.classify.MaxentClassifier
+        def train_function(v_train):
+            return CLASSIFIER.train(v_train, algorithm='IIS', max_iter=10)
     elif('SvmClassifier' == classifier):
         CLASSIFIER = nltk.classify.SvmClassifier
         def SvmClassifier_show_most_informative_features( self, n=10 ):
             print 'unimplemented'
         CLASSIFIER.show_most_informative_features = SvmClassifier_show_most_informative_features
+        def train_function(v_train):
+            return CLASSIFIER.train(v_train)
     elif('DecisionTreeClassifier' == classifier):
         CLASSIFIER = nltk.classify.DecisionTreeClassifier
         def DecisionTreeClassifier_show_most_informative_features( self, n=10 ):
@@ -237,15 +243,14 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
                     break
             print text
         CLASSIFIER.show_most_informative_features = DecisionTreeClassifier_show_most_informative_features
+        def train_function(v_train):
+            return CLASSIFIER.train(v_train, entropy_cutoff=0.05, depth_cutoff=100, support_cutoff=10, binary=False)
 
     if '1step' == method:
         (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
-        if( 'MaxentClassifier'==classifier ):
-            classifier_tot = CLASSIFIER.train(v_train, algorithm='IIS', max_iter=10)
-        else:
-            classifier_tot = CLASSIFIER.train(v_train)
+        classifier_tot = train_function(v_train)
         sys.stderr.write( ' [training complete]' )
         
         print '######################'
@@ -268,17 +273,11 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         (v_train_obj, v_train_sen, v_test_obj, v_test_sen, test_truth) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
-        if( 'MaxentClassifier'==classifier ):
-            classifier_obj = CLASSIFIER.train(v_train_obj, algorithm='IIS', max_iter=10)
-        else:
-            classifier_obj = CLASSIFIER.train(v_train_obj)
+        classifier_obj = train_function(v_train_obj)
         sys.stderr.write( ' [training complete]' )
 
         sys.stderr.write( '\n[training start]' )
-        if( 'MaxentClassifier'==classifier ):
-            classifier_sen = CLASSIFIER.train(v_train_sen, algorithm='IIS', max_iter=10)
-        else:
-            classifier_sen = CLASSIFIER.train(v_train_sen)
+        classifier_sen = train_function(v_train_sen)
         sys.stderr.write( ' [training complete]' )
 
         print '######################'
@@ -388,6 +387,7 @@ def main(argv) :
     #random.shuffle(tweets2)
     tweets = tweets1 + tweets2
     random.shuffle( tweets )
+    #tweets = tweets[:100]
     sys.stderr.write( '\nlen( tweets ) = '+str(len( tweets )) )
 
     #sys.stderr.write( '\n' )
