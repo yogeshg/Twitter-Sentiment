@@ -1,17 +1,10 @@
-No Title
-
-\rule{0.9\textwidth }{.4pt}\ \vspace{10pt} { Sentiment Analysis of Twitter
-Feeds }\ \rule{0.9\textwidth }{.4pt} \vfill
-\includegraphics[height=100pt]{img/iitd_logo.png}\ \vspace{10pt} {\Large{
-Departmemt of Mathematics\ Indian Institute of Technology, Delhi }}
-\vspace{100pt}
-
-#  
 SENTIMENT ANALYSIS OF TWITTER FEEDS  
-[Figure](img/iitd_logo.png)  
+===================================
+![Figure](img/iitd_logo_128.png)  
 DEPARTMEMT OF MATHEMATICS  
+-------------------------
 INDIAN INSTITUTE OF TECHNOLOGY, DELHI  
-  
+-------------------------------------  
   
   
   
@@ -20,97 +13,42 @@ INDIAN INSTITUTE OF TECHNOLOGY, DELHI
   
   
 
-###  
+###  Yogesh Garg  
 
-Submitted by:  
-Yogesh Garg  
-2009MT50635  
-
-  
-
-Supervised by:  
-Dr. Niladri Chatterjee  
-Department of Mathematics  
-
-  
+###  Dr. Niladri Chatterjee  
 
 ### July, 2014
 
-## Certificate
-
-This is to certify that the report entitled "Sentiment Analysis of Twitter
-Feeds" submitted by me in partial fulfilment of the requirement of the award
-of Integrated Masters in Technology in Mathematics and Computing, as a part of
-course MAD853 is an authentic record of my own work carried out under the
-supervision of Dr. Niladri Chatterjee and refers other researchers' work which
-are duly listed in the reference section.  
-  
-  
-  
-
-** Yogesh Garg  
-(2009MT50635)**
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-This is to certify that the above statement made by the candidate is correct
-and true to the best of my knowledge.  
-  
-  
-  
-
-** Dr. Niladri Chatterjee  
-Department of Mathematics,  
-Indian Institute of Technology, Delhi  
-**
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
 # Contents
 
-1  Introduction  
-    1.1  Sentiment Analysis  
-    1.2  Twitter  
-2  Literature Review  
-3  Methodology  
-    3.1  Datasets  
-        3.1.1  Twitter Sentiment Corpus  
-        3.1.2  Stanford Twitter  
-    3.2  Pre Processing  
-        3.2.1  Hashtags  
-        3.2.2  Handles  
-        3.2.3  URLs  
-        3.2.4  Emoticons  
-        3.2.5  Punctuations  
-        3.2.6  Repeating Characters  
-    3.3  Stemming Algorithms  
-        3.3.1  Porter Stemmer  
-        3.3.2  Lemmatization  
-    3.4  Features  
-        3.4.1  Unigrams  
-        3.4.2  N-grams  
-        3.4.3  Negation Handling  
-4  Experimentation  
-    4.1  Naive Bayes  
-    4.2  Maximum Entropy Classifier  
-5  Future Work  
-6  Conclusion  
+    1  Introduction  
+        1.1  Sentiment Analysis  
+        1.2  Twitter  
+    2  Literature Review  
+    3  Methodology  
+        3.1  Datasets  
+            3.1.1  Twitter Sentiment Corpus  
+            3.1.2  Stanford Twitter  
+        3.2  Pre Processing  
+            3.2.1  Hashtags  
+            3.2.2  Handles  
+            3.2.3  URLs  
+            3.2.4  Emoticons  
+            3.2.5  Punctuations  
+            3.2.6  Repeating Characters  
+        3.3  Stemming Algorithms  
+            3.3.1  Porter Stemmer  
+            3.3.2  Lemmatization  
+        3.4  Features  
+            3.4.1  Unigrams  
+            3.4.2  N-grams  
+            3.4.3  Negation Handling  
+    4  Experimentation  
+        4.1  Naive Bayes  
+        4.2  Maximum Entropy Classifier  
+    5  Future Work  
+    6  Conclusion  
 
 # List of Tables
 
@@ -258,7 +196,7 @@ unigrams, bigrams, trigrams and negation detection. We finally train our
 classifier using various machine-learning algorithms - Naive Bayes, Decision
 Trees and Maximum Entropy.
 
-[Figure](img/schematic.png)
+!![Figure](img/schematic.png)
 
 Figure 1: Schematic Diagram of Methodology
 
@@ -294,33 +232,21 @@ show in Table 1 .
 **Irrelevant**
      For non English text or off-topic comments
 
-Class
+<div style="text-align:center">
+<table border="1">
+<tr><td align="left">Class </td><td align="right">Count </td><td width="0">Example </td></tr>
+<tr><td align="left">neg </td><td align="right">529 </td><td width="0">#Skype often crashing: #microsoft, what are you doing? </td></tr>
+<tr><td align="left">neu </td><td align="right">3770 </td><td width="0">How #Google Ventures Chooses Which Startups Get Its $200
+                Million http://t.co/FCWXoUd8 via @mashbusiness @mashable </td></tr>
+<tr><td align="left">pos </td><td align="right">483 </td><td width="0">Now all @Apple has to do is get swype on the iphone and
+                it will be crack. Iphone that is </td></tr></table>
 
-Count
 
-Example
-
-neg
-
-529
-
-#Skype often crashing: #microsoft, what are you doing?
-
-neu
-
-3770
-
-How #Google Ventures Chooses Which Startups Get Its $200 Million
-http://t.co/FCWXoUd8 via @mashbusiness @mashable
-
-pos
-
-483
-
-Now all @Apple has to do is get swype on the iphone and it will be crack.
-Iphone that is
-
-Table 1: Twitter Sentiment Corpus
+<div class="p"><!----></div>
+<div style="text-align:center">Table 1: Twitter Sentiment Corpus</div>
+<a id="tab:TSC">
+</a>
+</div>
 
 ####  3.1.2  Stanford Twitter
 
@@ -333,27 +259,18 @@ tweets manually collected and labelled for testing purposes. We randomly
 sample and use 5000 tweets from this dataset. An example of Tweets in this
 corpus are shown in Table 2 .
 
-Class
+<div style="text-align:center">
+<table border="1">
+<tr><td align="left">Class </td><td align="right">Count </td><td width="0">Example </td></tr>
+<tr><td align="left">neg </td><td align="right">2501 </td><td width="0">Playing after the others thanks to TV scheduling may well allow us to know what's go on, but it makes things look bad on Saturday nights  </td></tr>
+<tr><td align="left">pos </td><td align="right">2499 </td><td width="0">@francescazurlo HAHA!!! how long have you been singing that song now? It has to be at least a day. i think you're wildly entertaining!  </td></tr></table>
 
-Count
 
-Example
-
-neg
-
-2501
-
-Playing after the others thanks to TV scheduling may well allow us to know
-what's go on, but it makes things look bad on Saturday nights
-
-pos
-
-2499
-
-@francescazurlo HAHA!!! how long have you been singing that song now? It has
-to be at least a day. i think you're wildly entertaining!
-
-Table 2: Stanford Corpus
+<div class="p"><!----></div>
+<div style="text-align:center">Table 2: Stanford Corpus</div>
+<a id="tab:STAN">
+</a>
+</div>
 
 ###  3.2  Pre Processing
 
@@ -365,101 +282,30 @@ algorithms. Figure 2 illustrates various features seen in micro-blogging.
 Table 3 illustrates the frequency of these features per tweet, cut by
 datasets. We also give a brief description of pre-processing steps taken.
 
-[Figure](img/tweet.png)
+![Figure](img/tweet.png)
 
 Figure 2: Illustration of a Tweet with various features
 
-Twitter Sentiment
+<div style="text-align:center">
+<table border="1">
+<tr><td align="left"></td><td colspan="2" align="center">Twitter Sentiment
+ </td><td colspan="2" align="center">Stanford Corpus
+ </td><td colspan="2" align="center">Both </td></tr>
+<tr><td align="left">Features   </td><td colspan="1" align="center">Avg. </td><td colspan="1" align="center">Max.
+            </td><td colspan="1" align="center">Avg. </td><td colspan="1" align="center">Max.
+            </td><td colspan="1" align="center">Avg. </td><td colspan="1" align="center">Max. </td></tr>
+<tr><td align="left">Handles        </td><td align="right">0.6761 </td><td align="right">8 </td><td align="right">0.4888 </td><td align="right">10 </td><td align="right">0.5804 </td><td align="right">10 </td></tr>
+<tr><td align="left">Hashtags   </td><td align="right">2.0276 </td><td align="right">13 </td><td align="right">0.0282 </td><td align="right">11 </td><td align="right">1.0056 </td><td align="right">13 </td></tr>
+<tr><td align="left">Urls       </td><td align="right">0.4431 </td><td align="right">4 </td><td align="right">0.0452 </td><td align="right">2 </td><td align="right">0.2397 </td><td align="right">4 </td></tr>
+<tr><td align="left">Emoticons  </td><td align="right">0.0550 </td><td align="right">3 </td><td align="right">0.0154 </td><td align="right">4 </td><td align="right">0.0348 </td><td align="right">4 </td></tr>
+<tr><td align="left">Words      </td><td align="right">14.4084 </td><td align="right">31 </td><td align="right">13.2056 </td><td align="right">33 </td><td align="right">13.7936 </td><td align="right">33 </td></tr></table>
 
-Stanford Corpus
 
-Both
-
-Features
-
-Avg.
-
-Max.
-
-Avg.
-
-Max.
-
-Avg.
-
-Max.
-
-Handles
-
-0.6761
-
-8
-
-0.4888
-
-10
-
-0.5804
-
-10
-
-Hashtags
-
-2.0276
-
-13
-
-0.0282
-
-11
-
-1.0056
-
-13
-
-Urls
-
-0.4431
-
-4
-
-0.0452
-
-2
-
-0.2397
-
-4
-
-Emoticons
-
-0.0550
-
-3
-
-0.0154
-
-4
-
-0.0348
-
-4
-
-Words
-
-14.4084
-
-31
-
-13.2056
-
-33
-
-13.7936
-
-33
-
-Table 3: Frequency of Features per Tweet
+<div class="p"><!----></div>
+<div style="text-align:center">Table 3: Frequency of Features per Tweet</div>
+<a id="tab:feat_freq">
+</a>
+</div>
 
 ####  3.2.1  Hashtags
 
@@ -503,95 +349,21 @@ blogging sites. We identify the following emoticons and replace them with a
 single word. Table 4 lists the emoticons we are currently detecting. All other
 emoticons would be ignored.
 
-Emoticons
+<div style="text-align:center"> 
+<table border="1">
+<tr><td colspan="1" align="center">Emoticons </td><td colspan="6" align="center">Examples </td></tr>
+<tr><td align="left"><tt>EMOT_SMILEY</tt>   </td><td align="left"><tt>:-)</tt>  </td><td align="left"><tt>:)</tt>   </td><td align="left"><tt>(:</tt>   </td><td align="left"><tt>(-:</tt>  </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_LAUGH</tt>    </td><td align="left"><tt>:-D</tt>  </td><td align="left"><tt>:D</tt>   </td><td align="left"><tt>X-D</tt>  </td><td align="left"><tt>XD</tt>   </td><td align="left"><tt>xD</tt>   </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_LOVE</tt>     </td><td align="left"><tt>&lt;3</tt>    </td><td align="left"><tt>:*</tt>   </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_WINK</tt>     </td><td align="left"><tt>;-)</tt>  </td><td align="left"><tt>;)</tt>   </td><td align="left"><tt>;-D</tt>  </td><td align="left"><tt>;D</tt>   </td><td align="left"><tt>(;</tt>   </td><td align="left"><tt>(-;</tt> </td></tr>
+<tr><td align="left"><tt>EMOT_FROWN</tt>    </td><td align="left"><tt>:-(</tt>  </td><td align="left"><tt>:(</tt>   </td><td align="left"><tt>(:</tt>   </td><td align="left"><tt>(-:</tt>  </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>EMOT_CRY</tt>  </td><td align="left"><tt>:,(</tt>  </td><td align="left"><tt>:'(</tt>  </td><td align="left"><tt>:"(</tt>  </td><td align="left"><tt>:((</tt>  </td><td align="left"><tt></tt>     </td><td align="left"><tt></tt> </td></tr></table>
 
-Examples
 
-`EMOT_SMILEY`
-
-`:-)`
-
-`:)`
-
-`(:`
-
-`(-:`
-
-``
-
-``
-
-`EMOT_LAUGH`
-
-`:-D`
-
-`:D`
-
-`X-D`
-
-`XD`
-
-`xD`
-
-``
-
-`EMOT_LOVE`
-
-`<3`
-
-`:*`
-
-``
-
-``
-
-``
-
-``
-
-`EMOT_WINK`
-
-`;-)`
-
-`;)`
-
-`;-D`
-
-`;D`
-
-`(;`
-
-`(-;`
-
-`EMOT_FROWN`
-
-`:-(`
-
-`:(`
-
-`(:`
-
-`(-:`
-
-``
-
-``
-
-`EMOT_CRY`
-
-`:,(`
-
-`:'(`
-
-`:"(`
-
-`:((`
-
-``
-
-``
-
-Table 4: List of Emoticons
+<div style="text-align:center">Table 4: List of Emoticons</div>
+<a id="tab:emot">
+</a>
+</div>
 
 ####  3.2.5  Punctuations
 
@@ -602,35 +374,19 @@ word boundary by a list of relevant punctuations present at that point. Table
 5 lists the punctuations currently identified. We also remove any single
 quotes that might exist in the text.
 
-Punctuations
+<div style="text-align:center"> 
+<table border="1">
+<tr><td colspan="1" align="center">Punctuations </td><td colspan="2" align="center">Examples </td></tr>
+<tr><td align="left"><tt>PUNC_DOT</tt> </td><td align="left"><tt>.</tt> </td><td align="left"><tt></tt> </td></tr>
+<tr><td align="left"><tt>PUNC_EXCL</tt> </td><td align="left"><tt>!</tt> </td><td align="left"><tt>¡</tt> </td></tr>
+<tr><td align="left"><tt>PUNC_QUES</tt> </td><td align="left"><tt>?</tt> </td><td align="left"><tt>¿</tt> </td></tr>
+<tr><td align="left"><tt>PUNC_ELLP</tt> </td><td align="left"><tt>...</tt> </td><td align="left"><tt>…</tt> </td></tr></table>
 
-Examples
 
-`PUNC_DOT`
-
-`.`
-
-``
-
-`PUNC_EXCL`
-
-`!`
-
-`¡`
-
-`PUNC_QUES`
-
-`?`
-
-`¿`
-
-`PUNC_ELLP`
-
-`...`
-
-`…`
-
-Table 5: List of Punctuations
+<div style="text-align:center">Table 5: List of Punctuations</div>
+<a id="tab:punc">
+</a>
+</div>
 
 ####  3.2.6  Repeating Characters
 
@@ -648,133 +404,30 @@ It’s important to note that by applying these pre-processing steps, we are
 reducing our feature set otherwise it can be too sparse. Table 6 lists the
 decrease in feature set due to processing each of these features.
 
-Twitter Sentiment
+<div style="text-align:center">
+<table border="1">
+<tr><td align="left"></td><td colspan="2" align="center">Twitter Sentiment
+ </td><td colspan="2" align="center">Stanford Corpus
+ </td><td colspan="2" align="center">Both </td></tr>
+<tr><td align="left">Preprocessing
+            </td><td colspan="1" align="center">Words </td><td colspan="1" align="center">Percentage
+            </td><td colspan="1" align="center">Words </td><td colspan="1" align="center">Percentage
+            </td><td colspan="1" align="center">Words </td><td colspan="1" align="center">Percentage </td></tr>
+<tr><td align="left">None           </td><td align="right">19128 </td><td align="right"></td><td align="right">15910 </td><td align="right"></td><td align="right">31832 </td><td align="right"></td></tr>
+<tr><td align="left">Hashtags       </td><td align="right">18649 </td><td align="right">97.50% </td><td align="right">15550 </td><td align="right">97.74% </td><td align="right">31223 </td><td align="right">98.09% </td></tr>
+<tr><td align="left">Handles            </td><td align="right">17118 </td><td align="right">89.49% </td><td align="right">13245 </td><td align="right">83.25% </td><td align="right">27383 </td><td align="right">86.02% </td></tr>
+<tr><td align="left">Urls           </td><td align="right">16723 </td><td align="right">87.43% </td><td align="right">15335 </td><td align="right">96.39% </td><td align="right">29083 </td><td align="right">91.36% </td></tr>
+<tr><td align="left">Emoticons      </td><td align="right">18631 </td><td align="right">97.40% </td><td align="right">15541 </td><td align="right">97.68% </td><td align="right">31197 </td><td align="right">98.01% </td></tr>
+<tr><td align="left">Punctuations   </td><td align="right">13724 </td><td align="right">71.75% </td><td align="right">11225 </td><td align="right">70.55% </td><td align="right">22095 </td><td align="right">69.41% </td></tr>
+<tr><td align="left">Repeatings     </td><td align="right">18540 </td><td align="right">96.93% </td><td align="right">15276 </td><td align="right">96.02% </td><td align="right">30818 </td><td align="right">96.81% </td></tr>
+<tr><td align="left">All                </td><td align="right">11108 </td><td align="right">58.07% </td><td align="right">8646 </td><td align="right">54.34% </td><td align="right">16981 </td><td align="right">53.35% </td></tr></table>
 
-Stanford Corpus
 
-Both
-
-Preprocessing
-
-Words
-
-Percentage
-
-Words
-
-Percentage
-
-Words
-
-Percentage
-
-None
-
-19128
-
-15910
-
-31832
-
-Hashtags
-
-18649
-
-97.50%
-
-15550
-
-97.74%
-
-31223
-
-98.09%
-
-Handles
-
-17118
-
-89.49%
-
-13245
-
-83.25%
-
-27383
-
-86.02%
-
-Urls
-
-16723
-
-87.43%
-
-15335
-
-96.39%
-
-29083
-
-91.36%
-
-Emoticons
-
-18631
-
-97.40%
-
-15541
-
-97.68%
-
-31197
-
-98.01%
-
-Punctuations
-
-13724
-
-71.75%
-
-11225
-
-70.55%
-
-22095
-
-69.41%
-
-Repeatings
-
-18540
-
-96.93%
-
-15276
-
-96.02%
-
-30818
-
-96.81%
-
-All
-
-11108
-
-58.07%
-
-8646
-
-54.34%
-
-16981
-
-53.35%
-
-Table 6: Number of words before and after pre-processing
+<div class="p"><!----></div>
+<div style="text-align:center">Table 6: Number of words before and after pre-processing</div>
+<a id="tab:reduction">
+</a>
+</div>
 
 ###  3.3  Stemming Algorithms
 
@@ -800,31 +453,20 @@ readability, and accuracy. It uses a set of around 60 rules applied in 6
 successive steps [9]. An important feature to note is that it doesn’t involve
 recursion. The steps in the algorithm are described in Table 7 .
 
-1\.
+<div style="text-align:center">
+<table border="1">
+<tr><td align="right">1.    </td><td align="left">Gets rid of plurals and -ed or -ing suffixes </td></tr>
+<tr><td align="right">2.    </td><td align="left">Turns terminal y to i when there is another vowel in the stem￼ </td></tr>
+<tr><td align="right">3.    </td><td align="left">Maps double suffixes to single ones: -ization, -ational, etc. </td></tr>
+<tr><td align="right">4.    </td><td align="left">Deals with suffixes, -full, -ness etc. </td></tr>
+<tr><td align="right">5.￼   </td><td align="left">Takes off -ant, -ence, etc. </td></tr>
+<tr><td align="right">6.    </td><td align="left">Removes a final –e </td></tr></table>
 
-Gets rid of plurals and -ed or -ing suffixes
 
-2\.
-
-Turns terminal y to i when there is another vowel in the stem￼
-
-3\.
-
-Maps double suffixes to single ones: -ization, -ational, etc.
-
-4\.
-
-Deals with suffixes, -full, -ness etc.
-
-5.￼
-
-Takes off -ant, -ence, etc.
-
-6\.
-
-Removes a final –e
-
-Table 7: Porter Stemmer Steps
+<div style="text-align:center">Table 7: Porter Stemmer Steps</div>
+<a id="tab:porter">
+</a>
+</div>
 
 ####  3.3.2  Lemmatization
 
@@ -854,7 +496,7 @@ helps us to avoid having to scale the data, which can considerably decrease
 training time [2]. Figure 3 illustrated the cumulative distribution of words
 in our dataset.
 
-[Figure](img/1grams.png)
+![Figure](img/1grams.png)
 
 Figure 3: Cumulative Frequency Plot for 50 Most Frequent Unigrams
 
@@ -888,7 +530,7 @@ r
 
 (3)
 
-[Figure](img/zipfs_law.png)
+![Figure](img/zipfs_law.png)
 
 Figure 4: Zipf's Law - Log Frequency versus Log Rank plot for unigrams
 
@@ -909,7 +551,7 @@ Figure 5 shows the number of n-grams versus number of Tweets. We can observe
 that bigrams and trigrams increase almost linearly where as unigrams are
 increasing logarithmically.
 
-[Figure](img/Ngrams_dist_1.png)
+![Figure](img/Ngrams_dist_1.png)
 
 Figure 5: Number of n-grams vs. Number of Tweets
 
@@ -920,18 +562,18 @@ the filtering out non-repeating n-grams, we see that the number of n-grams is
 considerably decreased and equals the order of unigrams, as shown in Figure 6
 .
 
-[Figure](img/Ngrams_dist_2.png)
+![Figure](img/Ngrams_dist_2.png)
 
 Figure 6: Number of repeating n-grams vs. Number of Tweets
 
 Figure 7 and Figure 8 show the cumulative distribution of the most frequent
 bigrams and trigrams respectively.
 
-[Figure](img/2grams.png)
+![Figure](img/2grams.png)
 
 Figure 7: Cumulative Frequency Plot for 50 Most Frequent Bigrams
 
-[Figure](img/3grams.png)
+![Figure](img/3grams.png)
 
 Figure 8: Cumulative Frequency Plot for 50 Most Frequent Trigrams
 
@@ -954,99 +596,37 @@ cue.
 To detect explicit negation cues, we are looking for the following words in
 Table 8 . The search is done using regular expressions.
 
-S.No.
+<div style="text-align:center">
+<table border="1">
+<tr><td align="left">S.No. </td><td align="left">Negation Cues </td></tr>
+<tr><td align="left">1.  </td><td align="left">never </td></tr>
+<tr><td align="left">2.  </td><td align="left">no </td></tr>
+<tr><td align="left">3.  </td><td align="left">nothing </td></tr>
+<tr><td align="left">4.  </td><td align="left">nowhere </td></tr>
+<tr><td align="left">5.  </td><td align="left">noone </td></tr>
+<tr><td align="left">6.  </td><td align="left">none </td></tr>
+<tr><td align="left">7.  </td><td align="left">not </td></tr>
+<tr><td align="left">8.  </td><td align="left">havent </td></tr>
+<tr><td align="left">9.  </td><td align="left">hasnt </td></tr>
+<tr><td align="left">10.  </td><td align="left">hadnt </td></tr>
+<tr><td align="left">11.  </td><td align="left">cant </td></tr>
+<tr><td align="left">12.  </td><td align="left">couldnt </td></tr>
+<tr><td align="left">13.  </td><td align="left">shouldnt </td></tr>
+<tr><td align="left">14.  </td><td align="left">wont </td></tr>
+<tr><td align="left">15.  </td><td align="left">wouldnt </td></tr>
+<tr><td align="left">16.  </td><td align="left">dont </td></tr>
+<tr><td align="left">17.  </td><td align="left">doesnt </td></tr>
+<tr><td align="left">18.  </td><td align="left">didnt </td></tr>
+<tr><td align="left">19.  </td><td align="left">isnt </td></tr>
+<tr><td align="left">20.  </td><td align="left">arent </td></tr>
+<tr><td align="left">21.  </td><td align="left">aint </td></tr>
+<tr><td align="left">22.  </td><td align="left">Anything ending with "n't" </td></tr></table>
 
-Negation Cues
 
-1\.
-
-never
-
-2\.
-
-no
-
-3\.
-
-nothing
-
-4\.
-
-nowhere
-
-5\.
-
-noone
-
-6\.
-
-none
-
-7\.
-
-not
-
-8\.
-
-havent
-
-9\.
-
-hasnt
-
-10\.
-
-hadnt
-
-11\.
-
-cant
-
-12\.
-
-couldnt
-
-13\.
-
-shouldnt
-
-14\.
-
-wont
-
-15\.
-
-wouldnt
-
-16\.
-
-dont
-
-17\.
-
-doesnt
-
-18\.
-
-didnt
-
-19\.
-
-isnt
-
-20\.
-
-arent
-
-21\.
-
-aint
-
-22\.
-
-Anything ending with "n't"
-
-Table 8: Explicit Negation Cues
+<div style="text-align:center">Table 8: Explicit Negation Cues</div>
+<a id="tab:negation">
+</a>
+</div>
 
 #### Scope of Negation
 
@@ -1058,7 +638,7 @@ depends on the closest negation cue on the left and similarly for Right
 negativity. Figure 9 illustrates the left and right negativity of words in a
 tweet.
 
-[Figure](img/negation.png)
+![Figure](img/negation.png)
 
 Figure 9: Scope of Negation
 
@@ -1077,7 +657,7 @@ classifying objective tweets into "positive" vs. "negative" tweets. We also
 trained 2 step classifiers. The accuracies for each of these configuration are
 shown in Figure 10 , we discuss these in detail below.
 
-[Figure](img/NBME_Accuracy.png)
+![Figure](img/NBME_Accuracy.png)
 
 Figure 10: Accuracy for Naive Bayes Classifier
 
@@ -1160,7 +740,7 @@ hollow markers show the affect of using double step classifier. Different
 points are for different feature sets. We can see that both precision as well
 as recall values are higher for single step than that for double step.
 
-[Figure](img/NB_PvsR.png)
+![Figure](img/NB_PvsR.png)
 
 Figure 11: Precision vs. Recall for Naive Bayes Classifier
 
@@ -1207,7 +787,7 @@ Figure 12 . Here we see that precision of "neutral" class increase by using a
 double step classifier, but with a considerable decrease in its recall and
 slight fall in precision of "negative" and "positive" classes.
 
-[Figure](img/ME_PvsR.png)
+![Figure](img/ME_PvsR.png)
 
 Figure 12: Precision vs. Recall for Maximum Entropy Classifier
 
@@ -1240,53 +820,29 @@ Trigrams, trained on Naive Bayes Classifier.
 
 ## References
 
-[1]
+[1] Bo Pang and Lillian Lee. Opinion mining and sentiment analysis. _Foundations and trends in information retrieval_, 2(1-2):pages 1-135, 2008. 
 
-     Bo Pang and Lillian Lee. Opinion mining and sentiment analysis. _Foundations and trends in information retrieval_, 2(1-2):pages 1-135, 2008. 
+[2] Alec Go, Richa Bhayani, and Lei Huang. Twitter sentiment classification using distant supervision. _Processing_, pages 1-6, 2009. 
 
-[2]
+[3] Niek Sanders. Twitter sentiment corpus. http://www.sananalytics.com/lab/twitter-sentiment/. Sanders Analytics. 
 
-     Alec Go, Richa Bhayani, and Lei Huang. Twitter sentiment classification using distant supervision. _Processing_, pages 1-6, 2009. 
+[4] Alexander Pak and Patrick Paroubek. Twitter as a corpus for sentiment analysis and opinion mining. volume 2010, pages 1320-1326, 2010. 
 
-[3]
+[5] Efthymios Kouloumpis, Theresa Wilson, and Johanna Moore. Twitter sentiment analysis: The good the bad and the omg! _ICWSM_, 11:pages 538-541, 2011. 
 
-     Niek Sanders. Twitter sentiment corpus. http://www.sananalytics.com/lab/twitter-sentiment/. Sanders Analytics. 
+[6] Hassan Saif, Yulan He, and Harith Alani. Semantic sentiment analysis of twitter. In _The Semantic Web-ISWC 2012_, pages 508-524. Springer, 2012. 
 
-[4]
+[7] Isaac G Councill, Ryan McDonald, and Leonid Velikovich. What's great and what's not: learning to classify the scope of negation for improved sentiment analysis. In _Proceedings of the workshop on negation and speculation in natural language processing_, pages 51-59. Association for Computational Linguistics, 2010. 
 
-     Alexander Pak and Patrick Paroubek. Twitter as a corpus for sentiment analysis and opinion mining. volume 2010, pages 1320-1326, 2010. 
+[8] Ilia Smirnov. Overview of stemming algorithms. _Mechanical Translation_, 2008. 
 
-[5]
+[9] Martin F Porter. An algorithm for suffix stripping. _Program: electronic library and information systems_, 40(3):pages 211-218, 2006. 
 
-     Efthymios Kouloumpis, Theresa Wilson, and Johanna Moore. Twitter sentiment analysis: The good the bad and the omg! _ICWSM_, 11:pages 538-541, 2011. 
+[10] Balakrishnan Gokulakrishnan, P Priyanthan, T Ragavan, N Prasath, and A Perera. Opinion mining and sentiment analysis on a twitter data stream. In _Advances in ICT for Emerging Regions (ICTer), 2012 International Conference on. IEEE_, 2012. 
 
-[6]
+[11] John Ross Quinlan. _C4. 5: programs for machine learning_, volume 1\. Morgan kaufmann, 1993. 
 
-     Hassan Saif, Yulan He, and Harith Alani. Semantic sentiment analysis of twitter. In _The Semantic Web-ISWC 2012_, pages 508-524. Springer, 2012. 
-
-[7]
-
-     Isaac G Councill, Ryan McDonald, and Leonid Velikovich. What's great and what's not: learning to classify the scope of negation for improved sentiment analysis. In _Proceedings of the workshop on negation and speculation in natural language processing_, pages 51-59. Association for Computational Linguistics, 2010. 
-
-[8]
-
-     Ilia Smirnov. Overview of stemming algorithms. _Mechanical Translation_, 2008. 
-
-[9]
-
-     Martin F Porter. An algorithm for suffix stripping. _Program: electronic library and information systems_, 40(3):pages 211-218, 2006. 
-
-[10]
-
-     Balakrishnan Gokulakrishnan, P Priyanthan, T Ragavan, N Prasath, and A Perera. Opinion mining and sentiment analysis on a twitter data stream. In _Advances in ICT for Emerging Regions (ICTer), 2012 International Conference on. IEEE_, 2012. 
-
-[11]
-
-     John Ross Quinlan. _C4. 5: programs for machine learning_, volume 1\. Morgan kaufmann, 1993. 
-
-[12]
-
-     Steven Bird, Ewan Klein, and Edward Loper. _Natural language processing with Python_. " O'Reilly Media, Inc.", 2009.
+[12] Steven Bird, Ewan Klein, and Edward Loper. _Natural language processing with Python_. " O'Reilly Media, Inc.", 2009.
 
   
   
