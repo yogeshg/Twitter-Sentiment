@@ -1,0 +1,41 @@
+\section{Future Work}
+
+\begin{description}
+
+\item[Investigating Support Vector Machines] { Several papers have discussed the
+results using Support Vector Machines (SVMs) also. The next step would be to
+test our approach on SVMs. However, Go, Bhayani and Huang have reported that
+SVMs do not increase the accuracy \cite{GBH}. }
+
+\item[Building a classifier for Hindi tweets] { There are many users on Twitter
+that use primarily Hindi language. The approach discussed here can be used to
+create a Hindi language sentiment classifier. }
+
+\item[Improving Results using Semantics Analysis] { Understanding the role of
+the nouns being talked about can help us better classify a given tweet. For
+example, ``Skype often crashing: microsoft, what are you doing?'' Here Skype is
+a product and Microsoft is a company. We can use semantic labellers to achieve
+this. Such an approach is discussed by Saif, He and Alani \cite{SHA}. }
+
+\ignore{Discourse}
+
+\end{description}
+
+\section{Conclusion}
+
+In this paper, we create a sentiment classifier for twitter using labelled data sets.
+We also investigate the relevance of using a double step classifier and negation
+detection for the purpose of sentiment analysis.
+
+Our baseline classifier that uses just the unigrams achieves an accuracy of
+around 80.00\%. Accuracy of the classifier increases if we use negation
+detection or introduce bigrams and trigrams. Thus we can conclude that both
+Negation Detection and higher order n-grams are useful for the purpose of text
+classification.  However, if we use both n-grams and negation detection, the
+accuracy falls marginally. We also note that Single step classifiers out perform
+double step classifiers. In general, Naive Bayes Classifier performs better than
+Maximum Entropy Classifier.
+
+We achieve the best accuracy of 86.68\% in the case of Unigrams + Bigrams + Trigrams,
+trained on Naive Bayes Classifier.
+

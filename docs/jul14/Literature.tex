@@ -1,0 +1,69 @@
+\section{Literature Review}
+
+Pang and Lee discuss in detail the current techniques in the area of sentiment
+analysis. Much of it revolves around reviews for movies and products.
+%TODO [and medical corpus].
+
+%TODO [write more about n-grams, stemming, multi-step classification, negaiton]
+
+Go, Bhayani and Huang (2009) were among the first to explore sentiment analysis
+on Twitter \cite{GBH}. They classify Tweets for a query term into negative or
+positive sentiment. They collect training dataset automatically from Twitter. To
+collect positive and negative tweets, they query twitter for happy and sad
+emoticons. Happy emoticons are different versions of smiling face, like
+``\texttt{:)}'', ``\texttt{:-)}'', ``\texttt{: )}'', ``\texttt{:D}'',
+``\texttt{=)}'' etc. Sad emoticons include frowns, like ``\texttt{:(}'',
+``\texttt{:-(}'', ``\texttt{:(}'' etc. They try various features – unigrams,
+bigrams and Part-of-Speech and train their classifier on various machine
+learning algorithms – Naive Bayes, Maximum Entropy and Scalable Vector Machines
+and compare it against a baseline classifier by counting the number of positive
+and negative words from a publicly available corpus. They report that Bigrams
+alone and Part-of-Speech Tagging are not helpful and that Naive Bayes Classifier
+gives the best results.
+
+Pak and Paroubek (2010) use a similar distant supervision technique to
+automatically collect the dataset from the web \cite{PP}. Apart from using happy
+and sad emoticons for positive and negative sentiment respectively, they also
+query tweets from accounts of 44 newspapers, like “New York Times”, “Washington
+Posts” etc. to collect a training set of subjective tweets. They use unigrams
+and filtered n-grams for their classification. They also handle negations by
+attaching negative cues, like “no”, “not” to the words preceding and following
+them. They report that both bigrams and negation handling help.
+
+Koulompis, Wilson and Moore (2011) identify that use of informal and creative
+language make sentiment analysis of tweets a rather different task \cite{KWM}.
+They leverage previous work done in hashtags and sentiment analysis to build
+their classifier. They use Edinburgh Twitter corpus to find out most frequent
+hashtags. They manually classify these hashtags and use them to in turn classify
+the tweets. Apart from using n-grams and Part-of-Speech features, they also
+build a feature set from already existing MPQA subjectivity lexicon and Internet
+Lingo Dictionary. They report that the best results are seen with n-gram
+features with lexicon features, while using Part-of-Speech features causes a
+drop in accuracy.
+
+Saif, He and Alani (2012) discuss a semantic based approach to identify the
+entity being discussed in a tweet, like a person, organization etc. \cite{SHA}.
+They also demonstrate that removal of stop words is not a necessary step and may
+have undesirable effect on the classifier.
+
+All of the aforementioned techniques rely on n-gram features. It is unclear that
+the use of Part-of-Speech tagging is useful or not. To improve accuracy, some
+employ different methods of feature selection or leveraging knowledge about
+micro-blogging. In contrast, we improve our results by using more basic
+techniques used in Sentiment Analysis, like stemming, two-step classification
+and negation detection and scope of negation.
+
+Negation detection is a technique that has often been studied in sentiment
+analysis. Negation words like “not”, “never”, “no” etc. can drastically change
+the meaning of a sentence and hence the sentiment expressed in them. Due to
+presence of such words, the meaning of nearby words becomes opposite. Such words
+are said to be in the scope of negation. Many researches have worked on
+detecting the scope of negation.
+
+%TODO [One more model of negation]
+
+The scope of negation of a cue can be taken from that word to the next following
+punctuation. Councill, McDonald and Velikovich (2010) discuss a technique to
+identify negation cues and their scope in a sentence \cite{CMV}. They identify
+explicit negation cues in the text and for each word in the scope. Then they
+find its distance from the nearest negative cue on the left and right.

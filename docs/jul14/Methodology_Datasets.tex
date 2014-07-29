@@ -1,0 +1,64 @@
+\subsection{Datasets}
+One of the major challenges in Sentiment Analysis of Twitter is to collect a
+labelled dataset. Researchers have made public the following datasets for
+training and testing classifiers.
+
+\subsubsection{Twitter Sentiment Corpus} This is a collection of 5513 tweets
+collected for four different topics, namely, Apple, Google, Microsoft, Twitter
+It is collected and hand-classified by Sanders Analytics LLC \cite{San}. Each
+entry in the corpus contains, Tweet id, Topic and a Sentiment label. We use
+Twitter-Python library to enrich this data by downloading data like Tweet text,
+Creation Date, Creator etc. for every Tweet id. Each Tweet is
+hand classified by an American male into the following four categories. For the
+purpose of our experiments, we consider Irrelevant and Neutral to be the same
+class. Illustration of Tweets in this corpus is show in \tabref{tab:TSC}.
+%TODO \cite{TwPyLib}
+
+\begin{description}
+	\item[Positive] {For showing positive sentiment towards the topic}
+	\item[Positive] {For showing no or mixed or weak sentiments towards the topic}
+	\item[Negative] {For showing negative sentiment towards the topic}	
+	\item[Irrelevant] {For non English text or off-topic comments}
+\end{description}
+
+\begin{table}[h!]
+\centering
+
+\begin{tabular}{|l|r|p{0.75\textwidth}|}
+\hline
+Class & Count & Example \\\hline
+neg & 529 & {{\#}Skype often crashing: {\#}microsoft, what are you doing?} \\\hline
+neu & 3770 & {How {\#}Google Ventures Chooses Which Startups Get Its \$200
+				Million http://t.co/FCWXoUd8 via @mashbusiness @mashable} \\\hline
+pos & 483 & {Now all @Apple has to do is get swype on the iphone and
+				it will be crack. Iphone that is} \\\hline
+
+\end{tabular}
+
+\caption{Twitter Sentiment Corpus}
+\label{tab:TSC}
+\end{table}
+
+\subsubsection{Stanford Twitter} This corpus of tweets, developed by Sanford’s
+Natural Language processing research group, is publically available \cite{GBH}.
+The training set is collected by querying Twitter API for happy emoticons like
+``\texttt{:)}'' and sad emoticons like ``\texttt{:(}'' and labelling them
+positive or negative. The emoticons were then stripped and Re-Tweets and
+duplicates removed. It also contains around 500 tweets manually collected and
+labelled for testing purposes. We randomly sample and use 5000 tweets from this
+dataset. An example of Tweets in this corpus are shown in \tabref{tab:STAN}.
+
+\begin{table}[h!]
+\centering
+
+\begin{tabular}{|l|r|p{0.75\textwidth}|}
+\hline
+Class & Count & Example \\\hline
+neg & 2501 & Playing after the others thanks to TV scheduling may well allow us to know what's go on, but it makes things look bad on Saturday nights  \\\hline
+pos & 2499 & @francescazurlo HAHA!!! how long have you been singing that song now? It has to be at least a day. i think you're wildly entertaining!  \\\hline
+
+\end{tabular}
+
+\caption{Stanford Corpus}
+\label{tab:STAN}
+\end{table}

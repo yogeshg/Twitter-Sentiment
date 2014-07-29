@@ -1,0 +1,47 @@
+\subsection{Stemming Algorithms} All stemming algorithms are of the following
+major types – affix removing, statistical and mixed. The first kind, Affix
+removal stemmer, is the most basic one. These apply a set of transformation
+rules to each word in an attempt to cut off commonly known prefixes and / or
+suffixes \cite{Ilia}. A trivial stemming algorithm would be to truncate words at N-th
+symbol. But this obviously is not well suited for practical purposes.
+
+J.B. Lovins described first stemming algorithm in 1968. It defines 294 endings,
+each linked to one of 29 conditions, plus 35 transformation rules\ignore{need to write
+more, conditions, transformations?}. For a word being stemmed, an ending with a
+satisfying condition is found and removed. Another famous stemmer used
+extensively is described in the next section.
+
+\subsubsection{Porter Stemmer}
+
+Martin Porter wrote a stemmer that was published in July 1980. This stemmer was
+very widely used and became and remains the de facto standard algorithm used for
+English stemming. It offers excellent trade-off between speed, readability, and
+accuracy. It uses a set of around 60 rules applied in 6 successive steps \cite{Porter}. An
+important feature to note is that it doesn’t involve recursion. The steps in the
+algorithm are described in \tabref{tab:porter}.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|r|l|} \hline
+1.	&	Gets rid of plurals and -ed or -ing suffixes \\ \hline
+2.	&	Turns terminal y to i when there is another vowel in the stem￼ \\ \hline
+3.	&	Maps double suffixes to single ones: -ization, -ational, etc. \\ \hline
+4.	&	Deals with suffixes, -full, -ness etc. \\ \hline
+5.￼	&	Takes off -ant, -ence, etc. \\ \hline
+6.	&	Removes a final –e \\ \hline
+\end{tabular}
+\caption{Porter Stemmer Steps}
+\label{tab:porter}
+\end{table}
+
+\ignore{Another commonly used algorithm is [blah]. Which does [blah].}
+
+\subsubsection{Lemmatization}
+
+Lemmatization is the process of normalizing a word rather than just finding its
+stem. In the process, a suffix may not only be removed, but may also be
+substituted with a different one. It may also involve first determining the
+part-of-speech for a word and then applying normalization rules. It might also
+involve dictionary look-up. For example, verb ‘saw’ would be lemmatized to ‘see’
+and the noun ‘saw’ will remain ‘saw’. For our purpose of classifying text,
+stemming should suffice.

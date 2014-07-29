@@ -1,0 +1,30 @@
+\section{Methodology}
+We use different feature sets and machine learning classifiers to determine the
+best combination for sentiment analysis of twitter. We also experiment with
+various pre-processing steps like -- punctuations, emoticons, twitter specific
+terms and stemming.  We investigated the following features -- unigrams,
+bigrams, trigrams and negation detection. We finally train our classifier using
+various machine-learning algorithms -- Naive Bayes, Decision Trees and Maximum
+Entropy.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.75\textwidth]{img/schematic.png}
+\caption{Schematic Diagram of Methodology}
+%TODO Lame caption?
+\label{fig:schematic}
+\end{figure}
+
+We use a modularized approach with feature extractor and classification
+algorithm as two independent components. This enables us to experiment with
+different options for each component. \figref{fig:schematic} illustrates
+different steps taken in the entire process.
+
+\input{Methodology_Datasets}
+
+\input{Methodology_Preprocessing}
+
+\input{Methodology_Stemming}
+
+\input{Methodology_Features}
+
