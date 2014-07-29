@@ -207,7 +207,7 @@ def generateARFF( tweets, fileprefix ):
 
 def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
-    INFO = '_'.join( [str(classifier), str(method)] + [ str(k)+'_'+str(v) for (k,v) in feature_set.items()] )
+    INFO = '_'.join( [str(classifier), str(method)] + [ str(k)+str(v) for (k,v) in feature_set.items()] )
     if( len(fileprefix)>0 and '_'!=fileprefix[0] ):
         directory = os.path.dirname(fileprefix)
         if not os.path.exists(directory):
@@ -225,7 +225,7 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
     elif('MaxentClassifier' == classifier):
         CLASSIFIER = nltk.classify.MaxentClassifier
         def train_function(v_train):
-            return CLASSIFIER.train(v_train, algorithm='IIS', max_iter=10)
+            return CLASSIFIER.train(v_train, algorithm='GIS', max_iter=10)
     elif('SvmClassifier' == classifier):
         CLASSIFIER = nltk.classify.SvmClassifier
         def SvmClassifier_show_most_informative_features( self, n=10 ):
@@ -400,9 +400,9 @@ def main(argv) :
     #generateARFF(tweets, fileprefix)
 
     #print classifierNames, methodNames, ngramVals, negtnVals
+    TIME_STAMP = get_time_stamp()
     for (((cname, mname), ngramVal), negtnVal) in grid( grid( grid( classifierNames, methodNames), ngramVals ), negtnVals ):
         try:
-            TIME_STAMP = get_time_stamp()
             trainAndClassify(
                 tweets, classifier=cname, method=mname,
                 feature_set={'ngram':ngramVal, 'negtn':negtnVal},
