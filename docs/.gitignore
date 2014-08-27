@@ -1,3 +1,10 @@
+# ignore report and paper for now
+paper/**
+table/**
+bib/**
+archive/**
+jul14 presentation/**
+
 # ignore all auto generated files 
 
 # Latex
