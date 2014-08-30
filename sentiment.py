@@ -22,6 +22,27 @@ SPLIT_RATIO = 0.9
 LIST_CLASSIFIERS = [ 'NaiveBayesClassifier', 'MaxentClassifier', 'DecisionTreeClassifier', 'SvmClassifier' ] 
 LIST_METHODS = ['1step', '2step']
 
+def k_fold_cross_validation(X, K, randomise = False):
+    """
+    Generates K (training, validation) pairs from the items in X.
+
+    Each pair is a partition of X, where validation is an iterable
+    of length len(X)/K. So each training iterable is of length (K-1)*len(X)/K.
+
+    If randomise is true, a copy of X is shuffled before partitioning,
+    otherwise its order is preserved in training and validation.
+    """
+    if randomise: from random import shuffle; X=list(X); shuffle(X)
+    for k in xrange(K):
+        training = [x for i, x in enumerate(X) if i % K != k]
+        validation = [x for i, x in enumerate(X) if i % K == k]
+        yield training, validation
+
+#X = [i for i in xrange(97)]
+#for training, validation in k_fold_cross_validation(X, K=7):
+#    for x in X: assert (x in training) ^ (x in validation), x
+
+
 def getTrainingAndTestData(tweets, ratio, method, feature_set):
 
     add_ngram_feat = feature_set.get('ngram', 1)
@@ -29,7 +50,6 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
 
 
     from functools import wraps
-    import re
     import preprocessing
 
     procTweets = [ (preprocessing.processAll(text, subject=subj, query=quer), sent)    \
@@ -144,13 +164,6 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
         features = {}
 
         word_features = get_word_features(words)
-        #for ug in unigrams_sorted:                              #FIXME: is it correct? try to use features.update( bag )
-        #    features['has(%s)' % str(ug)] = bag[ug]>0
-        # 
-        #if add_ngram_feat > 1:
-        #    for ng in ngrams_sorted:
-        #        features['has(%s)' % str(ng)] = bag[ng]>0
-        #
         features.update( word_features )
 
         if add_negtn_feat :
@@ -190,20 +203,6 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
 
     else:
         return nltk.classify.apply_features(extract_features,all_tweets)
-
-    
-
-def generateARFF( tweets, fileprefix ):
-
-    (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, '1step')
-
-    arff_formatter = nltk.classify.weka.ARFF_Formatter.from_train(v_train)
-
-    arff_formatter.write(fileprefix+'_train.arff', v_train)
-    arff_formatter.write(fileprefix+'_test.arff', v_test)
-    arff_formatter.write(fileprefix+'_all.arff', v_train+v_test)
-
-    return True
 
 def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
 
@@ -270,7 +269,26 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         print nltk.ConfusionMatrix( test_truth, test_predict )
 
     elif '2step' == method:
-        (v_train_obj, v_train_sen, v_test_obj, v_test_sen, test_truth) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
+        (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, '1step', feature_set)
+
+        isObj   = lambda sent: sent in ['neg','pos']
+        makeObj = lambda sent: 'obj' if isObj(sent) else sent
+
+        def makeObj_tweets(v_tweets):
+            for (words, sent) in v_tweets:
+                yield (words, makeObj(sent))
+        def getSen_tweets(v_tweets):
+            for (words, sent) in v_tweets:
+                if isObj(sent):
+                    yield (words, sent)
+
+        
+        v_train_obj = makeObj_tweets( v_train )
+        v_test_obj = makeObj_tweets( v_test )
+
+        v_train_sen = getSen_tweets( v_train )
+        v_test_sen = getSen_tweets( v_test )
+        
 
         sys.stderr.write( '\n[training start]' )
         classifier_obj = train_function(v_train_obj)
@@ -324,6 +342,8 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         print nltk.ConfusionMatrix( test_truth, test_predict )
         print '######################'
 
+        classifier_tot = (classifier_obj, classifier_sen)
+
     sys.stderr.write('\nAccuracy : %0.5f\n'%accuracy_tot)
     sys.stderr.flush()
     
@@ -332,7 +352,7 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         sys.stdout.close()
         sys.stdout = realstdout
 
-    return True
+    return classifier_tot
 
 def main(argv) :
     __usage__='''
