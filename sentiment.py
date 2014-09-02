@@ -17,8 +17,9 @@ def grid(alist, blist):
 
 TIME_STAMP = get_time_stamp()
 
-NUM_SHOW_FEATURES = 500
+NUM_SHOW_FEATURES = 100
 SPLIT_RATIO = 0.9
+FOLDS = 10
 LIST_CLASSIFIERS = [ 'NaiveBayesClassifier', 'MaxentClassifier', 'DecisionTreeClassifier', 'SvmClassifier' ] 
 LIST_METHODS = ['1step', '2step']
 
@@ -43,7 +44,7 @@ def k_fold_cross_validation(X, K, randomise = False):
 #    for x in X: assert (x in training) ^ (x in validation), x
 
 
-def getTrainingAndTestData(tweets, ratio, method, feature_set):
+def getTrainingAndTestData(tweets, K, k, method, feature_set):
 
     add_ngram_feat = feature_set.get('ngram', 1)
     add_negtn_feat = feature_set.get('negtn', False)
@@ -67,8 +68,10 @@ def getTrainingAndTestData(tweets, ratio, method, feature_set):
         words = [stemmer.stem(w) for w in words]                #DATADICT: words = [ 'word1', 'word2', ... ]
         all_tweets.append((words, sentiment))
 
-    train_tweets = all_tweets[:int(len(all_tweets)*ratio)]      #DATADICT: train_tweets = [ (words, sentiment), ... ]
-    test_tweets  = all_tweets[int(len(all_tweets)*ratio):]      #DATADICT: test_tweets  = [ (words, sentiment), ... ]
+    # train_tweets = all_tweets[:int(len(all_tweets)*ratio)]      #DATADICT: train_tweets = [ (words, sentiment), ... ]
+    # test_tweets  = all_tweets[int(len(all_tweets)*ratio):]      #DATADICT: test_tweets  = [ (words, sentiment), ... ]
+    train_tweets = [x for i,x in enumerate(all_tweets) if i % K !=k]
+    test_tweets  = [x for i,x in enumerate(all_tweets) if i % K ==k]
 
     unigrams_fd = nltk.FreqDist()
     if add_ngram_feat > 1 :
@@ -245,8 +248,10 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         def train_function(v_train):
             return CLASSIFIER.train(v_train, entropy_cutoff=0.05, depth_cutoff=100, support_cutoff=10, binary=False)
 
+    accuracies = []
     if '1step' == method:
-        (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, method, feature_set)
+     for k in range(FOLDS):
+        (v_train, v_test) = getTrainingAndTestData(tweets, FOLDS, k, method, feature_set)
 
         sys.stderr.write( '\n[training start]' )
         classifier_tot = train_function(v_train)
@@ -268,28 +273,38 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         print 'Confusion Matrix'
         print nltk.ConfusionMatrix( test_truth, test_predict )
 
+        accuracies.append( accuracy_tot )
+     print "Accuracies:", accuracies
+     print "Average Accuracy:", sum(accuracies)/FOLDS
+
+
     elif '2step' == method:
-        (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, '1step', feature_set)
+        # (v_train, v_test) = getTrainingAndTestData(tweets,SPLIT_RATIO, '1step', feature_set)
 
-        isObj   = lambda sent: sent in ['neg','pos']
-        makeObj = lambda sent: 'obj' if isObj(sent) else sent
+        # isObj   = lambda sent: sent in ['neg','pos']
+        # makeObj = lambda sent: 'obj' if isObj(sent) else sent
 
-        def makeObj_tweets(v_tweets):
-            for (words, sent) in v_tweets:
-                yield (words, makeObj(sent))
-        def getSen_tweets(v_tweets):
-            for (words, sent) in v_tweets:
-                if isObj(sent):
-                    yield (words, sent)
+        # def makeObj_tweets(v_tweets):
+        #     for (words, sent) in v_tweets:
+        #         print sent, makeObj(sent)
+        #         yield (words, makeObj(sent))
+        # def getSen_tweets(v_tweets):
+        #     for (words, sent) in v_tweets:
+        #         print sent, isObj(sent)
+        #         if isObj(sent):
+        #             yield (words, sent)
 
         
-        v_train_obj = makeObj_tweets( v_train )
-        v_test_obj = makeObj_tweets( v_test )
+        # v_train_obj = makeObj_tweets( v_train )
+        # v_test_obj = makeObj_tweets( v_test )
 
-        v_train_sen = getSen_tweets( v_train )
-        v_test_sen = getSen_tweets( v_test )
+        # v_train_sen = getSen_tweets( v_train )
+        # v_test_sen = getSen_tweets( v_test )
+
+     accuracies = []
+     for k in range(FOLDS):
+        (v_train_obj, v_train_sen, v_test_obj, v_test_sen, test_truth) = getTrainingAndTestData(tweets, FOLDS, k, method, feature_set)
         
-
         sys.stderr.write( '\n[training start]' )
         classifier_obj = train_function(v_train_obj)
         sys.stderr.write( ' [training complete]' )
@@ -343,8 +358,14 @@ def trainAndClassify( tweets, classifier, method, feature_set, fileprefix ):
         print '######################'
 
         classifier_tot = (classifier_obj, classifier_sen)
+        accuracies.append( accuracy_tot )
+     print "Accuracies:", accuracies
+     print "Average Accuracy:", sum(accuracies)/FOLDS
 
-    sys.stderr.write('\nAccuracy : %0.5f\n'%accuracy_tot)
+    sys.stderr.write('\nAccuracies :')    
+    for k in range(FOLDS):
+        sys.stderr.write(' %0.5f'%accuracies[k])
+    sys.stderr.write('\nAverage Accuracy: %0.5f\n'% (sum(accuracies)/FOLDS))
     sys.stderr.flush()
     
     sys.stdout.flush()
