@@ -1,0 +1,16 @@
+./run_140830-183849-IST_MaxentClassifier_1step_ngram1_negtnFalse.txt:Average Accuracy: 0.73757945485
+./run_140830-183849-IST_MaxentClassifier_1step_ngram1_negtnTrue.txt:Average Accuracy: 0.744121855489
+./run_140830-183849-IST_MaxentClassifier_1step_ngram3_negtnFalse.txt:Average Accuracy: 0.748927163689
+./run_140830-183849-IST_MaxentClassifier_1step_ngram3_negtnTrue.txt:Average Accuracy: 0.751483505351
+./run_140830-183849-IST_MaxentClassifier_2step_ngram1_negtnFalse.txt:Average Accuracy: 0.707865168539
+./run_140830-183849-IST_MaxentClassifier_2step_ngram1_negtnTrue.txt:Average Accuracy: 0.70684371808
+./run_140830-183849-IST_MaxentClassifier_2step_ngram3_negtnFalse.txt:Average Accuracy: 0.73646578141
+./run_140830-183849-IST_MaxentClassifier_2step_ngram3_negtnTrue.txt:Average Accuracy: 0.719101123596
+./run_140830-183849-IST_NaiveBayesClassifier_1step_ngram1_negtnFalse.txt:Average Accuracy: 0.731754471718
+./run_140830-183849-IST_NaiveBayesClassifier_1step_ngram1_negtnTrue.txt:Average Accuracy: 0.736250315939
+./run_140830-183849-IST_NaiveBayesClassifier_1step_ngram3_negtnFalse.txt:Average Accuracy: 0.750051490294
+./run_140830-183849-IST_NaiveBayesClassifier_1step_ngram3_negtnTrue.txt:Average Accuracy: 0.753323160606
+./run_140830-183849-IST_NaiveBayesClassifier_2step_ngram1_negtnFalse.txt:Average Accuracy: 0.725229826353
+./run_140830-183849-IST_NaiveBayesClassifier_2step_ngram1_negtnTrue.txt:Average Accuracy: 0.727272727273
+./run_140830-183849-IST_NaiveBayesClassifier_2step_ngram3_negtnFalse.txt:Average Accuracy: 0.741573033708
+./run_140830-183849-IST_NaiveBayesClassifier_2step_ngram3_negtnTrue.txt:Average Accuracy: 0.737487231869
