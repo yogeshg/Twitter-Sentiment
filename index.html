@@ -28,30 +28,1255 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a id="sentiment-analysis-of-twitter-feeds--" class="anchor" href="#sentiment-analysis-of-twitter-feeds--" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SENTIMENT ANALYSIS OF TWITTER FEEDS  </h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<p><img src="docs/jul14/img/iitd_logo_128.png" alt="Figure">  </p>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<h2>
+<a id="departmemt-of-mathematics--" class="anchor" href="#departmemt-of-mathematics--" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DEPARTMEMT OF MATHEMATICS  </h2>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
-
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h2>
+<a id="indian-institute-of-technology-delhi--" class="anchor" href="#indian-institute-of-technology-delhi--" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>INDIAN INSTITUTE OF TECHNOLOGY, DELHI  </h2>
 
 <h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<a id="yogesh-garg" class="anchor" href="#yogesh-garg" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Yogesh Garg</h3>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a id="dr-niladri-chatterjee" class="anchor" href="#dr-niladri-chatterjee" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dr. Niladri Chatterjee</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<h3>
+<a id="july-2014" class="anchor" href="#july-2014" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>July, 2014</h3>
+
+<h1>
+<a id="contents" class="anchor" href="#contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contents</h1>
+
+<pre><code>1  Introduction  
+    1.1  Sentiment Analysis  
+    1.2  Twitter  
+2  Literature Review  
+3  Methodology  
+    3.1  Datasets  
+        3.1.1  Twitter Sentiment Corpus  
+        3.1.2  Stanford Twitter  
+    3.2  Pre Processing  
+        3.2.1  Hashtags  
+        3.2.2  Handles  
+        3.2.3  URLs  
+        3.2.4  Emoticons  
+        3.2.5  Punctuations  
+        3.2.6  Repeating Characters  
+    3.3  Stemming Algorithms  
+        3.3.1  Porter Stemmer  
+        3.3.2  Lemmatization  
+    3.4  Features  
+        3.4.1  Unigrams  
+        3.4.2  N-grams  
+        3.4.3  Negation Handling  
+4  Experimentation  
+    4.1  Naive Bayes  
+    4.2  Maximum Entropy Classifier  
+5  Future Work  
+6  Conclusion  
+</code></pre>
+
+<h1>
+<a id="list-of-tables" class="anchor" href="#list-of-tables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>List of Tables</h1>
+
+<pre><code>1  Twitter Sentiment Corpus  
+2  Stanford Corpus  
+3  Frequency of Features per Tweet  
+4  List of Emoticons  
+5  List of Punctuations  
+6  Number of words before and after pre-processing  
+7  Porter Stemmer Steps  
+8  Explicit Negation Cues  
+</code></pre>
+
+<h1>
+<a id="list-of-figures" class="anchor" href="#list-of-figures" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>List of Figures</h1>
+
+<pre><code>1  Schematic Diagram of Methodology  
+2  Illustration of a Tweet with various features  
+3  Cumulative Frequency Plot for 50 Most Frequent Unigrams  
+4  Zipf's Law - Log Frequency versus Log Rank plot for unigrams  
+5  Number of n-grams vs. Number of Tweets  
+6  Number of repeating n-grams vs. Number of Tweets  
+7  Cumulative Frequency Plot for 50 Most Frequent Bigrams  
+8  Cumulative Frequency Plot for 50 Most Frequent Trigrams  
+9  Scope of Negation  
+10  Accuracy for Naive Bayes Classifier  
+11  Precision vs. Recall for Naive Bayes Classifier  
+12  Precision vs. Recall for Maximum Entropy Classifier  
+</code></pre>
+
+<h2>
+<a id="1--introduction" class="anchor" href="#1--introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1  Introduction</h2>
+
+<h3>
+<a id="11--sentiment-analysis" class="anchor" href="#11--sentiment-analysis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.1  Sentiment Analysis</h3>
+
+<p>Sentiment Analysis refers to the use of text analysis and natural language
+processing to identify and extract subjective information in textual contents.
+There are two type of user-generated content available on the web – facts and
+opinions. Facts are statements about topics and in the current scenario,
+easily collectible from the Internet using search engines that index documents
+based on topic keywords. Opinions are user specific statement exhibiting
+positive or negative sentiments about a certain topic. Generally opinions are
+hard to categorize using keywords. Various text analysis and machine learning
+techniques are used to mine opinions from a document [1]. Sentiment Analysis
+finds its application in a variety of domains.</p>
+
+<p><strong>Business</strong>
+     Businesses may use sentiment analysis on blogs, review websites etc. to judge the market response of a product. This information may also be used for intelligent placement of advertisements. For example, if product "A" and "B" are competitors and an online merchant business "M" sells both, then "M" may advertise for "A" if the user displays positive sentiments towards "A", its brand or related products, or "B" if they display negative sentiments towards "A". 
+<strong>Government</strong>
+     Governments and politicians can actively monitor public sentiments as a response to their current policies, speeches made during campaigns etc. This will help them make create better public awareness regarding policies and even drive campaigns intelligently. 
+<strong>Financial Markets</strong>
+     Public opinion regarding companies can be used to predict performance of their stocks in the financial markets. If people have a positive opinion about a product that a company A has launched, then the share prices of A are likely to go higher and vice versa. Public opinion can be used as an additional feature in existing models that try to predict market performances based on historical data. </p>
+
+<h3>
+<a id="12--twitter" class="anchor" href="#12--twitter" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.2  Twitter</h3>
+
+<p>Twitter is an online social networking and micro-blogging service that enables
+users to create and read short messages, called "Tweets". It is a global forum
+with the presence of eminent personalities from the field of entertainment,
+industry and politics. People tweet about their life, events and express
+opinion about various topics using text messages limited to 140 characters.
+Registered users can read and post tweets, but any unregistered users can read
+them. Twitter can be accessed via Web, SMS, or mobile apps. Traditionally a
+large volume of research in sentiment analysis and opinion mining has been
+directed towards larger pieces of text like movie reviews. Sentiment Analysis
+in micro-blogging sphere is relatively new. From the perspective of Sentiment
+Analysis, we discuss a few characteristics of Twitter:</p>
+
+<p><strong>Length of a Tweet</strong>
+     The maximum length of a Twitter message is 140 characters. This means that we can practically consider a tweet to be a single sentence, void of complex grammatical constructs. This is a vast difference from traditional subjects of Sentiment Analysis, such as movie reviews. 
+<strong>Language used</strong>
+     Twitter is used via a variety of media including SMS and mobile phone apps. Because of this and the 140-character limit, language used in Tweets tend be more colloquial, and filled with slang and misspellings. Use of hashtags also gained popularity on Twitter and is a primary feature in any given tweet. Our analysis shows that there are approximately 1-2 hashtags per tweet, as shown in Table 3 . 
+<strong>Data availability</strong>
+     Another difference is the magnitude of data available. With the Twitter API, it is easy to collect millions of tweets for training. There also exist a few datasets that have automatically and manually labelled the tweets [2] [3]. 
+<strong>Domain of topics</strong>
+     People often post about their likes and dislikes on social media. These are not al concentrated around one topic. This makes twitter a unique place to model a generic classifier as opposed to domain specific classifiers that could be build datasets such as movie reviews. </p>
+
+<h2>
+<a id="2--literature-review" class="anchor" href="#2--literature-review" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2  Literature Review</h2>
+
+<p>Pang and Lee discuss in detail the current techniques in the area of sentiment
+analysis. Much of it revolves around reviews for movies and products.</p>
+
+<p>Go, Bhayani and Huang (2009) were among the first to explore sentiment
+analysis on Twitter [2]. They classify Tweets for a query term into negative
+or positive sentiment. They collect training dataset automatically from
+Twitter. To collect positive and negative tweets, they query twitter for happy
+and sad emoticons. Happy emoticons are different versions of smiling face,
+like "<code>:)</code>", "<code>:-)</code>", "<code>: )</code>", "<code>:D</code>", "<code>=)</code>" etc. Sad emoticons include
+frowns, like "<code>:(</code>", "<code>:-(</code>", "<code>:(</code>" etc. They try various features –
+unigrams, bigrams and Part-of-Speech and train their classifier on various
+machine learning algorithms – Naive Bayes, Maximum Entropy and Scalable Vector
+Machines and compare it against a baseline classifier by counting the number
+of positive and negative words from a publicly available corpus. They report
+that Bigrams alone and Part-of-Speech Tagging are not helpful and that Naive
+Bayes Classifier gives the best results.</p>
+
+<p>Pak and Paroubek (2010) use a similar distant supervision technique to
+automatically collect the dataset from the web [4]. Apart from using happy and
+sad emoticons for positive and negative sentiment respectively, they also
+query tweets from accounts of 44 newspapers, like “New York Times”,
+“Washington Posts” etc. to collect a training set of subjective tweets. They
+use unigrams and filtered n-grams for their classification. They also handle
+negations by attaching negative cues, like “no”, “not” to the words preceding
+and following them. They report that both bigrams and negation handling help.</p>
+
+<p>Koulompis, Wilson and Moore (2011) identify that use of informal and creative
+language make sentiment analysis of tweets a rather different task [5]. They
+leverage previous work done in hashtags and sentiment analysis to build their
+classifier. They use Edinburgh Twitter corpus to find out most frequent
+hashtags. They manually classify these hashtags and use them to in turn
+classify the tweets. Apart from using n-grams and Part-of-Speech features,
+they also build a feature set from already existing MPQA subjectivity lexicon
+and Internet Lingo Dictionary. They report that the best results are seen with
+n-gram features with lexicon features, while using Part-of-Speech features
+causes a drop in accuracy.</p>
+
+<p>Saif, He and Alani (2012) discuss a semantic based approach to identify the
+entity being discussed in a tweet, like a person, organization etc. [6]. They
+also demonstrate that removal of stop words is not a necessary step and may
+have undesirable effect on the classifier.</p>
+
+<p>All of the aforementioned techniques rely on n-gram features. It is unclear
+that the use of Part-of-Speech tagging is useful or not. To improve accuracy,
+some employ different methods of feature selection or leveraging knowledge
+about micro-blogging. In contrast, we improve our results by using more basic
+techniques used in Sentiment Analysis, like stemming, two-step classification
+and negation detection and scope of negation.</p>
+
+<p>Negation detection is a technique that has often been studied in sentiment
+analysis. Negation words like “not”, “never”, “no” etc. can drastically change
+the meaning of a sentence and hence the sentiment expressed in them. Due to
+presence of such words, the meaning of nearby words becomes opposite. Such
+words are said to be in the scope of negation. Many researches have worked on
+detecting the scope of negation.</p>
+
+<p>The scope of negation of a cue can be taken from that word to the next
+following punctuation. Councill, McDonald and Velikovich (2010) discuss a
+technique to identify negation cues and their scope in a sentence [7]. They
+identify explicit negation cues in the text and for each word in the scope.
+Then they find its distance from the nearest negative cue on the left and
+right.</p>
+
+<h2>
+<a id="3--methodology" class="anchor" href="#3--methodology" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3  Methodology</h2>
+
+<p>We use different feature sets and machine learning classifiers to determine
+the best combination for sentiment analysis of twitter. We also experiment
+with various pre-processing steps like - punctuations, emoticons, twitter
+specific terms and stemming. We investigated the following features -
+unigrams, bigrams, trigrams and negation detection. We finally train our
+classifier using various machine-learning algorithms - Naive Bayes, Decision
+Trees and Maximum Entropy.</p>
+
+<p>!<img src="docs/jul14/img/schematic.png" alt="Figure"></p>
+
+<p>Figure 1: Schematic Diagram of Methodology</p>
+
+<p>We use a modularized approach with feature extractor and classification
+algorithm as two independent components. This enables us to experiment with
+different options for each component. Figure 1 illustrates different steps
+taken in the entire process.</p>
+
+<h3>
+<a id="31--datasets" class="anchor" href="#31--datasets" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1  Datasets</h3>
+
+<p>One of the major challenges in Sentiment Analysis of Twitter is to collect a
+labelled dataset. Researchers have made public the following datasets for
+training and testing classifiers.</p>
+
+<h4>
+<a id="311--twitter-sentiment-corpus" class="anchor" href="#311--twitter-sentiment-corpus" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1.1  Twitter Sentiment Corpus</h4>
+
+<p>This is a collection of 5513 tweets collected for four different topics,
+namely, Apple, Google, Microsoft, Twitter It is collected and hand-classified
+by Sanders Analytics LLC [3]. Each entry in the corpus contains, Tweet id,
+Topic and a Sentiment label. We use Twitter-Python library to enrich this data
+by downloading data like Tweet text, Creation Date, Creator etc. for every
+Tweet id. Each Tweet is hand classified by an American male into the following
+four categories. For the purpose of our experiments, we consider Irrelevant
+and Neutral to be the same class. Illustration of Tweets in this corpus is
+show in Table 1 .</p>
+
+<p><strong>Positive</strong>
+     For showing positive sentiment towards the topic
+<strong>Positive</strong>
+     For showing no or mixed or weak sentiments towards the topic
+<strong>Negative</strong>
+     For showing negative sentiment towards the topic
+<strong>Irrelevant</strong>
+     For non English text or off-topic comments</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="left">Class </td>
+<td align="right">Count </td>
+<td width="0">Example </td>
+</tr>
+<tr>
+<td align="left">neg </td>
+<td align="right">529 </td>
+<td width="0">#Skype often crashing: #microsoft, what are you doing? </td>
+</tr>
+<tr>
+<td align="left">neu </td>
+<td align="right">3770 </td>
+<td width="0">How #Google Ventures Chooses Which Startups Get Its $200
+                Million http://t.co/FCWXoUd8 via @mashbusiness <a href="https://github.com/mashable" class="user-mention">@mashable</a> </td>
+</tr>
+<tr>
+<td align="left">pos </td>
+<td align="right">483 </td>
+<td width="0">Now all <a href="https://github.com/Apple" class="user-mention">@Apple</a> has to do is get swype on the iphone and
+                it will be crack. Iphone that is </td>
+</tr>
+</table>
+
+
+<div></div>
+<div>Table 1: Twitter Sentiment Corpus</div>
+<a id="tab:TSC">
+</a>
+</div>
+
+<h4>
+<a id="312--stanford-twitter" class="anchor" href="#312--stanford-twitter" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1.2  Stanford Twitter</h4>
+
+<p>This corpus of tweets, developed by Sanford’s Natural Language processing
+research group, is publically available [2]. The training set is collected by
+querying Twitter API for happy emoticons like "<code>:)</code>" and sad emoticons like
+"<code>:(</code>" and labelling them positive or negative. The emoticons were then
+stripped and Re-Tweets and duplicates removed. It also contains around 500
+tweets manually collected and labelled for testing purposes. We randomly
+sample and use 5000 tweets from this dataset. An example of Tweets in this
+corpus are shown in Table 2 .</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="left">Class </td>
+<td align="right">Count </td>
+<td width="0">Example </td>
+</tr>
+<tr>
+<td align="left">neg </td>
+<td align="right">2501 </td>
+<td width="0">Playing after the others thanks to TV scheduling may well allow us to know what's go on, but it makes things look bad on Saturday nights  </td>
+</tr>
+<tr>
+<td align="left">pos </td>
+<td align="right">2499 </td>
+<td width="0">@francescazurlo HAHA!!! how long have you been singing that song now? It has to be at least a day. i think you're wildly entertaining!  </td>
+</tr>
+</table>
+
+
+<div></div>
+<div>Table 2: Stanford Corpus</div>
+<a id="tab:STAN">
+</a>
+</div>
+
+<h3>
+<a id="32--pre-processing" class="anchor" href="#32--pre-processing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2  Pre Processing</h3>
+
+<p>User-generated content on the web is seldom present in a form usable for
+learning. It becomes important to normalize the text by applying a series of
+pre-processing steps. We have applied an extensive set of pre-processing steps
+to decrease the size of the feature set to make it suitable for learning
+algorithms. Figure 2 illustrates various features seen in micro-blogging.
+Table 3 illustrates the frequency of these features per tweet, cut by
+datasets. We also give a brief description of pre-processing steps taken.</p>
+
+<p><img src="docs/jul14/img/tweet.png" alt="Figure"></p>
+
+<p>Figure 2: Illustration of a Tweet with various features</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="left"></td>
+<td colspan="2" align="center">Twitter Sentiment
+ </td>
+<td colspan="2" align="center">Stanford Corpus
+ </td>
+<td colspan="2" align="center">Both </td>
+</tr>
+<tr>
+<td align="left">Features   </td>
+<td colspan="1" align="center">Avg. </td>
+<td colspan="1" align="center">Max.
+            </td>
+<td colspan="1" align="center">Avg. </td>
+<td colspan="1" align="center">Max.
+            </td>
+<td colspan="1" align="center">Avg. </td>
+<td colspan="1" align="center">Max. </td>
+</tr>
+<tr>
+<td align="left">Handles        </td>
+<td align="right">0.6761 </td>
+<td align="right">8 </td>
+<td align="right">0.4888 </td>
+<td align="right">10 </td>
+<td align="right">0.5804 </td>
+<td align="right">10 </td>
+</tr>
+<tr>
+<td align="left">Hashtags   </td>
+<td align="right">2.0276 </td>
+<td align="right">13 </td>
+<td align="right">0.0282 </td>
+<td align="right">11 </td>
+<td align="right">1.0056 </td>
+<td align="right">13 </td>
+</tr>
+<tr>
+<td align="left">Urls       </td>
+<td align="right">0.4431 </td>
+<td align="right">4 </td>
+<td align="right">0.0452 </td>
+<td align="right">2 </td>
+<td align="right">0.2397 </td>
+<td align="right">4 </td>
+</tr>
+<tr>
+<td align="left">Emoticons  </td>
+<td align="right">0.0550 </td>
+<td align="right">3 </td>
+<td align="right">0.0154 </td>
+<td align="right">4 </td>
+<td align="right">0.0348 </td>
+<td align="right">4 </td>
+</tr>
+<tr>
+<td align="left">Words      </td>
+<td align="right">14.4084 </td>
+<td align="right">31 </td>
+<td align="right">13.2056 </td>
+<td align="right">33 </td>
+<td align="right">13.7936 </td>
+<td align="right">33 </td>
+</tr>
+</table>
+
+
+<div></div>
+<div>Table 3: Frequency of Features per Tweet</div>
+<a id="tab:feat_freq">
+</a>
+</div>
+
+<h4>
+<a id="321--hashtags" class="anchor" href="#321--hashtags" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.1  Hashtags</h4>
+
+<p>A hashtag is a word or an un-spaced phrase prefixed with the hash symbol (#).
+These are used to both naming subjects and phrases that are currently in
+trending topics. For example, #iPad, #news</p>
+
+<p>Regular Expression: <code>#(\w+)</code></p>
+
+<p>Replace Expression: <code>HASH_\1</code></p>
+
+<h4>
+<a id="322--handles" class="anchor" href="#322--handles" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.2  Handles</h4>
+
+<p>Every Twitter user has a unique username. Any thing directed towards that user
+can be indicated be writing their username preceded by ‘@’. Thus, these are
+like proper nouns. For example, <a href="https://github.com/Apple" class="user-mention">@Apple</a></p>
+
+<p>Regular Expression: <code>@(\w+)</code></p>
+
+<p>Replace Expression: <code>HNDL_\1</code></p>
+
+<h4>
+<a id="323--urls" class="anchor" href="#323--urls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.3  URLs</h4>
+
+<p>Users often share hyperlinks in their tweets. Twitter shortens them using its
+in-house URL shortening service, like <a href="http://t.co/FCWXoUd8">http://t.co/FCWXoUd8</a> - such links also
+enables Twitter to alert users if the link leads out of its domain. From the
+point of view of text classification, a particular URL is not important.
+However, presence of a URL can be an important feature. Regular expression for
+detecting a URL is fairly complex because of different types of URLs that can
+be there, but because of Twitter’s shortening service, we can use a relatively
+simple regular expression.</p>
+
+<p>Regular Expression: <code>(http|https|ftp)://[a-zA-Z0-9\\./]+</code></p>
+
+<p>Replace Expression: <code>URL</code></p>
+
+<h4>
+<a id="324--emoticons" class="anchor" href="#324--emoticons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.4  Emoticons</h4>
+
+<p>Use of emoticons is very prevalent throughout the web, more so on micro-
+blogging sites. We identify the following emoticons and replace them with a
+single word. Table 4 lists the emoticons we are currently detecting. All other
+emoticons would be ignored.</p>
+
+<div> 
+<table border="1">
+<tr>
+<td colspan="1" align="center">Emoticons </td>
+<td colspan="6" align="center">Examples </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_SMILEY</tt>   </td>
+<td align="left">
+<tt>:-)</tt>  </td>
+<td align="left">
+<tt>:)</tt>   </td>
+<td align="left">
+<tt>(:</tt>   </td>
+<td align="left">
+<tt>(-:</tt>  </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_LAUGH</tt>    </td>
+<td align="left">
+<tt>:-D</tt>  </td>
+<td align="left">
+<tt>:D</tt>   </td>
+<td align="left">
+<tt>X-D</tt>  </td>
+<td align="left">
+<tt>XD</tt>   </td>
+<td align="left">
+<tt>xD</tt>   </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_LOVE</tt>     </td>
+<td align="left">
+<tt>&lt;3</tt>    </td>
+<td align="left">
+<tt>:*</tt>   </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_WINK</tt>     </td>
+<td align="left">
+<tt>;-)</tt>  </td>
+<td align="left">
+<tt>;)</tt>   </td>
+<td align="left">
+<tt>;-D</tt>  </td>
+<td align="left">
+<tt>;D</tt>   </td>
+<td align="left">
+<tt>(;</tt>   </td>
+<td align="left">
+<tt>(-;</tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_FROWN</tt>    </td>
+<td align="left">
+<tt>:-(</tt>  </td>
+<td align="left">
+<tt>:(</tt>   </td>
+<td align="left">
+<tt>(:</tt>   </td>
+<td align="left">
+<tt>(-:</tt>  </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>EMOT_CRY</tt>  </td>
+<td align="left">
+<tt>:,(</tt>  </td>
+<td align="left">
+<tt>:'(</tt>  </td>
+<td align="left">
+<tt>:"(</tt>  </td>
+<td align="left">
+<tt>:((</tt>  </td>
+<td align="left">
+<tt></tt>     </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+</table>
+
+
+<div>Table 4: List of Emoticons</div>
+<a id="tab:emot">
+</a>
+</div>
+
+<h4>
+<a id="325--punctuations" class="anchor" href="#325--punctuations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.5  Punctuations</h4>
+
+<p>Although not all Punctuations are important from the point of view of
+classification but some of these, like question mark, exclamation mark can
+also provide information about the sentiments of the text. We replace every
+word boundary by a list of relevant punctuations present at that point. Table
+5 lists the punctuations currently identified. We also remove any single
+quotes that might exist in the text.</p>
+
+<div> 
+<table border="1">
+<tr>
+<td colspan="1" align="center">Punctuations </td>
+<td colspan="2" align="center">Examples </td>
+</tr>
+<tr>
+<td align="left">
+<tt>PUNC_DOT</tt> </td>
+<td align="left">
+<tt>.</tt> </td>
+<td align="left">
+<tt></tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>PUNC_EXCL</tt> </td>
+<td align="left">
+<tt>!</tt> </td>
+<td align="left">
+<tt>¡</tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>PUNC_QUES</tt> </td>
+<td align="left">
+<tt>?</tt> </td>
+<td align="left">
+<tt>¿</tt> </td>
+</tr>
+<tr>
+<td align="left">
+<tt>PUNC_ELLP</tt> </td>
+<td align="left">
+<tt>...</tt> </td>
+<td align="left">
+<tt>…</tt> </td>
+</tr>
+</table>
+
+
+<div>Table 5: List of Punctuations</div>
+<a id="tab:punc">
+</a>
+</div>
+
+<h4>
+<a id="326--repeating-characters" class="anchor" href="#326--repeating-characters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2.6  Repeating Characters</h4>
+
+<p>People often use repeating characters while using colloquial language, like
+"I’m in a hurrryyyyy", "We won, yaaayyyyy!" As our final pre-processing step,
+we replace characters repeating more than twice as two characters.</p>
+
+<p>Regular Expression: <code>(.)\1{1,}</code></p>
+
+<p>Replace Expression: <code>\1\1</code></p>
+
+<h4>
+<a id="reduction-in-feature-space" class="anchor" href="#reduction-in-feature-space" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reduction in feature space</h4>
+
+<p>It’s important to note that by applying these pre-processing steps, we are
+reducing our feature set otherwise it can be too sparse. Table 6 lists the
+decrease in feature set due to processing each of these features.</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="left"></td>
+<td colspan="2" align="center">Twitter Sentiment
+ </td>
+<td colspan="2" align="center">Stanford Corpus
+ </td>
+<td colspan="2" align="center">Both </td>
+</tr>
+<tr>
+<td align="left">Preprocessing
+            </td>
+<td colspan="1" align="center">Words </td>
+<td colspan="1" align="center">Percentage
+            </td>
+<td colspan="1" align="center">Words </td>
+<td colspan="1" align="center">Percentage
+            </td>
+<td colspan="1" align="center">Words </td>
+<td colspan="1" align="center">Percentage </td>
+</tr>
+<tr>
+<td align="left">None           </td>
+<td align="right">19128 </td>
+<td align="right"></td>
+<td align="right">15910 </td>
+<td align="right"></td>
+<td align="right">31832 </td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">Hashtags       </td>
+<td align="right">18649 </td>
+<td align="right">97.50% </td>
+<td align="right">15550 </td>
+<td align="right">97.74% </td>
+<td align="right">31223 </td>
+<td align="right">98.09% </td>
+</tr>
+<tr>
+<td align="left">Handles            </td>
+<td align="right">17118 </td>
+<td align="right">89.49% </td>
+<td align="right">13245 </td>
+<td align="right">83.25% </td>
+<td align="right">27383 </td>
+<td align="right">86.02% </td>
+</tr>
+<tr>
+<td align="left">Urls           </td>
+<td align="right">16723 </td>
+<td align="right">87.43% </td>
+<td align="right">15335 </td>
+<td align="right">96.39% </td>
+<td align="right">29083 </td>
+<td align="right">91.36% </td>
+</tr>
+<tr>
+<td align="left">Emoticons      </td>
+<td align="right">18631 </td>
+<td align="right">97.40% </td>
+<td align="right">15541 </td>
+<td align="right">97.68% </td>
+<td align="right">31197 </td>
+<td align="right">98.01% </td>
+</tr>
+<tr>
+<td align="left">Punctuations   </td>
+<td align="right">13724 </td>
+<td align="right">71.75% </td>
+<td align="right">11225 </td>
+<td align="right">70.55% </td>
+<td align="right">22095 </td>
+<td align="right">69.41% </td>
+</tr>
+<tr>
+<td align="left">Repeatings     </td>
+<td align="right">18540 </td>
+<td align="right">96.93% </td>
+<td align="right">15276 </td>
+<td align="right">96.02% </td>
+<td align="right">30818 </td>
+<td align="right">96.81% </td>
+</tr>
+<tr>
+<td align="left">All                </td>
+<td align="right">11108 </td>
+<td align="right">58.07% </td>
+<td align="right">8646 </td>
+<td align="right">54.34% </td>
+<td align="right">16981 </td>
+<td align="right">53.35% </td>
+</tr>
+</table>
+
+
+<div></div>
+<div>Table 6: Number of words before and after pre-processing</div>
+<a id="tab:reduction">
+</a>
+</div>
+
+<h3>
+<a id="33--stemming-algorithms" class="anchor" href="#33--stemming-algorithms" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3  Stemming Algorithms</h3>
+
+<p>All stemming algorithms are of the following major types – affix removing,
+statistical and mixed. The first kind, Affix removal stemmer, is the most
+basic one. These apply a set of transformation rules to each word in an
+attempt to cut off commonly known prefixes and / or suffixes [8]. A trivial
+stemming algorithm would be to truncate words at N-th symbol. But this
+obviously is not well suited for practical purposes.</p>
+
+<p>J.B. Lovins described first stemming algorithm in 1968. It defines 294
+endings, each linked to one of 29 conditions, plus 35 transformation rules.
+For a word being stemmed, an ending with a satisfying condition is found and
+removed. Another famous stemmer used extensively is described in the next
+section.</p>
+
+<h4>
+<a id="331--porter-stemmer" class="anchor" href="#331--porter-stemmer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3.1  Porter Stemmer</h4>
+
+<p>Martin Porter wrote a stemmer that was published in July 1980. This stemmer
+was very widely used and became and remains the de facto standard algorithm
+used for English stemming. It offers excellent trade-off between speed,
+readability, and accuracy. It uses a set of around 60 rules applied in 6
+successive steps [9]. An important feature to note is that it doesn’t involve
+recursion. The steps in the algorithm are described in Table 7 .</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="right">1.    </td>
+<td align="left">Gets rid of plurals and -ed or -ing suffixes </td>
+</tr>
+<tr>
+<td align="right">2.    </td>
+<td align="left">Turns terminal y to i when there is another vowel in the stem￼ </td>
+</tr>
+<tr>
+<td align="right">3.    </td>
+<td align="left">Maps double suffixes to single ones: -ization, -ational, etc. </td>
+</tr>
+<tr>
+<td align="right">4.    </td>
+<td align="left">Deals with suffixes, -full, -ness etc. </td>
+</tr>
+<tr>
+<td align="right">5.￼   </td>
+<td align="left">Takes off -ant, -ence, etc. </td>
+</tr>
+<tr>
+<td align="right">6.    </td>
+<td align="left">Removes a final –e </td>
+</tr>
+</table>
+
+
+<div>Table 7: Porter Stemmer Steps</div>
+<a id="tab:porter">
+</a>
+</div>
+
+<h4>
+<a id="332--lemmatization" class="anchor" href="#332--lemmatization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3.2  Lemmatization</h4>
+
+<p>Lemmatization is the process of normalizing a word rather than just finding
+its stem. In the process, a suffix may not only be removed, but may also be
+substituted with a different one. It may also involve first determining the
+part-of-speech for a word and then applying normalization rules. It might also
+involve dictionary look-up. For example, verb ‘saw’ would be lemmatized to
+‘see’ and the noun ‘saw’ will remain ‘saw’. For our purpose of classifying
+text, stemming should suffice.</p>
+
+<h3>
+<a id="34--features" class="anchor" href="#34--features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4  Features</h3>
+
+<p>A wide variety of features can be used to build a classifier for tweets. The
+most widely used and basic feature set is word n-grams. However, there's a lot
+of domain specific information present in tweets that can also be used for
+classifying them. We have experimented with two sets of features:</p>
+
+<h4>
+<a id="341--unigrams" class="anchor" href="#341--unigrams" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4.1  Unigrams</h4>
+
+<p>Unigrams are the simplest features that can be used for text classification. A
+Tweet can be represented by a multiset of words present in it. We, however,
+have used the presence of unigrams in a tweet as a feature set. Presence of a
+word is more important than how many times it is repeated. Pang et al. found
+that presence of unigrams yields better results than repetition [1]. This also
+helps us to avoid having to scale the data, which can considerably decrease
+training time [2]. Figure 3 illustrated the cumulative distribution of words
+in our dataset.</p>
+
+<p><img src="docs/jul14/img/1grams.png" alt="Figure"></p>
+
+<p>Figure 3: Cumulative Frequency Plot for 50 Most Frequent Unigrams</p>
+
+<p>We also observe that the unigrams nicely follow Zipf’s law. It states that in
+a corpus of natural language, the frequency of any word is inversely
+proportional to its rank in the frequency table. Figure 4 is a plot of log
+frequency versus log rank of our dataset. A linear trendline fits well with
+the data.</p>
+
+<p>log( f ) = −0.9799 log( r ) + 3.9838</p>
+
+<p>(1)</p>
+
+<p>f = 103.9838 r−0.9799</p>
+
+<p>(2)</p>
+
+<p>f ∝</p>
+
+<p>1</p>
+
+<hr>
+
+<p>r  </p>
+
+<p>(3)</p>
+
+<p><img src="docs/jul14/img/zipfs_law.png" alt="Figure"></p>
+
+<p>Figure 4: Zipf's Law - Log Frequency versus Log Rank plot for unigrams</p>
+
+<h4>
+<a id="342--n-grams" class="anchor" href="#342--n-grams" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4.2  N-grams</h4>
+
+<p>N-gram refers to an n-long sequence of words. Probabilistic Language Models
+based on Unigrams, Bigrams and Trigrams can be successfully used to predict
+the next word given a current context of words. In the domain of sentiment
+analysis, the performance of N-grams is unclear. According to Pang et al.,
+some researchers report that unigrams alone are better than bigrams for
+classification movie reviews, while some others report that bigrams and
+trigrams yield better product-review polarity classification [1].</p>
+
+<p>As the order of the n-grams increases, they tend to be more and more sparse.
+Based on our experiments, we find that number of bigrams and trigrams increase
+much more rapidly than the number of unigrams with the number of Tweets.
+Figure 5 shows the number of n-grams versus number of Tweets. We can observe
+that bigrams and trigrams increase almost linearly where as unigrams are
+increasing logarithmically.</p>
+
+<p><img src="docs/jul14/img/Ngrams_dist_1.png" alt="Figure"></p>
+
+<p>Figure 5: Number of n-grams vs. Number of Tweets</p>
+
+<p>Because higher order n-grams are sparsely populated, we decide to trim off the
+n-grams that are not seen more than once in the training corpus, because
+chances are that these n-grams are not good indicators of sentiments. After
+the filtering out non-repeating n-grams, we see that the number of n-grams is
+considerably decreased and equals the order of unigrams, as shown in Figure 6
+.</p>
+
+<p><img src="docs/jul14/img/Ngrams_dist_2.png" alt="Figure"></p>
+
+<p>Figure 6: Number of repeating n-grams vs. Number of Tweets</p>
+
+<p>Figure 7 and Figure 8 show the cumulative distribution of the most frequent
+bigrams and trigrams respectively.</p>
+
+<p><img src="docs/jul14/img/2grams.png" alt="Figure"></p>
+
+<p>Figure 7: Cumulative Frequency Plot for 50 Most Frequent Bigrams</p>
+
+<p><img src="docs/jul14/img/3grams.png" alt="Figure"></p>
+
+<p>Figure 8: Cumulative Frequency Plot for 50 Most Frequent Trigrams</p>
+
+<h4>
+<a id="343--negation-handling" class="anchor" href="#343--negation-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4.3  Negation Handling</h4>
+
+<p>The need negation detection in sentiment analysis can be illustrated by the
+difference in the meaning of the phrases, "This is good" vs. "This is not
+good" However, the negations occurring in natural language are seldom so
+simple. Handling the negation consists of two tasks – Detection of explicit
+negation cues and the scope of negation of these words.</p>
+
+<p>Councill et al. look at whether negation detection is useful for sentiment
+analysis and also to what extent is it possible to determine the exact scope
+of a negation in the text [7]. They describe a method for negation detection
+based on Left and Right Distances of a token to the nearest explicit negation
+cue.</p>
+
+<h4>
+<a id="detection-of-explicit-negation-cues" class="anchor" href="#detection-of-explicit-negation-cues" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Detection of Explicit Negation Cues</h4>
+
+<p>To detect explicit negation cues, we are looking for the following words in
+Table 8 . The search is done using regular expressions.</p>
+
+<div>
+<table border="1">
+<tr>
+<td align="left">S.No. </td>
+<td align="left">Negation Cues </td>
+</tr>
+<tr>
+<td align="left">1.  </td>
+<td align="left">never </td>
+</tr>
+<tr>
+<td align="left">2.  </td>
+<td align="left">no </td>
+</tr>
+<tr>
+<td align="left">3.  </td>
+<td align="left">nothing </td>
+</tr>
+<tr>
+<td align="left">4.  </td>
+<td align="left">nowhere </td>
+</tr>
+<tr>
+<td align="left">5.  </td>
+<td align="left">noone </td>
+</tr>
+<tr>
+<td align="left">6.  </td>
+<td align="left">none </td>
+</tr>
+<tr>
+<td align="left">7.  </td>
+<td align="left">not </td>
+</tr>
+<tr>
+<td align="left">8.  </td>
+<td align="left">havent </td>
+</tr>
+<tr>
+<td align="left">9.  </td>
+<td align="left">hasnt </td>
+</tr>
+<tr>
+<td align="left">10.  </td>
+<td align="left">hadnt </td>
+</tr>
+<tr>
+<td align="left">11.  </td>
+<td align="left">cant </td>
+</tr>
+<tr>
+<td align="left">12.  </td>
+<td align="left">couldnt </td>
+</tr>
+<tr>
+<td align="left">13.  </td>
+<td align="left">shouldnt </td>
+</tr>
+<tr>
+<td align="left">14.  </td>
+<td align="left">wont </td>
+</tr>
+<tr>
+<td align="left">15.  </td>
+<td align="left">wouldnt </td>
+</tr>
+<tr>
+<td align="left">16.  </td>
+<td align="left">dont </td>
+</tr>
+<tr>
+<td align="left">17.  </td>
+<td align="left">doesnt </td>
+</tr>
+<tr>
+<td align="left">18.  </td>
+<td align="left">didnt </td>
+</tr>
+<tr>
+<td align="left">19.  </td>
+<td align="left">isnt </td>
+</tr>
+<tr>
+<td align="left">20.  </td>
+<td align="left">arent </td>
+</tr>
+<tr>
+<td align="left">21.  </td>
+<td align="left">aint </td>
+</tr>
+<tr>
+<td align="left">22.  </td>
+<td align="left">Anything ending with "n't" </td>
+</tr>
+</table>
+
+
+<div>Table 8: Explicit Negation Cues</div>
+<a id="tab:negation">
+</a>
+</div>
+
+<h4>
+<a id="scope-of-negation" class="anchor" href="#scope-of-negation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scope of Negation</h4>
+
+<p>Words immediately preceding and following the negation cues are the most
+negative and the words that come farther away do not lie in the scope of
+negation of such cues. We define left and right negativity of a word as the
+chances that meaning of that word is actually the opposite. Left negativity
+depends on the closest negation cue on the left and similarly for Right
+negativity. Figure 9 illustrates the left and right negativity of words in a
+tweet.</p>
+
+<p><img src="docs/jul14/img/negation.png" alt="Figure"></p>
+
+<p>Figure 9: Scope of Negation</p>
+
+<h2>
+<a id="4--experimentation" class="anchor" href="#4--experimentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4  Experimentation</h2>
+
+<p>We train 90% of our data using different combinations of features and test
+them on the remaining 10%. We take the features in the following combinations</p>
+
+<ul>
+<li>only unigrams, unigrams + filtered bigrams and trigrams, unigrams +
+negation, unigrams + filtered bigrams and trigrams + negation. We then train
+classifiers using different classification algorithms - Naive Bayes Classifier
+and Maximum Entropy Classifier.</li>
+</ul>
+
+<p>The task of classification of a tweet can be done in two steps - first,
+classifying "neutral" (or "subjective") vs. "objective" tweets and second,
+classifying objective tweets into "positive" vs. "negative" tweets. We also
+trained 2 step classifiers. The accuracies for each of these configuration are
+shown in Figure 10 , we discuss these in detail below.</p>
+
+<p><img src="docs/jul14/img/NBME_Accuracy.png" alt="Figure"></p>
+
+<p>Figure 10: Accuracy for Naive Bayes Classifier</p>
+
+<h3>
+<a id="41--naive-bayes" class="anchor" href="#41--naive-bayes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4.1  Naive Bayes</h3>
+
+<p>Naive Bayes classifier is the simplest and the fastest classifier. Many
+researchers [2], [4] claim to have gotten best results using this classifier.</p>
+
+<p>For a given tweet, if we need to find the label for it, we find the
+probabilities of all the labels, given that feature and then select the label
+with maximum probability.</p>
+
+<p>labelNB : = argmaxlabel P(label|features)</p>
+
+<p>(4)</p>
+
+<p>In order to find the probability for a label, this algorithm first uses the
+Bayes rule to express P(label - features) in terms of P(label) and P(features</p>
+
+<ul>
+<li>label) as,</li>
+</ul>
+
+<p>P(label|features) =</p>
+
+<p>P(label) * P(features|label)</p>
+
+<hr>
+
+<p>P(features)  </p>
+
+<p>(5)</p>
+
+<p>Making the `naive' assumption that all the features are independent,</p>
+
+<p>P(label|features) =</p>
+
+<p>P(label) * P(f1|label) * ... * P(fn|label)</p>
+
+<hr>
+
+<p>P(features)  </p>
+
+<p>(6)</p>
+
+<p>Rather than computing P(featues) explicitly, we can just calculate the
+denominator for each label, and normalize them so they sum to one:</p>
+
+<p>P(label|features) =</p>
+
+<p>P(label) * P(f1|label) * ... * P(fn|label)</p>
+
+<hr>
+
+<p>∑<br>
+l  </p>
+
+<p>( P(l) * P(f1|l) * ... * P(fn|l) )</p>
+
+<p>(7)</p>
+
+<p>The results from training the Naive Bayes classifier are shown below in Figure
+10 . The accuracy of Unigrams is the lowest at 79.67%. The accuracy increases
+if we also use Negation detection (81.66%) or higher order n-grams (86.68%).
+We see that if we use both Negation detection and higher order n-grams, the
+accuracy is marginally less than just using higher order n-grams (85.92%). We
+can also note that accuracies for double step classifier are lesser than those
+for corresponding single step.</p>
+
+<p>We have also shown Precision versus Recall values for Naive Bayes classifier
+corresponding to different classes – Negative, Neutral and Positive in Figure
+11 . The solid markers show the P-R values for single step classifier and
+hollow markers show the affect of using double step classifier. Different
+points are for different feature sets. We can see that both precision as well
+as recall values are higher for single step than that for double step.</p>
+
+<p><img src="docs/jul14/img/NB_PvsR.png" alt="Figure"></p>
+
+<p>Figure 11: Precision vs. Recall for Naive Bayes Classifier</p>
+
+<h3>
+<a id="42--maximum-entropy-classifier" class="anchor" href="#42--maximum-entropy-classifier" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4.2  Maximum Entropy Classifier</h3>
+
+<p>This classifier works by finding a probability distribution that maximizes the
+likelihood of testable data. This probability function is parameterized by
+weight vector. The optimal value of which can be found out using the method of
+Lagrange multipliers.</p>
+
+<p>P(label|features) =</p>
+
+<p>∑<br>
+i  </p>
+
+<p>wi fi(label)</p>
+
+<hr>
+
+<p>∑<br>
+l ∈ labels  </p>
+
+<p>∑<br>
+i  </p>
+
+<p>wi fi(l)</p>
+
+<p>(8)</p>
+
+<p>The results from training the Naive Bayes classifier are shown below in Figure
+10 . Accuracies follow a similar trend as compared to Naive Bayes classifier.
+Unigram is the lowest at 79.73% and we see an increase for negation detection
+at 80.96%. The maximum is achieved with unigrams, bigrams and trigrams at
+85.22% closely followed by n-grams and negation at 85.16%. Once again, the
+accuracies for double step classifiers are considerably lower.</p>
+
+<p>Precision versus Recall map is also shown for maximum entropy classifier in
+Figure 12 . Here we see that precision of "neutral" class increase by using a
+double step classifier, but with a considerable decrease in its recall and
+slight fall in precision of "negative" and "positive" classes.</p>
+
+<p><img src="docs/jul14/img/ME_PvsR.png" alt="Figure"></p>
+
+<p>Figure 12: Precision vs. Recall for Maximum Entropy Classifier</p>
+
+<h2>
+<a id="5--future-work" class="anchor" href="#5--future-work" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5  Future Work</h2>
+
+<p><strong>Investigating Support Vector Machines</strong>
+     Several papers have discussed the results using Support Vector Machines (SVMs) also. The next step would be to test our approach on SVMs. However, Go, Bhayani and Huang have reported that SVMs do not increase the accuracy [2]. 
+<strong>Building a classifier for Hindi tweets</strong>
+     There are many users on Twitter that use primarily Hindi language. The approach discussed here can be used to create a Hindi language sentiment classifier. 
+<strong>Improving Results using Semantics Analysis</strong>
+     Understanding the role of the nouns being talked about can help us better classify a given tweet. For example, "Skype often crashing: microsoft, what are you doing?" Here Skype is a product and Microsoft is a company. We can use semantic labellers to achieve this. Such an approach is discussed by Saif, He and Alani [6]. </p>
+
+<h2>
+<a id="6--conclusion" class="anchor" href="#6--conclusion" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6  Conclusion</h2>
+
+<p>In this paper, we create a sentiment classifier for twitter using labelled
+data sets. We also investigate the relevance of using a double step classifier
+and negation detection for the purpose of sentiment analysis.</p>
+
+<p>Our baseline classifier that uses just the unigrams achieves an accuracy of
+around 80.00%. Accuracy of the classifier increases if we use negation
+detection or introduce bigrams and trigrams. Thus we can conclude that both
+Negation Detection and higher order n-grams are useful for the purpose of text
+classification. However, if we use both n-grams and negation detection, the
+accuracy falls marginally. We also note that Single step classifiers out
+perform double step classifiers. In general, Naive Bayes Classifier performs
+better than Maximum Entropy Classifier.</p>
+
+<p>We achieve the best accuracy of 86.68% in the case of Unigrams + Bigrams +
+Trigrams, trained on Naive Bayes Classifier.</p>
+
+<h2>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
+
+<p>[1] Bo Pang and Lillian Lee. Opinion mining and sentiment analysis. <em>Foundations and trends in information retrieval</em>, 2(1-2):pages 1-135, 2008. </p>
+
+<p>[2] Alec Go, Richa Bhayani, and Lei Huang. Twitter sentiment classification using distant supervision. <em>Processing</em>, pages 1-6, 2009. </p>
+
+<p>[3] Niek Sanders. Twitter sentiment corpus. <a href="http://www.sananalytics.com/lab/twitter-sentiment/">http://www.sananalytics.com/lab/twitter-sentiment/</a>. Sanders Analytics. </p>
+
+<p>[4] Alexander Pak and Patrick Paroubek. Twitter as a corpus for sentiment analysis and opinion mining. volume 2010, pages 1320-1326, 2010. </p>
+
+<p>[5] Efthymios Kouloumpis, Theresa Wilson, and Johanna Moore. Twitter sentiment analysis: The good the bad and the omg! <em>ICWSM</em>, 11:pages 538-541, 2011. </p>
+
+<p>[6] Hassan Saif, Yulan He, and Harith Alani. Semantic sentiment analysis of twitter. In <em>The Semantic Web-ISWC 2012</em>, pages 508-524. Springer, 2012. </p>
+
+<p>[7] Isaac G Councill, Ryan McDonald, and Leonid Velikovich. What's great and what's not: learning to classify the scope of negation for improved sentiment analysis. In <em>Proceedings of the workshop on negation and speculation in natural language processing</em>, pages 51-59. Association for Computational Linguistics, 2010. </p>
+
+<p>[8] Ilia Smirnov. Overview of stemming algorithms. <em>Mechanical Translation</em>, 2008. </p>
+
+<p>[9] Martin F Porter. An algorithm for suffix stripping. <em>Program: electronic library and information systems</em>, 40(3):pages 211-218, 2006. </p>
+
+<p>[10] Balakrishnan Gokulakrishnan, P Priyanthan, T Ragavan, N Prasath, and A Perera. Opinion mining and sentiment analysis on a twitter data stream. In <em>Advances in ICT for Emerging Regions (ICTer), 2012 International Conference on. IEEE</em>, 2012. </p>
+
+<p>[11] John Ross Quinlan. <em>C4. 5: programs for machine learning</em>, volume 1. Morgan kaufmann, 1993. </p>
+
+<p>[12] Steven Bird, Ewan Klein, and Edward Loper. <em>Natural language processing with Python</em>. " O'Reilly Media, Inc.", 2009.</p>
+
+<hr>
+
+<p>File translated from TEX by <a href="http://hutchinson.belmont.ma.us/tth/"> TTH</a>,
+version 4.03.<br>
+On 30 Jul 2014, 01:16.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/yogeshg">yogeshg</a></p>
