@@ -1,5 +1,29 @@
 SENTIMENT ANALYSIS OF TWITTER FEEDS  
 ===================================
+
+
+
+
+|Style|Citation|
+|-|-|
+|MLA|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." International Conference on Big Data Analytics. Springer, Cham, 2014.|
+|APA|Garg, Y., & Chatterjee, N. (2014, December). Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
+|Chicago|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." In International Conference on Big Data Analytics, pp. 33-52. Springer, Cham, 2014.|
+|Harvard|Garg, Y. and Chatterjee, N., 2014, December. Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
+|Vancouver|Garg Y, Chatterjee N. Sentiment analysis of twitter feeds. InInternational Conference on Big Data Analytics 2014 Dec 20 (pp. 33-52). Springer, Cham.|
+|Bibtex|_as follows_|
+```
+@inproceedings{garg2014sentiment,
+  title={Sentiment analysis of twitter feeds},
+  author={Garg, Yogesh and Chatterjee, Niladri},
+  booktitle={International Conference on Big Data Analytics},
+  pages={33--52},
+  year={2014},
+  organization={Springer}
+}
+```
+
+
 ![Figure](docs/jul14/img/iitd_logo_128.png)  
 DEPARTMEMT OF MATHEMATICS  
 -------------------------
