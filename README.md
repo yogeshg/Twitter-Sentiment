@@ -1,17 +1,7 @@
 SENTIMENT ANALYSIS OF TWITTER FEEDS  
 ===================================
 
-
-
-
-|Style|Citation|
-|-|-|
-|MLA|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." International Conference on Big Data Analytics. Springer, Cham, 2014.|
-|APA|Garg, Y., & Chatterjee, N. (2014, December). Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
-|Chicago|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." In International Conference on Big Data Analytics, pp. 33-52. Springer, Cham, 2014.|
-|Harvard|Garg, Y. and Chatterjee, N., 2014, December. Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
-|Vancouver|Garg Y, Chatterjee N. Sentiment analysis of twitter feeds. InInternational Conference on Big Data Analytics 2014 Dec 20 (pp. 33-52). Springer, Cham.|
-|Bibtex|_as follows_|
+If you find this repository useful, please consider citing our work:
 ```
 @inproceedings{garg2014sentiment,
   title={Sentiment analysis of twitter feeds},
@@ -873,7 +863,13 @@ Trigrams, trained on Naive Bayes Classifier.
 
 * * *
 
-File translated from TEX by [ TTH](http://hutchinson.belmont.ma.us/tth/),
-version 4.03.  
-On 30 Jul 2014, 01:16.
+If you find this repository useful, please consider citing our work:
 
+|Style|Citation|
+|-|-|
+|MLA|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." International Conference on Big Data Analytics. Springer, Cham, 2014.|
+|APA|Garg, Y., & Chatterjee, N. (2014, December). Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
+|Chicago|Garg, Yogesh, and Niladri Chatterjee. "Sentiment analysis of twitter feeds." In International Conference on Big Data Analytics, pp. 33-52. Springer, Cham, 2014.|
+|Harvard|Garg, Y. and Chatterjee, N., 2014, December. Sentiment analysis of twitter feeds. In International Conference on Big Data Analytics (pp. 33-52). Springer, Cham.|
+|Vancouver|Garg Y, Chatterjee N. Sentiment analysis of twitter feeds. InInternational Conference on Big Data Analytics 2014 Dec 20 (pp. 33-52). Springer, Cham.|
+|Bibtex|_as above_|
