@@ -1,4 +1,4 @@
-SENTIMENT ANALYSIS OF TWITTER FEEDS  
+SSENTIMENT ANALYSIS OF TWITTER FEEDS  
 ===================================
 ![Figure](docs/jul14/img/iitd_logo_128.png)  
 DEPARTMEMT OF MATHEMATICS  
